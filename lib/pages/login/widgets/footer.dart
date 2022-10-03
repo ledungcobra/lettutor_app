@@ -1,0 +1,34 @@
+import 'package:flutter/material.dart';
+import 'package:lettutor_app/pages/login/widgets/svg_icon_button.dart';
+
+class FooterLogin extends StatelessWidget {
+  const FooterLogin({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    const icons = ["facebook.svg", "google.svg"];
+    return Column(
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        const Text('Or continue with'),
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: icons.map((icon) => SvgIconButton(icon)).toList(),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Not a member yet?"),
+            TextButton(onPressed: () {}, child: Text('Sign up'))
+          ],
+        )
+      ],
+    );
+  }
+}
