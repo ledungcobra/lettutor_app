@@ -2,6 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:lettutor_app/models/tutor.dart';
 import 'package:lettutor_app/widgets/skill_chip.dart';
 
+abstract class Basewidget extends StatelessWidget{
+
+  late double _height;
+  late double _width;
+
+  @override
+  Widget build(BuildContext context) {
+    _height = MediaQuery.of(context).size.height;
+    _width = MediaQuery.of(context).size.width;
+     return builder(context);
+  }
+
+  Widget  builder(BuildContext context);
+}
+
 class TutorCard extends StatelessWidget {
   final Tutor tutor;
   late double _height;
@@ -18,7 +33,7 @@ class TutorCard extends StatelessWidget {
       elevation: 10,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: SizedBox(
-        height: 150.0,
+        height: 180.0,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Column(
@@ -88,7 +103,7 @@ class TutorCard extends StatelessWidget {
       child: Text(
         tutor.description,
         overflow: TextOverflow.ellipsis,
-        maxLines: 4,
+        maxLines: 3,
         softWrap: false,
         style: TextStyle(
           fontSize: 14.0,
@@ -101,6 +116,17 @@ class TutorCard extends StatelessWidget {
   }
 
   Widget _footer(){
-    return Container();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+      Container(),
+      Row(
+        children: [
+          IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border)),
+          OutlinedButton(onPressed: (){
+          }, child: Text('Book')),
+        ],
+      )
+    ],);
   }
 }
