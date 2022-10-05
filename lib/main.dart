@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/pages/login/login_screen.dart';
-import 'package:lettutor_app/pages/tutors/tutor.dart';
+import 'package:get_it/get_it.dart';
+import 'package:lettutor_app/screens/tutors/tutor_screen.dart';
+import 'package:lettutor_app/services/tutor_service.dart';
+import 'package:lettutor_app/utils/mixing.dart';
 
 void main() {
+  setUpIOC();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+void setUpIOC() {
+  GetIt.I.registerSingleton<TutorService>(TutorService());
+}
+
+class MyApp extends StatelessWidget with Dimension {
   const MyApp({super.key});
 
   // This widget is the root of your application.
@@ -21,4 +28,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

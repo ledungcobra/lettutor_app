@@ -2,62 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:lettutor_app/models/tutor.dart';
 import 'package:lettutor_app/widgets/skill_chip.dart';
 
-abstract class Basewidget extends StatelessWidget{
-
-  late double _height;
-  late double _width;
-
-  @override
-  Widget build(BuildContext context) {
-    _height = MediaQuery.of(context).size.height;
-    _width = MediaQuery.of(context).size.width;
-     return builder(context);
-  }
-
-  Widget  builder(BuildContext context);
-}
-
 class TutorCard extends StatelessWidget {
   final Tutor tutor;
-  late double _height;
-  late double _width;
+  final void Function() onClick;
 
-  TutorCard({Key? key, required this.tutor}) : super(key: key);
+  TutorCard({Key? key, required this.tutor, required this.onClick})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    _height = MediaQuery.of(context).size.height;
-    _width = MediaQuery.of(context).size.width;
-
-    return Card(
-      elevation: 10,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: SizedBox(
-        height: 180.0,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Column(
-            children: [
-              _header(),
-              _body(),
-              _footer()
-            ],
+    return InkWell(
+      onTap: onClick,
+      child: Card(
+        elevation: 10,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: SizedBox(
+          height: 180.0,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Column(
+              children: [_header(), _body(), _footer()],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _header(){
+  Widget _header() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-            width: 50,
-            height: 50,
-            child: CircleAvatar(
-                backgroundImage: NetworkImage(tutor.avatar),
-                radius: 100)),
+          width: 50,
+          height: 50,
+          child: CircleAvatar(
+              backgroundImage: NetworkImage(tutor.avatar), radius: 100),
+        ),
         SizedBox(
           width: 20,
         ),
@@ -74,11 +55,18 @@ class TutorCard extends StatelessWidget {
                     tutor.name,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Row(children: [
-                    Text(tutor.rating.toString()),
-                    SizedBox(width: 5,),
-                    Icon(Icons.star, color: Colors.amber,)
-                  ],)
+                  Row(
+                    children: [
+                      Text(tutor.rating.toString()),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      )
+                    ],
+                  )
                 ],
               ),
               SizedBox(
@@ -86,8 +74,7 @@ class TutorCard extends StatelessWidget {
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => SkillChip(
-                        selected: true,
-                        value: tutor.specialties[index]),
+                        selected: true, value: tutor.specialties[index]),
                     itemCount: tutor.specialties.length,
                   ))
             ],
@@ -97,7 +84,7 @@ class TutorCard extends StatelessWidget {
     );
   }
 
-  Widget _body(){
+  Widget _body() {
     return Container(
       padding: EdgeInsets.only(right: 13.0),
       child: Text(
@@ -115,18 +102,18 @@ class TutorCard extends StatelessWidget {
     );
   }
 
-  Widget _footer(){
+  Widget _footer() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-      Container(),
-      Row(
-        children: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border)),
-          OutlinedButton(onPressed: (){
-          }, child: Text('Book')),
-        ],
-      )
-    ],);
+        Container(),
+        Row(
+          children: [
+            IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
+            OutlinedButton(onPressed: () {}, child: Text('Book')),
+          ],
+        )
+      ],
+    );
   }
 }

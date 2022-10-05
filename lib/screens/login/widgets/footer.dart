@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/pages/login/widgets/svg_icon_button.dart';
+import 'package:lettutor_app/screens/login/widgets/svg_icon_button.dart';
 
 class FooterLogin extends StatelessWidget {
   const FooterLogin({Key? key}) : super(key: key);

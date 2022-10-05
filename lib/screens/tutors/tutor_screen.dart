@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lettutor_app/mockdata/tutors.dart';
-import 'package:lettutor_app/pages/tutors/widgets/tutor_card.dart';
+import 'package:lettutor_app/models/tutor.dart';
+import 'package:lettutor_app/screens/tutor_detail/tutor_detail.dart';
+import 'package:lettutor_app/screens/tutors/widgets/tutor_card.dart';
 import 'package:lettutor_app/widgets/skill_chip.dart';
 
 class TutorsPage extends StatefulWidget {
@@ -11,6 +13,7 @@ class TutorsPage extends StatefulWidget {
 }
 
 class _TutorsPageState extends State<TutorsPage> {
+
   late double _width;
   late double _height;
   late Nationality selectedNationality = nationalities.first;
@@ -150,6 +153,7 @@ class _TutorsPageState extends State<TutorsPage> {
     return Expanded(
       child: ListView.builder(
         itemBuilder: (context, index) => TutorCard(
+          onClick: ()=> _handleShowTutorDetail(listTutors[index]),
           tutor: listTutors[index],
           key: Key(index.toString()),
         ),
@@ -157,4 +161,10 @@ class _TutorsPageState extends State<TutorsPage> {
       ),
     );
   }
+
+ void _handleShowTutorDetail(Tutor tutor) {
+    var destinationScreen = TutorDetailScreen(tutor: listTutorDetails.first,);
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => destinationScreen));
+ }
 }

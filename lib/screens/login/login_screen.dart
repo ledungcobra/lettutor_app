@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/pages/login/widgets/FormFields.dart';
-import 'package:lettutor_app/pages/login/widgets/footer.dart';
+import 'package:lettutor_app/screens/login/widgets/FormFields.dart';
+import 'package:lettutor_app/screens/login/widgets/footer.dart';
 import 'package:lettutor_app/utils/constants.dart';
+import 'package:lettutor_app/widgets/button.dart';
 
 class LoginScreen extends StatelessWidget {
   late double _width;
@@ -17,7 +18,7 @@ class LoginScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: PADDING),
+          padding: EdgeInsets.symmetric(horizontal: DEFAULT_PADDING),
           child: Center(
             child: SingleChildScrollView(
               child: Column(
@@ -27,16 +28,7 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                   FormFields(width: _width),
                   const SizedBox(height: 10),
-                  MaterialButton(
-                    minWidth: _width,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    color: PRIMARY_COLOR,
-                    onPressed: () {
-                      print('Handle Login');
-                    },
-                    child: const Text('LOG IN',
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
-                  ),
+                  Button(onClick: () {}, title: 'LOGIN'),
                   FooterLogin(),
                 ],
               ),
