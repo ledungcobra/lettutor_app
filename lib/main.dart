@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lettutor_app/screens/history/history_screen.dart';
 import 'package:lettutor_app/screens/schedule/schedule_screen.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/services/user_service.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget with Dimension {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ScheduleScreen(),
+      home: HistoryScreen(),
     );
   }
 }
