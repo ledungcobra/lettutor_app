@@ -3,16 +3,15 @@ import 'package:flutter/rendering.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lettutor_app/models/comment.dart';
 import 'package:lettutor_app/models/tutor_detail.dart';
+import 'package:lettutor_app/screens/tutor_detail/widgets/booking.dart';
 import 'package:lettutor_app/screens/tutor_detail/widgets/comment_item.dart';
 import 'package:lettutor_app/screens/tutor_detail/widgets/course_preview_button.dart';
 import 'package:lettutor_app/screens/tutor_detail/widgets/text_and_chips.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/utils/constants.dart';
-import 'package:lettutor_app/utils/helper.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
-import 'package:lettutor_app/widgets/stars.dart';
 import 'package:lettutor_app/widgets/title_button.dart';
 
 class TutorDetailScreen extends StatefulWidget {
@@ -38,6 +37,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
           backgroundColor: Colors.lightBlueAccent,
           title: Text('Tutor Detail'),
         ),
+        floatingActionButton:  IconButton( iconSize: 50,onPressed: (){}, icon: Icon(Icons.schedule_rounded, color: PRIMARY_COLOR)),
         backgroundColor: Colors.white70,
         body: SafeArea(
           child: SizedBox(
@@ -128,7 +128,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
         SizedBox(
           height: 10,
         ),
-        Button(onClick: () {}, title: 'Book')
+        Button(onClick:()=>Booking.showFullModal(context, widget.tutor.id), title: 'Book')
       ],
     );
   }

@@ -13,14 +13,14 @@ class Comment {
 
   Comment(
       {this.id,
-        this.bookingId,
-        this.firstId,
-        this.secondId,
-        this.rating,
-        this.content,
-        this.createdAt,
-        this.updatedAt,
-        this.firstInfo});
+      this.bookingId,
+      this.firstId,
+      this.secondId,
+      this.rating,
+      this.content,
+      this.createdAt,
+      this.updatedAt,
+      this.firstInfo});
 
   Comment.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -31,9 +31,8 @@ class Comment {
     content = json['content'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    firstInfo = json['firstInfo'] != null
-        ? UserInfo.fromJson(json['firstInfo'])
-        : null;
+    firstInfo =
+        json['firstInfo'] != null ? UserInfo.fromJson(json['firstInfo']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -52,4 +51,3 @@ class Comment {
     return data;
   }
 }
-
