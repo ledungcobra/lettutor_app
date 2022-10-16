@@ -1,4 +1,4 @@
-import 'package:lettutor_app/models/course.dart';
+import 'package:lettutor_app/models/course_preview.dart';
 import 'package:lettutor_app/models/tutor.dart';
 
 class TutorDetail extends Tutor {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/models/course.dart';
+import 'package:lettutor_app/models/course_preview.dart';
 import 'package:lettutor_app/utils/constants.dart';
 
 class CoursePreviewButton extends StatelessWidget {

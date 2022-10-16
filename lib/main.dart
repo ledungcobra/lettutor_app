@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lettutor_app/models/tutor_detail.dart';
-import 'package:lettutor_app/screens/history/history_screen.dart';
-import 'package:lettutor_app/screens/login/login_screen.dart';
-import 'package:lettutor_app/screens/schedule/schedule_screen.dart';
-import 'package:lettutor_app/screens/signup/sign_up.dart';
-import 'package:lettutor_app/screens/tutor_detail/tutor_detail.dart';
-import 'package:lettutor_app/screens/tutors/tutor_screen.dart';
+import 'package:lettutor_app/screens/courses/courses.dart';
+import 'package:lettutor_app/services/course_service.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/utils/mixing.dart';
@@ -19,6 +14,7 @@ void main() {
 void setUpIOC() {
   GetIt.I.registerSingleton<TutorService>(TutorService());
   GetIt.I.registerSingleton<UserService>(UserService());
+  GetIt.I.registerSingleton<CourseService>(CourseService());
 }
 
 class MyApp extends StatelessWidget with Dimension {
@@ -30,9 +26,13 @@ class MyApp extends StatelessWidget with Dimension {
     return MaterialApp(
       title: 'Lettutor',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        fontFamily: 'Roboto',
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black
+        )
       ),
-      home: SignUp(),
+      home: Courses(),
     );
   }
 }
