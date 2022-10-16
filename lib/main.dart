@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lettutor_app/models/tutor_detail.dart';
 import 'package:lettutor_app/screens/history/history_screen.dart';
+import 'package:lettutor_app/screens/login/login_screen.dart';
 import 'package:lettutor_app/screens/schedule/schedule_screen.dart';
+import 'package:lettutor_app/screens/signup/sign_up.dart';
+import 'package:lettutor_app/screens/tutor_detail/tutor_detail.dart';
+import 'package:lettutor_app/screens/tutors/tutor_screen.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/utils/mixing.dart';
@@ -27,7 +32,7 @@ class MyApp extends StatelessWidget with Dimension {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HistoryScreen(),
+      home: SignUp(),
     );
   }
 }

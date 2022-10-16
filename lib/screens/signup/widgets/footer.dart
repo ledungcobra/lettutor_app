@@ -24,8 +24,7 @@ class Footer extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Not a member yet?"),
-            TextButton(onPressed: () {}, child: Text('Sign up'))
+            TextButton(onPressed: () {}, child: Text('Sign In'))
           ],
         )
       ],

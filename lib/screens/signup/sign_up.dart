@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/screens/login/widgets/FormFields.dart';
-import 'package:lettutor_app/screens/login/widgets/footer.dart';
+import 'package:lettutor_app/screens/signup/widgets/FormFields.dart';
+import 'package:lettutor_app/screens/signup/widgets/footer.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
-class LoginScreen extends StatelessWidget {
+class SignUp extends StatelessWidget {
   late double _width;
   late double _height;
 
-  LoginScreen({Key? key}) : super(key: key);
+  SignUp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                   FormFields(width: _width),
                   const SizedBox(height: 10),
-                  Button(onClick: () {}, title: 'LOGIN'),
+                  Button(onClick: () {}, title: 'SIGN UP'),
                   Footer(),
                 ],
               ),

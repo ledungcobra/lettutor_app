@@ -57,7 +57,7 @@ class HistoryItem extends StatelessWidget with Dimension {
                 height: 10,
               ),
               Container(height: 1, width: double.infinity, color: Colors.grey),
-              if (history.reviews!.isEmpty!)
+              if (history.reviews!.isEmpty)
                 Text('Tutor haven\'t reviewed yet')
               else
                 TutorReview()

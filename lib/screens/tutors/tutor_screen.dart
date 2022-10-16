@@ -40,8 +40,8 @@ class _TutorsPageState extends State<TutorsPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
-                _filterBar(),
-                _filters(),
+                _filterLanguageBar(),
+                _filterSkillsBar(),
                 _tutorsList(),
               ],
             ),
@@ -49,7 +49,7 @@ class _TutorsPageState extends State<TutorsPage> {
         ));
   }
 
-  Widget _filterBar() {
+  Widget _filterLanguageBar() {
     return Column(
       children: [
         SizedBox(
@@ -124,7 +124,7 @@ class _TutorsPageState extends State<TutorsPage> {
 
   int selectedFilterIndex = 0;
 
-  Widget _filters() {
+  Widget _filterSkillsBar() {
     return SizedBox(
       width: _width,
       height: 0.06 * _height,
