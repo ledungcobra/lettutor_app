@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:lettutor_app/models/schedule.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
+import 'package:lettutor_app/widgets/button.dart';
 
-class ScheduleItem extends StatelessWidget {
+class MeetingItem extends StatelessWidget {
   final Schedule schedule;
 
-  const ScheduleItem({Key? key, required this.schedule}) : super(key: key);
+  const MeetingItem({Key? key, required this.schedule}) : super(key: key);
 
   _messageNow() {}
+
+  _handleCancelUpcoming() {}
+
+  _handleGoMeeting() {}
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +39,17 @@ class ScheduleItem extends StatelessWidget {
                   Column(
                     children: [
                       NetworkAvatar(url: schedule.teacherInfo!.avatar!),
-                      SizedBox(height: 2,),
+                      SizedBox(
+                        height: 2,
+                      ),
                       Text(schedule.teacherInfo!.nationality!),
-                      SizedBox(height: 2,),
-                      IconButton(onPressed: _messageNow, icon: Icon(Icons.message_outlined, color: PRIMARY_COLOR))
+                      SizedBox(
+                        height: 2,
+                      ),
+                      IconButton(
+                          onPressed: _messageNow,
+                          icon: Icon(Icons.message_outlined,
+                              color: PRIMARY_COLOR))
                     ],
                   ),
                   SizedBox(
@@ -86,10 +98,30 @@ class ScheduleItem extends StatelessWidget {
                               style:
                                   TextStyle(color: Colors.grey, fontSize: 13),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Button(
+                    full: false,
+                    radius: 10,
+                    title: 'Cancel',
+                    onClick: _handleCancelUpcoming,
+                    color: Colors.red,
+                  ),
+                  SizedBox(width: 20),
+                  Button(
+                    full: false,
+                    radius: 10,
+                    title: 'Go Meeting',
+                    onClick: _handleGoMeeting,
                   )
                 ],
               )

@@ -5,14 +5,14 @@ import 'package:lettutor_app/screens/tutor_detail/tutor_detail.dart';
 import 'package:lettutor_app/screens/tutors/widgets/tutor_card.dart';
 import 'package:lettutor_app/widgets/skill_chip.dart';
 
-class TutorsPage extends StatefulWidget {
-  const TutorsPage({Key? key}) : super(key: key);
+class TutorsScreen extends StatefulWidget {
+  const TutorsScreen({Key? key}) : super(key: key);
 
   @override
-  State<TutorsPage> createState() => _TutorsPageState();
+  State<TutorsScreen> createState() => _TutorsScreenState();
 }
 
-class _TutorsPageState extends State<TutorsPage> {
+class _TutorsScreenState extends State<TutorsScreen> {
 
   late double _width;
   late double _height;

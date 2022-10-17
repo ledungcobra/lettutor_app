@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lettutor_app/models/schedule.dart';
-import 'package:lettutor_app/screens/schedule/widgets/schedule_item.dart';
+import 'package:lettutor_app/screens/upcoming/widgets/schedule_item.dart';
 import 'package:lettutor_app/services/user_service.dart';
 
-class ScheduleScreen extends StatelessWidget {
+class UpcomingScreen extends StatelessWidget {
   late UserService userService;
 
-  ScheduleScreen({Key? key}) : super(key: key) {
+  UpcomingScreen({Key? key}) : super(key: key) {
     userService = GetIt.I.get<UserService>();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Schedule')),
+      appBar: AppBar(title: Text('Upcoming')),
       backgroundColor: Colors.grey[200],
       body: SizedBox(
         height: double.infinity,
@@ -33,7 +33,7 @@ class ScheduleScreen extends StatelessWidget {
         if (snapshot.hasData) {
           var schedules = snapshot.data as List<Schedule>;
           return ListView(
-            children: schedules.map((schedule)=> ScheduleItem(schedule: schedule)).toList(),
+            children: schedules.map((schedule)=> MeetingItem(schedule: schedule)).toList(),
           );
         }
         if (snapshot.hasError) {

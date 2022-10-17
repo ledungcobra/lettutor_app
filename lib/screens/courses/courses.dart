@@ -6,11 +6,11 @@ import 'package:lettutor_app/screens/courses/widgets/course_item.dart';
 import 'package:lettutor_app/services/course_service.dart';
 import 'package:lettutor_app/widgets/loading.dart';
 
-class Courses extends StatelessWidget {
+class CoursesScreen extends StatelessWidget {
   late CourseService _courseService;
   late BuildContext context;
 
-  Courses({Key? key}) : super(key: key) {
+  CoursesScreen({Key? key}) : super(key: key) {
     _courseService = GetIt.I.get<CourseService>();
   }
 

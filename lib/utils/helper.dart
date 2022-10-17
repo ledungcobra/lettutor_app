@@ -26,10 +26,15 @@ Future<List<Map<String, dynamic>>> readJson(String jsonFile) async {
   return (decodedJson as List).map((r) => r as Map<String, dynamic>).toList();
 }
 
+Future<Map<String, dynamic>> readObjectJson(String jsonFile) async {
+  final String response = await rootBundle.loadString('assets/json/$jsonFile');
+  return (await json.decode(response)) as Map<String, dynamic>;
+}
+
 String getTimeAgo(String date) {
   return timeago.format(DateTime.parse(date), locale: 'en');
 }
 
-bool hasValue(String? value){
+bool hasValue(String? value) {
   return value != null && value.isNotEmpty;
 }
