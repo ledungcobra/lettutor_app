@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lettutor_app/models/home_model.dart';
+import 'package:lettutor_app/screens/video_call/video_call_screen.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/button.dart';
@@ -24,7 +25,9 @@ class UpCommingLession extends StatelessWidget with Dimension{
           children: [
             Text(header.totalLessonTime ?? "", style:textWhiteStyle,),
             Text(header.upcomingLesson?.timeStart  ?? "Not available", style: textWhiteStyle,),
-            Button(title: 'Enter lesson room', onClick: (){}, color: Colors.white,textColor: PRIMARY_COLOR,full: false, radius: 20,)
+            Button(title: 'Enter lesson room', onClick: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => VideoCallScreen() ));
+            }, color: Colors.white,textColor: PRIMARY_COLOR,full: false, radius: 20,)
           ],
         ),
       ),

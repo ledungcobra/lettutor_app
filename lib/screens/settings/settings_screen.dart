@@ -29,7 +29,9 @@ class SettingsScreen extends StatelessWidget with Dimension {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _userDetails(),
-            SizedBox(height: 100,),
+            SizedBox(
+              height: 100,
+            ),
             Button(
               title: 'Booking History',
               onClick: _handleOpenHistory,
@@ -59,14 +61,22 @@ class SettingsScreen extends StatelessWidget with Dimension {
     return Row(
       children: [
         NetworkAvatar(url: ''),
-        SizedBox(width: 20,),
+        SizedBox(
+          width: 20,
+        ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Name', style: TextStyle(fontSize: 18),),
-            Text("Email@gmail.com", style: TextStyle(fontSize: 18),),
+            Text(
+              'Name',
+              style: TextStyle(fontSize: 18),
+            ),
+            Text(
+              "Email@gmail.com",
+              style: TextStyle(fontSize: 18),
+            ),
           ],
         )
       ],

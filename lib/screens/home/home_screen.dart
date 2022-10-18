@@ -13,6 +13,7 @@ import 'package:lettutor_app/widgets/loading.dart';
 class HomeScreen extends StatelessWidget {
   late TutorService tutorService;
   late BuildContext context;
+
   HomeScreen({Key? key}) : super(key: key) {
     tutorService = GetIt.I.get<TutorService>();
   }
