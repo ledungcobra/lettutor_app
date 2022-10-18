@@ -1,9 +1,9 @@
 const LEVEL_TO_TEXT = {
-  "0": "Beginner",
-  "1": "Started",
-  "2": "Medium",
-  "3": "Intermediate",
-  "4": "Advanced"
+  "1": "Beginner",
+  "2": "Upper-Beginner",
+  "3": "Pre-Intermediate",
+  "4": "Intermediate",
+  "5": "Upper-Intermediate"
 };
 
 class Course {

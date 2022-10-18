@@ -6,37 +6,32 @@ import 'package:lettutor_app/screens/courses/widgets/course_item.dart';
 import 'package:lettutor_app/services/course_service.dart';
 import 'package:lettutor_app/widgets/loading.dart';
 
-class CoursesScreen extends StatelessWidget {
+class CoursesTab extends StatelessWidget {
+
+  CoursesTab({Key? key}) : super(key: key){
+    _courseService = GetIt.I.get<CourseService>();
+  }
   late CourseService _courseService;
   late BuildContext context;
 
-  CoursesScreen({Key? key}) : super(key: key) {
-    _courseService = GetIt.I.get<CourseService>();
-  }
-
   @override
   Widget build(BuildContext context) {
-    this.context = context;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Courses',),
-      ),
-      body: FutureBuilder(
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return AlertDialog(
-              content: Text('Error when loading courses'),
-            );
-          }
-          if (snapshot.hasData) {
-            return _coursesList(snapshot.data as List<Course>);
-          }
-          return Loading();
-        },
-        future: _courseService.getCourses(),
-      ),
+    return FutureBuilder(
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return AlertDialog(
+            content: Text(snapshot.error.toString()),
+          );
+        }
+        if (snapshot.hasData) {
+          return _coursesList(snapshot.data as List<Course>);
+        }
+        return Loading();
+      },
+      future: _courseService.getCourses(),
     );
   }
+
 
   _onTap(Course course) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => CourseDetails(course: course),));

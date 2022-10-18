@@ -3,7 +3,8 @@ import 'package:lettutor_app/widgets/loading.dart';
 
 class LoadingImage extends StatelessWidget {
   final String? src;
-  const LoadingImage({Key? key, required this.src}) : super(key: key);
+  BoxFit? boxFit;
+  LoadingImage({Key? key, required this.src, this.boxFit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +13,6 @@ class LoadingImage extends StatelessWidget {
         return  child;
       }
       return Loading();
-     },);
+     },fit: boxFit,);
   }
 }
