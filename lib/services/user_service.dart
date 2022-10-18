@@ -18,10 +18,4 @@ class UserService {
     return result;
   }
 
-  // Future<Meeting> getSchedule() async {
-  //   var result =
-  //   (await readJson("schedule.json").then((value) => value.map((v) {
-  //     return Schedule.fromJson(v);
-  //   }).toList()));
-  // }
 }

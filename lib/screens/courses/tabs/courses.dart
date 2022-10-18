@@ -16,6 +16,7 @@ class CoursesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    this.context = context;
     return FutureBuilder(
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -34,6 +35,7 @@ class CoursesTab extends StatelessWidget {
 
 
   _onTap(Course course) {
+
     Navigator.push(context, MaterialPageRoute(builder: (context) => CourseDetails(course: course),));
   }
 
