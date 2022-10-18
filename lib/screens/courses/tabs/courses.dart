@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lettutor_app/models/course.dart';
-import 'package:lettutor_app/screens/course_detail/course_details.dart';
+import 'package:lettutor_app/screens/course_overview/course_overview.dart';
 import 'package:lettutor_app/screens/courses/widgets/course_item.dart';
 import 'package:lettutor_app/services/course_service.dart';
 import 'package:lettutor_app/widgets/loading.dart';
@@ -36,7 +36,7 @@ class CoursesTab extends StatelessWidget {
 
   _onTap(Course course) {
 
-    Navigator.push(context, MaterialPageRoute(builder: (context) => CourseDetails(course: course),));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => CourseOverview(course: course),));
   }
 
   Widget _coursesList(List<Course> courses) {

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:lettutor_app/models/course.dart';
-import 'package:lettutor_app/screens/course_detail/course_details.dart';
 import 'package:lettutor_app/screens/courses/tabs/books.dart';
 import 'package:lettutor_app/screens/courses/tabs/courses.dart';
-import 'package:lettutor_app/screens/courses/widgets/course_item.dart';
 import 'package:lettutor_app/services/course_service.dart';
-import 'package:lettutor_app/widgets/loading.dart';
 
 class CoursesScreen extends StatefulWidget {
   late CourseService _courseService;

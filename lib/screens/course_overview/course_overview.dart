@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:lettutor_app/models/course.dart';
+import 'package:lettutor_app/screens/course_details/course_details.dart';
 import 'package:lettutor_app/widgets/loading_image.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
-class CourseDetails extends StatelessWidget {
+class CourseOverview extends StatelessWidget {
   final Course course;
 
-  CourseDetails({Key? key, required this.course}) : super(key: key);
+  CourseOverview({Key? key, required this.course}) : super(key: key);
 
-  _handleDiscover() {}
+  late BuildContext context;
+
+  _handleDiscover() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (ctx) => CourseDetails(course: course, selectedIndex: 0,)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    this.context = context;
     return Scaffold(
       appBar: AppBar(
-          title: Text('Course Detail', style: TextStyle(color: Colors.grey))),
+          title: Text('Course Details', style: TextStyle(color: Colors.grey))),
       body: Padding(
         padding: EdgeInsets.all(8.0),
         child: ListView(
@@ -148,11 +158,29 @@ class CourseDetails extends StatelessWidget {
 
   _topics() {
     List<Widget> widget = [];
-    for(var i = 0;i < course.topics!.length;i++){
+    for (var i = 0; i < course.topics!.length; i++) {
       var topic = course.topics![i];
-      widget.add( Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18),
-        child: Text("${i + 1}.${topic.name}"),
+      widget.add(Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("${i + 1}.${topic.name}"),
+              InkWell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (ctx) => CourseDetails(course: course, selectedIndex: i,)),
+                ),
+                child: Text(
+                  'Find out',
+                  style: TextStyle(color: Colors.blue),
+                ),
+              )
+            ],
+          ),
+        ),
       ));
     }
     return widget;
