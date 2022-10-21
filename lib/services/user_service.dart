@@ -1,8 +1,10 @@
 import 'package:lettutor_app/models/history/History.dart';
 import 'package:lettutor_app/models/schedule.dart';
+import 'package:lettutor_app/models/user_info.dart';
 import 'package:lettutor_app/utils/helper.dart';
 
 class UserService {
+
   Future<List<Schedule>> getListSchedules() async {
     var result =
         (await readJson("schedule.json").then((value) => value.map((v) {
@@ -18,4 +20,8 @@ class UserService {
     return result;
   }
 
+  Future<UserInfo> getUserInfo() async {
+    return UserInfo.fromJson(
+        (await readObjectJson("user.json")));
+  }
 }

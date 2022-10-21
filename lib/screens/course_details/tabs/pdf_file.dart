@@ -18,7 +18,6 @@ class _PdfFileState extends State<PdfFile> {
   bool? loaded;
 @override
   void initState() {
-    // TODO: implement initState
     PDFDocument.fromURL(widget.url)
     .then((v)=> doc = v)
     .catchError((e)=> print(e));

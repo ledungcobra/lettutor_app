@@ -43,6 +43,9 @@ dependencies:
   shared_preferences: '2.0.15'
   flutter_countdown_timer: '4.1.0'
   advance_pdf_viewer: '2.0.0'
+  country_picker: ^2.0.16
+  image_picker: ^0.8.6
+  language_picker: ^0.4.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
