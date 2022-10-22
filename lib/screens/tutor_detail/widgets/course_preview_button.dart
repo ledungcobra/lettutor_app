@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/models/course_preview.dart';
+import 'package:lettutor_app/models/tutor_detail.dart';
 import 'package:lettutor_app/utils/constants.dart';
 
 class CoursePreviewButton extends StatelessWidget {
-  final CoursePreview coursePreview;
+  final Courses coursePreview;
 
   CoursePreviewButton({Key? key, required this.coursePreview})
       : super(key: key);
@@ -14,7 +14,7 @@ class CoursePreviewButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          coursePreview.name,
+          coursePreview.name!,
           style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
         ),
         SizedBox(
@@ -27,7 +27,6 @@ class CoursePreviewButton extends StatelessWidget {
             ),
           ),
         )
-
       ],
     );
   }

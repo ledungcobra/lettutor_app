@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:lettutor_app/utils/constants.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:flutter/services.dart';
@@ -37,4 +38,9 @@ String getTimeAgo(String date) {
 
 bool hasValue(String? value) {
   return value != null && value.isNotEmpty;
+}
+
+
+String getAssetImage(String file) {
+  return "$ASSET_FILE_PATH/$file";
 }

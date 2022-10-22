@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/models/course.dart';
 import 'package:lettutor_app/screens/course_overview/course_overview.dart';
 import 'package:lettutor_app/screens/courses/widgets/course_item.dart';
@@ -8,11 +8,11 @@ import 'package:lettutor_app/widgets/loading.dart';
 
 class CoursesTab extends StatelessWidget {
 
-  CoursesTab({Key? key}) : super(key: key){
-    _courseService = GetIt.I.get<CourseService>();
-  }
-  late CourseService _courseService;
+  CourseService _courseService = Get.find();
   late BuildContext context;
+
+  CoursesTab({Key? key}) : super(key: key){
+  }
 
   @override
   Widget build(BuildContext context) {

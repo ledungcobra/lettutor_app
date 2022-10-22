@@ -17,7 +17,7 @@ class TutorCard extends StatelessWidget {
         elevation: 10,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: SizedBox(
-          height: 180.0,
+          height: 200,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Column(
@@ -37,7 +37,7 @@ class TutorCard extends StatelessWidget {
           width: 50,
           height: 50,
           child: CircleAvatar(
-              backgroundImage: NetworkImage(tutor.avatar), radius: 100),
+              backgroundImage: NetworkImage(tutor.avatar?? ""), radius: 100),
         ),
         SizedBox(
           width: 20,
@@ -52,12 +52,12 @@ class TutorCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    tutor.name,
+                    tutor.name ?? "",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Row(
                     children: [
-                      Text(tutor.rating.toString()),
+                      Text(tutor.rating!.toStringAsFixed(2) ),
                       SizedBox(
                         width: 5,
                       ),
@@ -74,8 +74,8 @@ class TutorCard extends StatelessWidget {
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => SkillChip(
-                        selected: true, value: tutor.specialties[index]),
-                    itemCount: tutor.specialties.length,
+                        selected: true, value: tutor.getSpecialties()[index]),
+                    itemCount: tutor.getSpecialties().length,
                   ))
             ],
           ),
@@ -88,7 +88,7 @@ class TutorCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(right: 13.0),
       child: Text(
-        tutor.description,
+        tutor.bio ?? "",
         overflow: TextOverflow.ellipsis,
         maxLines: 3,
         softWrap: false,

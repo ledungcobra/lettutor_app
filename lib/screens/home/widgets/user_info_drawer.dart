@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/models/user_info.dart';
 import 'package:lettutor_app/screens/profile/profile_screen.dart';
 import 'package:lettutor_app/services/user_service.dart';
@@ -18,8 +18,7 @@ class _UserInfoDrawerState extends State<UserInfoDrawer> {
 
   @override
   void initState() {
-    GetIt.I
-        .get<UserService>()
+    Get.find<UserService>()
         .getUserInfo()
         .then((value) => setState(() {
               userInfo = value;

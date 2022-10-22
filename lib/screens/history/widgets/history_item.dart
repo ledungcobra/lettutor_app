@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/models/history/History.dart';
+import 'package:lettutor_app/models/history/history.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/avatar.dart';

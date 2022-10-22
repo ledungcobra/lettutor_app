@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lettutor_app/screens/signup/widgets/FormFields.dart';
 import 'package:lettutor_app/screens/signup/widgets/footer.dart';
 import 'package:lettutor_app/utils/constants.dart';
+import 'package:lettutor_app/utils/helper.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
 class SignUp extends StatelessWidget {

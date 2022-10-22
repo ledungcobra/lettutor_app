@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:get_it/get_it.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/models/comment.dart';
 import 'package:lettutor_app/models/tutor_detail.dart';
 import 'package:lettutor_app/screens/tutor_detail/widgets/booking.dart';
@@ -15,12 +15,9 @@ import 'package:lettutor_app/widgets/button.dart';
 import 'package:lettutor_app/widgets/title_button.dart';
 
 class TutorDetailScreen extends StatefulWidget {
-  final TutorDetail tutor;
-  late TutorService _tutorService;
-
-  TutorDetailScreen({Key? key, required this.tutor}) : super(key: key) {
-    _tutorService = GetIt.I.get<TutorService>();
-  }
+  final TutorDetail tutorDetail;
+  TutorService _tutorService = Get.find();
+  TutorDetailScreen({Key? key, required this.tutorDetail}) : super(key: key);
 
   @override
   State<TutorDetailScreen> createState() => _TutorDetailScreenState();
@@ -29,7 +26,7 @@ class TutorDetailScreen extends StatefulWidget {
 class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
   bool courseExpanded = true;
   bool commentExpanded = true;
-
+  TutorDetail get tutor=> widget.tutorDetail;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,14 +68,14 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
     return Row(
       children: [
         NetworkAvatar(
-          url: widget.tutor.avatar,
+          url: tutor.user?.avatar,
           width: 80,
           height: 80,
         ),
         Column(
           children: [
-            Text(widget.tutor.name),
-            _stars(widget.tutor.rating.toInt()),
+            Text(tutor.user?.name ?? ""),
+            _stars(tutor.avgRating?.toInt() ?? 0),
             Align(
                 child: Container(
               height: 1.2,
@@ -128,12 +125,14 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
         SizedBox(
           height: 10,
         ),
-        Button(onClick:()=>Booking.showFullModal(context, widget.tutor.id), title: 'Book')
+        Button(onClick:()=>Booking.showFullModal(context, tutor.user!.id!), title: 'Book')
       ],
     );
   }
 
   void _onPressMessageNow() {}
+
+
 
   Widget _body() {
     var gap = SizedBox(height: 10);
@@ -142,11 +141,11 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          widget.tutor.description,
+          tutor.bio!,
           style: TextStyle(fontSize: 18),
         ),
         gap,
-        TextAndChips(text: 'Language', chips: widget.tutor.specialties),
+        TextAndChips(text: 'Language', chips: tutor.getSpecialties()),
         halfGap,
         Text(
           "Interest",
@@ -154,7 +153,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
         ),
         halfGap,
         Text(
-          widget.tutor.interests,
+          tutor.interests!,
           style: TextStyle(fontSize: 18),
         ),
         gap,
@@ -164,11 +163,11 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
         ),
         halfGap,
         Text(
-          widget.tutor.teachingExperience,
+          tutor.experience!,
           style: TextStyle(fontSize: 18),
         ),
         gap,
-        TextAndChips(text: 'Specialties', chips: widget.tutor.specialties),
+        TextAndChips(text: 'Specialties', chips: tutor.getSpecialties()),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -188,7 +187,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
         ),
         if (courseExpanded)
           Column(
-            children: widget.tutor.courses
+            children: tutor.getCourses()
                 .map(
                   (course) => CoursePreviewButton(coursePreview: course),
                 )
@@ -232,7 +231,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
 
   FutureBuilder<List<Comment>> _comments() {
     return FutureBuilder(
-      future: widget._tutorService.getComments(widget.tutor.id),
+      future: widget._tutorService.getComments(tutor.user!.id!),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Container();

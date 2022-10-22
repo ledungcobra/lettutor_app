@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/screens/courses/courses_screen.dart';
+import 'package:lettutor_app/screens/home/home_controller.dart';
 import 'package:lettutor_app/screens/home/home_screen.dart';
 import 'package:lettutor_app/screens/settings/settings_screen.dart';
+import 'package:lettutor_app/screens/tutors/tutors_controller.dart';
 import 'package:lettutor_app/screens/tutors/tutors_screen.dart';
 import 'package:lettutor_app/screens/upcoming/upcoming_screen.dart';
 import 'package:lettutor_app/services/course_service.dart';
@@ -16,9 +18,11 @@ void main() {
 }
 
 void setUpIOC() {
-  GetIt.I.registerSingleton<TutorService>(TutorService());
-  GetIt.I.registerSingleton<UserService>(UserService());
-  GetIt.I.registerSingleton<CourseService>(CourseService());
+  Get.put(TutorService());
+  Get.put(UserService());
+  Get.put(CourseService());
+  Get.lazyPut(() => HomeController());
+  Get.lazyPut(() => TutorsController());
 }
 
 class MyApp extends StatefulWidget with Dimension {
@@ -48,7 +52,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Lettutor',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

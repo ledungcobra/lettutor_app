@@ -1,4 +1,4 @@
-import 'package:lettutor_app/models/history/History.dart';
+import 'package:lettutor_app/models/history/history.dart';
 import 'package:lettutor_app/models/schedule.dart';
 import 'package:lettutor_app/models/user_info.dart';
 import 'package:lettutor_app/utils/helper.dart';

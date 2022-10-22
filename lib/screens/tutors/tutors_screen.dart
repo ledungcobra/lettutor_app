@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/mockdata/tutors.dart';
 import 'package:lettutor_app/models/tutor.dart';
 import 'package:lettutor_app/screens/tutor_detail/tutor_detail.dart';
+import 'package:lettutor_app/screens/tutors/tutors_controller.dart';
 import 'package:lettutor_app/screens/tutors/widgets/tutor_card.dart';
+import 'package:lettutor_app/services/tutor_service.dart';
+import 'package:lettutor_app/utils/constants.dart';
+import 'package:lettutor_app/utils/types.dart';
+import 'package:lettutor_app/widgets/center_error.dart';
+import 'package:lettutor_app/widgets/loading.dart';
 import 'package:lettutor_app/widgets/skill_chip.dart';
 
-class TutorsScreen extends StatefulWidget {
-  const TutorsScreen({Key? key}) : super(key: key);
-
-  @override
-  State<TutorsScreen> createState() => _TutorsScreenState();
-}
-
-class _TutorsScreenState extends State<TutorsScreen> {
-
+class TutorsScreen extends GetView<TutorsController> {
   late double _width;
   late double _height;
-  late Nationality selectedNationality = nationalities.first;
+  Rx<Nationality> selectedNationality = nationalities.first.obs;
+  RxInt selectedFilterIndex = 0.obs;
+  final TutorService _tutorService = Get.find();
+  TutorsScreen();
 
   @override
   Widget build(BuildContext context) {
-    _width = MediaQuery.of(context).size.width;
-    _height = MediaQuery.of(context).size.height;
+    _width = Get.width;
+    _height = Get.height;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -70,21 +72,21 @@ class _TutorsScreenState extends State<TutorsScreen> {
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(50)),
-              child: DropdownButton(
-                underline: Container(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedNationality = nationalities
-                        .firstWhere((element) => element.value == value);
-                  });
-                },
-                value: selectedNationality.value,
-                items: nationalities
-                    .map(
-                      (e) => DropdownMenuItem(
-                          value: e.value, child: Text(e.display)),
-                    )
-                    .toList(),
+              child: Obx(
+                () => DropdownButton(
+                  underline: Container(),
+                  onChanged: (value) {
+                    selectedNationality.value = (nationalities
+                        .firstWhere((element) => element.val == value));
+                  },
+                  value: selectedNationality.value.val,
+                  items: nationalities
+                      .map(
+                        (e) => DropdownMenuItem(
+                            value: e.val, child: Text(e.display)),
+                      )
+                      .toList(),
+                ),
               ),
             )
           ],
@@ -99,47 +101,43 @@ class _TutorsScreenState extends State<TutorsScreen> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(vertical: 0),
-              hintText: 'Enter tutor name',
-              prefixIcon: Icon(Icons.search),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50.0),
-                borderSide: BorderSide(
-                  color: Colors.blue,
-                ),
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(vertical: 0),
+            hintText: 'Enter tutor name',
+            prefixIcon: Icon(Icons.search),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(50.0),
+              borderSide: BorderSide(
+                color: Colors.blue,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25.0),
-                borderSide: BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25.0),
+              borderSide: BorderSide(
+                color: Colors.grey,
+                width: 1.0,
               ),
             ),
           ),
+        ),
       ),
     );
   }
-
-  int selectedFilterIndex = 0;
 
   Widget _filterSkillsBar() {
     return SizedBox(
       width: _width,
       height: 0.06 * _height,
       child: ListView.separated(
-        itemCount: tutorFilters.length,
+        itemCount: skillFilters.length,
         scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => GestureDetector(
-          onTap: () {
-            setState(() {
-              selectedFilterIndex = index;
-            });
-          },
-          child: SkillChip(
-            selected: selectedFilterIndex == index,
-            value: tutorFilters[index],
+        itemBuilder: (context, index) => Obx(
+          () => SkillChip(
+            onClick: () {
+              selectedFilterIndex.value = index;
+            },
+            selected: selectedFilterIndex.value == index,
+            value: skillFilters[index],
           ),
         ),
         separatorBuilder: ((context, index) => SizedBox(
@@ -150,21 +148,26 @@ class _TutorsScreenState extends State<TutorsScreen> {
   }
 
   Widget _tutorsList() {
-    return Expanded(
-      child: ListView.builder(
-        itemBuilder: (context, index) => TutorCard(
-          onClick: ()=> _handleShowTutorDetail(listTutors[index]),
-          tutor: listTutors[index],
-          key: Key(index.toString()),
-        ),
-        itemCount: listTutors.length,
-      ),
+    return controller.obx(
+      onLoading: Loading(),
+      onError: (error) => CenterError(error: error ?? ""),
+      (tutors) => tutors!.isEmpty
+          ? Loading()
+          : Expanded(
+              child: ListView.builder(
+                itemBuilder: (context, index) => TutorCard(
+                  onClick: () => _handleShowTutorDetail(tutors[index]),
+                  tutor: tutors[index],
+                  key: Key(index.toString()),
+                ),
+                itemCount: tutors.length,
+              ),
+            ),
     );
   }
 
- void _handleShowTutorDetail(Tutor tutor) {
-    var destinationScreen = TutorDetailScreen(tutor: listTutorDetails.first,);
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => destinationScreen));
- }
+  void _handleShowTutorDetail(Tutor tutor) async {
+    var tutorDetail = await _tutorService.getTutorDetail(tutor.userId!);
+    Get.to(TutorDetailScreen(tutorDetail: tutorDetail));
+  }
 }

@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:lettutor_app/models/history/History.dart';
+import 'package:get/get.dart';
+import 'package:lettutor_app/models/history/history.dart';
 import 'package:lettutor_app/screens/history/widgets/history_item.dart';
 import 'package:lettutor_app/services/user_service.dart';
 
 class HistoryScreen extends StatefulWidget {
-  late UserService _userService;
+  UserService _userService = Get.find();
 
-  HistoryScreen({Key? key}) : super(key: key) {
-    _userService = GetIt.I.get<UserService>();
-  }
+  HistoryScreen({Key? key}) : super(key: key);
 
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();

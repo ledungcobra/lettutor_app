@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/models/comment.dart';
 import 'package:lettutor_app/utils/helper.dart';
 import 'package:lettutor_app/utils/mixing.dart';
@@ -36,25 +37,28 @@ class CommentItem extends StatelessWidget with Dimension {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      comment.firstInfo?.name ?? "",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(getTimeAgo(
-                        comment?.createdAt ?? "2022-09-14T11:26:18.056Z"))
-                  ],
+                Text(
+                  comment.firstInfo?.name ?? "",
+                  style:
+                  TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                 ),
-                Stars(
-                  onRatingChanged: (value) {},
-                  rating: 5,
+                SizedBox(
+                  child: Row(
+
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Stars(
+                        onRatingChanged: (value) {},
+                        rating: 5,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(getTimeAgo(
+                          comment?.createdAt ?? "2022-09-14T11:26:18.056Z")),
+                    ],
+                  ),
                 ),
                 if (hasValue(comment.content))
                   SizedBox(

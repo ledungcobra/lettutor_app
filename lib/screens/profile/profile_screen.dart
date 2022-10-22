@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/models/user_info.dart';
 import 'package:lettutor_app/screens/profile/widgets/birthday_text_form_field.dart';
 import 'package:lettutor_app/screens/profile/widgets/country_text_form_field.dart';
@@ -26,8 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    GetIt.I
-        .get<UserService>()
+    Get.find<UserService>()
         .getUserInfo()
         .then((value) => setState(() {
       userInfo = value;

@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/screens/courses/tabs/books.dart';
 import 'package:lettutor_app/screens/courses/tabs/courses.dart';
 import 'package:lettutor_app/services/course_service.dart';
 
 class CoursesScreen extends StatefulWidget {
-  late CourseService _courseService;
+  CourseService _courseService = Get.find();
 
-  CoursesScreen({Key? key}) : super(key: key) {
-    _courseService = GetIt.I.get<CourseService>();
-  }
-
+  CoursesScreen({Key? key}) : super(key: key);
   @override
   State<CoursesScreen> createState() => _CoursesScreenState();
 }
