@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/screens/login/widgets/FormFields.dart';
 import 'package:lettutor_app/screens/login/widgets/footer.dart';
+import 'package:lettutor_app/screens/tab_bar_screen/tab_bar_screen.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/helper.dart';
 import 'package:lettutor_app/widgets/button.dart';
@@ -29,7 +31,7 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                   FormFields(width: _width),
                   const SizedBox(height: 10),
-                  Button(onClick: () {}, title: 'LOGIN'),
+                  Button(onClick: _handleLogin, title: 'LOGIN'),
                   Footer(),
                 ],
               ),
@@ -74,5 +76,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  bool showPassword = false;
+  void _handleLogin() {
+    Get.offAll(()=>TabBarScreen());
+  }
 }

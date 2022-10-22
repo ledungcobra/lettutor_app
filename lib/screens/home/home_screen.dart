@@ -7,18 +7,19 @@ import 'package:lettutor_app/screens/home/home_controller.dart';
 import 'package:lettutor_app/screens/home/widgets/upcoming_lesson.dart';
 import 'package:lettutor_app/screens/home/widgets/user_info_drawer.dart';
 import 'package:lettutor_app/screens/tutor_detail/tutor_detail.dart';
-import 'package:lettutor_app/screens/tutors/tutors_controller.dart';
 import 'package:lettutor_app/screens/tutors/widgets/tutor_card.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 
 class HomeScreen extends GetView<HomeController> {
+
   late BuildContext context;
   final UserService _userService = Get.find();
   final TutorService _tutorService = Get.find();
 
-  HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key){
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,7 @@ class HomeScreen extends GetView<HomeController> {
             )
           ],
         ),
-        body: Obx(() =>
+        body:Obx(() =>
             _homeBody(controller.header.value, controller.listTutors.value)));
   }
 

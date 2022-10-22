@@ -5,7 +5,7 @@ import 'package:lettutor_app/services/tutor_service.dart';
 import '../../models/home_model.dart';
 import '../../models/tutor_detail.dart';
 
-class HomeController extends GetxController {
+class HomeController extends GetxController{
 
   final TutorService _tutorService = Get.find();
   var listTutors = <Tutor>[].obs;
@@ -15,6 +15,7 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
+    print("init");
     super.onInit();
     isLoading.value = true;
     loadingData();

@@ -1,15 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lettutor_app/models/user_info.dart';
 import 'package:lettutor_app/screens/history/history_screen.dart';
+import 'package:lettutor_app/screens/login/login_screen.dart';
+import 'package:lettutor_app/services/user_service.dart';
+import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
-class SettingsScreen extends StatelessWidget with Dimension {
-  late BuildContext context;
+class SettingsScreen extends StatefulWidget with Dimension {
 
   SettingsScreen({Key? key}) : super(key: key);
 
-  _handleLogout() {}
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  late BuildContext context;
+
+  UserInfo? userInfo;
+
+  @override
+  void initState() {
+    Get.find<UserService>()
+        .getUserInfo()
+        .then((value) => setState(() {
+      userInfo = value;
+    }))
+        .catchError((e) => print(e.toString()));
+    super.initState();
+  }
+
+  void _handleLogout() {
+    Get.offAll(LoginScreen());
+  }
 
   _handleOpenHistory() {
     Navigator.of(context)
@@ -60,7 +86,7 @@ class SettingsScreen extends StatelessWidget with Dimension {
   _userDetails() {
     return Row(
       children: [
-        NetworkAvatar(url: ''),
+        NetworkAvatar(url: userInfo?.user?.avatar ?? DEFAULT_AVATAR),
         SizedBox(
           width: 20,
         ),
@@ -70,11 +96,11 @@ class SettingsScreen extends StatelessWidget with Dimension {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Name',
+              userInfo?.user?.name ?? "",
               style: TextStyle(fontSize: 18),
             ),
             Text(
-              "Email@gmail.com",
+              userInfo?.user?.email ?? "",
               style: TextStyle(fontSize: 18),
             ),
           ],

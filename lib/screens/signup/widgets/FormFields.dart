@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lettutor_app/screens/forgot_password/forgot_password.dart';
 import 'package:lettutor_app/utils/helper.dart';
 
 class FormFields extends StatefulWidget {
@@ -108,12 +110,16 @@ class _FormFieldsState extends State<FormFields> {
         ),
         Row(children: [
           TextButton(
-            onPressed: () {},
+            onPressed: _openForgotPassword,
             child: const Text('Forgot Password?'),
             style: ButtonStyle(alignment: Alignment.topLeft),
           ),
         ])
       ],
     );
+  }
+
+  void _openForgotPassword() {
+    Get.to(ForgotPasswordScreen());
   }
 }

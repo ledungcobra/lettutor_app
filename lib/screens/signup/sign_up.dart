@@ -5,11 +5,11 @@ import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/helper.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
-class SignUp extends StatelessWidget {
+class SignUpScreen extends StatelessWidget {
   late double _width;
   late double _height;
 
-  SignUp({Key? key}) : super(key: key);
+  SignUpScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

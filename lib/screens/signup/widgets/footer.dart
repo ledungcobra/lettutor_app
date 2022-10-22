@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lettutor_app/screens/login/login_screen.dart';
 import 'package:lettutor_app/screens/login/widgets/svg_icon_button.dart';
 
 class Footer extends StatelessWidget {
@@ -24,10 +26,14 @@ class Footer extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextButton(onPressed: () {}, child: Text('Sign In'))
+            TextButton(onPressed: _openSignIn, child: Text('Sign In'))
           ],
         )
       ],
     );
+  }
+
+  void _openSignIn() {
+    Get.to(LoginScreen());
   }
 }

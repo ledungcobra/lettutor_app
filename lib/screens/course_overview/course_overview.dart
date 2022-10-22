@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/models/course.dart';
 import 'package:lettutor_app/screens/course_details/course_details.dart';
 import 'package:lettutor_app/widgets/loading_image.dart';
@@ -12,11 +13,7 @@ class CourseOverview extends StatelessWidget {
   late BuildContext context;
 
   _handleDiscover() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (ctx) => CourseDetails(course: course, selectedIndex: 0,)),
-    );
+    Get.to(CourseDetails(course: course, selectedIndex: 0,));
   }
 
   @override

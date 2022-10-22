@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/screens/login/widgets/svg_icon_button.dart';
+import 'package:lettutor_app/screens/signup/sign_up.dart';
 
 class Footer extends StatelessWidget {
   const Footer({Key? key}) : super(key: key);
@@ -25,10 +27,14 @@ class Footer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("Not a member yet?"),
-            TextButton(onPressed: () {}, child: Text('Sign up'))
+            TextButton(onPressed: _openSignUp, child: Text('Sign up'))
           ],
         )
       ],
     );
+  }
+
+  void _openSignUp() {
+    Get.to(SignUpScreen());
   }
 }
