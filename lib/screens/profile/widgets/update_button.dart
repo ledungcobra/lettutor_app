@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/utils/constants.dart';
+import 'package:lettutor_app/widgets/button.dart';
 
 class UpdateButton extends StatelessWidget {
   const UpdateButton({
@@ -8,28 +10,8 @@ class UpdateButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.all(10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        primary: PRIMARY_COLOR,
-      ),
-      child: Row(
-        children: const [
-          Spacer(),
-          Text(
-            "Update",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20.0,
-            ),
-          ),
-          Spacer(),
-        ],
-      ),
-    );
+    return Button(title: 'Update', onClick: (){
+      Get.snackbar('Notification', "Profile updated", backgroundColor: Colors.lightGreen);
+    });
   }
 }

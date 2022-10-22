@@ -6,7 +6,7 @@ class VideoCallScreen extends StatelessWidget {
 
   VideoCallScreen({Key? key}) : super(key: key);
 
-  int endTime = DateTime.parse("2022-10-18 21:20:00").millisecondsSinceEpoch;
+  int endTime =DateTime.now().add(Duration(seconds: 20)).millisecondsSinceEpoch;
 
   @override
   Widget build(BuildContext context) {

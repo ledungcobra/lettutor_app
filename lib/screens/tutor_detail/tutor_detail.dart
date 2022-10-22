@@ -14,27 +14,27 @@ import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 import 'package:lettutor_app/widgets/title_button.dart';
 
-class TutorDetailScreen extends StatefulWidget {
+class TutorDetailScreen extends StatelessWidget with Dimension {
+  var courseExpanded = true.obs;
+  var commentExpanded = true.obs;
   final TutorDetail tutorDetail;
   TutorService _tutorService = Get.find();
-  TutorDetailScreen({Key? key, required this.tutorDetail}) : super(key: key);
+  late BuildContext context;
 
-  @override
-  State<TutorDetailScreen> createState() => _TutorDetailScreenState();
-}
+  TutorDetailScreen({super.key, required this.tutorDetail});
 
-class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
-  bool courseExpanded = true;
-  bool commentExpanded = true;
-  TutorDetail get tutor=> widget.tutorDetail;
   @override
   Widget build(BuildContext context) {
+    this.context = context;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.lightBlueAccent,
           title: Text('Tutor Detail'),
         ),
-        floatingActionButton:  IconButton( iconSize: 50,onPressed: (){}, icon: Icon(Icons.schedule_rounded, color: PRIMARY_COLOR)),
+        floatingActionButton: IconButton(
+            iconSize: 50,
+            onPressed: () {},
+            icon: Icon(Icons.schedule_rounded, color: PRIMARY_COLOR)),
         backgroundColor: Colors.white70,
         body: SafeArea(
           child: SizedBox(
@@ -68,14 +68,14 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
     return Row(
       children: [
         NetworkAvatar(
-          url: tutor.user?.avatar,
+          url: tutorDetail.user?.avatar,
           width: 80,
           height: 80,
         ),
         Column(
           children: [
-            Text(tutor.user?.name ?? ""),
-            _stars(tutor.avgRating?.toInt() ?? 0),
+            Text(tutorDetail.user?.name ?? ""),
+            _stars(tutorDetail.avgRating?.toInt() ?? 0),
             Align(
                 child: Container(
               height: 1.2,
@@ -115,24 +115,45 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
             TitleButton(
                 title: 'Favorite',
                 icon: Icons.favorite_outline,
-                onPress: _onPressMessageNow),
+                onPress: _onPressFavorite),
             TitleButton(
                 title: 'Report',
                 icon: Icons.info_outline,
-                onPress: _onPressMessageNow),
+                onPress: _onPressReport),
           ],
         ),
         SizedBox(
           height: 10,
         ),
-        Button(onClick:()=>Booking.showFullModal(context, tutor.user!.id!), title: 'Book')
+        Button(
+            onClick: () => Booking.showFullModal(context, tutorDetail.user!.id!),
+            title: 'Book')
       ],
     );
   }
 
-  void _onPressMessageNow() {}
-
-
+  void _onPressMessageNow() {
+    Get.defaultDialog(
+        title: 'Compose message',
+        radius: 2,
+        middleText: "",
+        content: Column(
+          children: [
+            TextFormField(
+              decoration: InputDecoration(hintText: 'Enter some thing ...'),
+            )
+          ],
+        ),
+        actions: [
+          Button(
+              title: 'Send',
+              onClick: () {
+                Get.back();
+                Get.snackbar('Sending', 'Message is sending',
+                    backgroundColor: Colors.green);
+              })
+        ]);
+  }
 
   Widget _body() {
     var gap = SizedBox(height: 10);
@@ -141,11 +162,11 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          tutor.bio!,
+          tutorDetail.bio!,
           style: TextStyle(fontSize: 18),
         ),
         gap,
-        TextAndChips(text: 'Language', chips: tutor.getSpecialties()),
+        TextAndChips(text: 'Language', chips: tutorDetail.getSpecialties()),
         halfGap,
         Text(
           "Interest",
@@ -153,7 +174,7 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
         ),
         halfGap,
         Text(
-          tutor.interests!,
+          tutorDetail.interests!,
           style: TextStyle(fontSize: 18),
         ),
         gap,
@@ -163,11 +184,11 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
         ),
         halfGap,
         Text(
-          tutor.experience!,
+          tutorDetail.experience!,
           style: TextStyle(fontSize: 18),
         ),
         gap,
-        TextAndChips(text: 'Specialties', chips: tutor.getSpecialties()),
+        TextAndChips(text: 'Specialties', chips: tutorDetail.getSpecialties()),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -177,22 +198,29 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
             ),
             TextButton(
               onPressed: () {
-                setState(() {
-                  courseExpanded = !courseExpanded;
-                });
+                courseExpanded.value = !courseExpanded.value;
               },
-              child: Text(courseExpanded ? 'Collapse' : 'Expand'),
+              child:
+                  Obx(() => Text(courseExpanded.value ? 'Collapse' : 'Expand')),
             )
           ],
         ),
-        if (courseExpanded)
-          Column(
-            children: tutor.getCourses()
-                .map(
-                  (course) => CoursePreviewButton(coursePreview: course),
-                )
-                .toList(),
-          ),
+        Obx(
+          () {
+            if (courseExpanded.value) {
+              return Column(
+                children: tutorDetail
+                    .getCourses()
+                    .map(
+                      (course) => CoursePreviewButton(coursePreview: course),
+                    )
+                    .toList(),
+              );
+            } else {
+              return Container();
+            }
+          },
+        ),
         SizedBox(
           height: 10,
         ),
@@ -205,11 +233,10 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
             ),
             TextButton(
               onPressed: () {
-                setState(() {
-                  commentExpanded = !commentExpanded;
-                });
+                commentExpanded.value = !commentExpanded.value;
               },
-              child: Text(commentExpanded ? 'Collapse' : 'Expand'),
+              child: Obx(
+                  () => Text(commentExpanded.value ? 'Collapse' : 'Expand')),
             )
           ],
         ),
@@ -224,14 +251,19 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
         SizedBox(
           height: 20,
         ),
-        if (commentExpanded) _comments()
+        Obx(() {
+          if (commentExpanded.value) {
+            return _comments();
+          }
+          return Container();
+        })
       ],
     );
   }
 
   FutureBuilder<List<Comment>> _comments() {
     return FutureBuilder(
-      future: widget._tutorService.getComments(tutor.user!.id!),
+      future: _tutorService.getComments(tutorDetail.user!.id!),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Container();
@@ -252,5 +284,12 @@ class _TutorDetailScreenState extends State<TutorDetailScreen> with Dimension {
         return CircularProgressIndicator();
       },
     );
+  }
+
+  void _onPressFavorite() {}
+
+  void _onPressReport() {
+    Get.snackbar('Reporting', 'Sending report to admin',
+        backgroundColor: Colors.red);
   }
 }

@@ -1,5 +1,8 @@
+import 'package:lettutor_app/utils/constants.dart';
+import 'package:lettutor_app/utils/types.dart';
+
 class Tutor {
-   String? email;
+  String? email;
   String? google;
   String? avatar;
   String? name;
@@ -8,11 +11,11 @@ class Tutor {
   bool? requestPassword;
   bool? isActivated;
   bool? isPhoneActivated;
-   int? timezone;
-   bool? isPhoneAuthActivated;
+  int? timezone;
+  bool? isPhoneAuthActivated;
   bool? canSendMessage;
   bool? isPublicRecord;
-   String? createdAt;
+  String? createdAt;
   String? updatedAt;
   List<Feedbacks>? feedbacks;
   String? id;
@@ -31,39 +34,40 @@ class Tutor {
   int? price;
   bool? isOnline;
 
+  bool isFavorite = false;
+
   Tutor(
-      {
-        this.email,
-        this.google,
-        this.avatar,
-        this.name,
-        this.country,
-        this.birthday,
-        this.requestPassword,
-        this.isActivated,
-        this.isPhoneActivated,
-        this.timezone,
-        this.isPhoneAuthActivated,
-        this.canSendMessage,
-        this.isPublicRecord,
-        this.createdAt,
-        this.updatedAt,
-        this.feedbacks,
-        this.id,
-        this.userId,
-        this.video,
-        this.bio,
-        this.education,
-        this.experience,
-        this.profession,
-        this.targetStudent,
-        this.interests,
-        this.languages,
-        this.specialties,
-        this.rating,
-        this.isNative,
-        this.price,
-        this.isOnline});
+      {this.email,
+      this.google,
+      this.avatar,
+      this.name,
+      this.country,
+      this.birthday,
+      this.requestPassword,
+      this.isActivated,
+      this.isPhoneActivated,
+      this.timezone,
+      this.isPhoneAuthActivated,
+      this.canSendMessage,
+      this.isPublicRecord,
+      this.createdAt,
+      this.updatedAt,
+      this.feedbacks,
+      this.id,
+      this.userId,
+      this.video,
+      this.bio,
+      this.education,
+      this.experience,
+      this.profession,
+      this.targetStudent,
+      this.interests,
+      this.languages,
+      this.specialties,
+      this.rating,
+      this.isNative,
+      this.price,
+      this.isOnline});
 
   Tutor.fromJson(Map<String, dynamic> json) {
     email = json['email'];
@@ -136,9 +140,14 @@ class Tutor {
     return data;
   }
 
-   List<String> getSpecialties() {
-     return specialties!.split(RegExp(",")).toList();
-   }
+  List<SkillFilter> getSpecialties() {
+    return specialties!
+        .split(RegExp(","))
+        .map((specialty) =>
+            skillFilters[specialty] ??
+            SkillFilter(0, specialty, specialty.toUpperCase()))
+        .toList();
+  }
 }
 
 class Feedbacks {
@@ -154,14 +163,14 @@ class Feedbacks {
 
   Feedbacks(
       {this.id,
-        this.bookingId,
-        this.firstId,
-        this.secondId,
-        this.rating,
-        this.content,
-        this.createdAt,
-        this.updatedAt,
-        this.firstInfo});
+      this.bookingId,
+      this.firstId,
+      this.secondId,
+      this.rating,
+      this.content,
+      this.createdAt,
+      this.updatedAt,
+      this.firstInfo});
 
   Feedbacks.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -225,32 +234,32 @@ class FirstInfo {
 
   FirstInfo(
       {this.level,
-        this.email,
-        this.google,
-        this.facebook,
-        this.apple,
-        this.avatar,
-        this.name,
-        this.country,
-        this.phone,
-        this.language,
-        this.birthday,
-        this.requestPassword,
-        this.isActivated,
-        this.isPhoneActivated,
-        this.requireNote,
-        this.timezone,
-        this.phoneAuth,
-        this.isPhoneAuthActivated,
-        this.studySchedule,
-        this.canSendMessage,
-        this.isPublicRecord,
-        this.caredByStaffId,
-        this.zaloUserId,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt,
-        this.studentGroupId});
+      this.email,
+      this.google,
+      this.facebook,
+      this.apple,
+      this.avatar,
+      this.name,
+      this.country,
+      this.phone,
+      this.language,
+      this.birthday,
+      this.requestPassword,
+      this.isActivated,
+      this.isPhoneActivated,
+      this.requireNote,
+      this.timezone,
+      this.phoneAuth,
+      this.isPhoneAuthActivated,
+      this.studySchedule,
+      this.canSendMessage,
+      this.isPublicRecord,
+      this.caredByStaffId,
+      this.zaloUserId,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      this.studentGroupId});
 
   FirstInfo.fromJson(Map<String, dynamic> json) {
     level = json['level'];
@@ -313,6 +322,4 @@ class FirstInfo {
     data['studentGroupId'] = this.studentGroupId;
     return data;
   }
-
-
 }

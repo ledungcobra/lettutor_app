@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/models/book.dart';
-import 'package:lettutor_app/screens/courses/widgets/BookItem.dart';
+import 'package:lettutor_app/screens/courses/widgets/book_item.dart';
 import 'package:lettutor_app/services/course_service.dart';
 import 'package:lettutor_app/widgets/loading.dart';
 

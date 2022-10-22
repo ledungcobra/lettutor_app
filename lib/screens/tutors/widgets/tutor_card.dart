@@ -5,8 +5,13 @@ import 'package:lettutor_app/widgets/skill_chip.dart';
 class TutorCard extends StatelessWidget {
   final Tutor tutor;
   final void Function() onClick;
+  final void Function() onLikeClick;
 
-  TutorCard({Key? key, required this.tutor, required this.onClick})
+  TutorCard(
+      {Key? key,
+      required this.tutor,
+      required this.onClick,
+      required this.onLikeClick})
       : super(key: key);
 
   @override
@@ -37,7 +42,7 @@ class TutorCard extends StatelessWidget {
           width: 50,
           height: 50,
           child: CircleAvatar(
-              backgroundImage: NetworkImage(tutor.avatar?? ""), radius: 100),
+              backgroundImage: NetworkImage(tutor.avatar ?? ""), radius: 100),
         ),
         SizedBox(
           width: 20,
@@ -57,7 +62,7 @@ class TutorCard extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text(tutor.rating!.toStringAsFixed(2) ),
+                      Text(tutor.rating!.toStringAsFixed(2)),
                       SizedBox(
                         width: 5,
                       ),
@@ -73,8 +78,12 @@ class TutorCard extends StatelessWidget {
                   height: 50,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => SkillChip(
-                        selected: true, value: tutor.getSpecialties()[index]),
+                    itemBuilder: (context, index) => Container(
+                      margin: EdgeInsets.only(right: 5),
+                      child: SkillChip(
+                          selected: true,
+                          value: tutor.getSpecialties()[index].name),
+                    ),
                     itemCount: tutor.getSpecialties().length,
                   ))
             ],
@@ -109,7 +118,8 @@ class TutorCard extends StatelessWidget {
         Container(),
         Row(
           children: [
-            IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
+            IconButton(
+                onPressed: onLikeClick, icon: Icon(tutor.isFavorite ? Icons.favorite: Icons.favorite_border, color: Colors.redAccent,)),
             OutlinedButton(onPressed: () {}, child: Text('Book')),
           ],
         )

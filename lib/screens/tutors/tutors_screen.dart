@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/mockdata/tutors.dart';
 import 'package:lettutor_app/models/tutor.dart';
 import 'package:lettutor_app/screens/tutor_detail/tutor_detail.dart';
 import 'package:lettutor_app/screens/tutors/tutors_controller.dart';
@@ -11,6 +10,7 @@ import 'package:lettutor_app/utils/types.dart';
 import 'package:lettutor_app/widgets/center_error.dart';
 import 'package:lettutor_app/widgets/loading.dart';
 import 'package:lettutor_app/widgets/skill_chip.dart';
+import 'package:lettutor_app/widgets/not_found.dart';
 
 class TutorsScreen extends GetView<TutorsController> {
   late double _width;
@@ -18,6 +18,8 @@ class TutorsScreen extends GetView<TutorsController> {
   Rx<Nationality> selectedNationality = nationalities.first.obs;
   RxInt selectedFilterIndex = 0.obs;
   final TutorService _tutorService = Get.find();
+  var tutorName = "";
+
   TutorsScreen();
 
   @override
@@ -25,6 +27,7 @@ class TutorsScreen extends GetView<TutorsController> {
     _width = Get.width;
     _height = Get.height;
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: AppBar(
             title: Row(
@@ -42,7 +45,7 @@ class TutorsScreen extends GetView<TutorsController> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
-                _filterLanguageBar(),
+                _filterNationalityBar(),
                 _filterSkillsBar(),
                 _tutorsList(),
               ],
@@ -51,7 +54,7 @@ class TutorsScreen extends GetView<TutorsController> {
         ));
   }
 
-  Widget _filterLanguageBar() {
+  Widget _filterNationalityBar() {
     return Column(
       children: [
         SizedBox(
@@ -78,6 +81,7 @@ class TutorsScreen extends GetView<TutorsController> {
                   onChanged: (value) {
                     selectedNationality.value = (nationalities
                         .firstWhere((element) => element.val == value));
+                    doFilter();
                   },
                   value: selectedNationality.value.val,
                   items: nationalities
@@ -101,6 +105,7 @@ class TutorsScreen extends GetView<TutorsController> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextFormField(
+          onFieldSubmitted: _handleSearch,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 0),
             hintText: 'Enter tutor name',
@@ -129,15 +134,16 @@ class TutorsScreen extends GetView<TutorsController> {
       width: _width,
       height: 0.06 * _height,
       child: ListView.separated(
-        itemCount: skillFilters.length,
+        itemCount: skillFilters.keys.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) => Obx(
           () => SkillChip(
             onClick: () {
               selectedFilterIndex.value = index;
+              doFilter();
             },
             selected: selectedFilterIndex.value == index,
-            value: skillFilters[index],
+            value: skillFilters.values.toList()[index].name,
           ),
         ),
         separatorBuilder: ((context, index) => SizedBox(
@@ -151,18 +157,21 @@ class TutorsScreen extends GetView<TutorsController> {
     return controller.obx(
       onLoading: Loading(),
       onError: (error) => CenterError(error: error ?? ""),
-      (tutors) => tutors!.isEmpty
+      (tutors) => controller.isInit.value
           ? Loading()
-          : Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index) => TutorCard(
-                  onClick: () => _handleShowTutorDetail(tutors[index]),
-                  tutor: tutors[index],
-                  key: Key(index.toString()),
+          : tutors!.isEmpty
+              ? NotFound()
+              : Expanded(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) => TutorCard(
+                      onLikeClick: () => controller.like(tutors[index].userId!),
+                      onClick: () => _handleShowTutorDetail(tutors[index]),
+                      tutor: tutors[index],
+                      key: Key(index.toString()),
+                    ),
+                    itemCount: tutors.length,
+                  ),
                 ),
-                itemCount: tutors.length,
-              ),
-            ),
     );
   }
 
@@ -170,4 +179,24 @@ class TutorsScreen extends GetView<TutorsController> {
     var tutorDetail = await _tutorService.getTutorDetail(tutor.userId!);
     Get.to(TutorDetailScreen(tutorDetail: tutorDetail));
   }
+
+  void _handleSearch(String? newValue) {
+    if (newValue == null) {
+      return;
+    }
+    tutorName = newValue;
+    doFilter();
+  }
+
+  doFilter() {
+    controller.filter(filterCriteria);
+  }
+
+  SkillFilter get selectedSkillFilter =>
+      skillFilters.entries.toList()[selectedFilterIndex.value].value;
+
+  FilterCriteria get filterCriteria => FilterCriteria(
+      nationality: selectedNationality.value,
+      skillFilter: selectedSkillFilter,
+      name: tutorName);
 }

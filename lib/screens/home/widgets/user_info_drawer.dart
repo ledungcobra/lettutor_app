@@ -87,7 +87,7 @@ class _UserInfoDrawerState extends State<UserInfoDrawer> {
               style: TextStyle(fontSize: 16, color: Colors.black),
             ),
             onTap: () {
-              // Become Tutor
+              Get.snackbar('Notification', 'Becoming tutor', backgroundColor: Colors.greenAccent);
             },
           ),
           ListTile(

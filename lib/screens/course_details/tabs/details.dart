@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/models/course.dart';
+import 'package:lettutor_app/screens/course_details/controllers/course_details_controller.dart';
 import 'package:lettutor_app/screens/course_details/widgets/topic_item.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/loading_image.dart';
 
 class Details extends StatelessWidget with Dimension {
   final Course course;
-  final int selectedIndex;
   late BuildContext context;
   final void Function(int index) changeSelectedIndex;
-
+  CourseDetailsController _courseDetailsController = Get.find();
   Details(
       {Key? key,
       required this.course,
-      required this.selectedIndex,
       required this.changeSelectedIndex})
       : super(key: key);
 
@@ -32,7 +32,7 @@ class Details extends StatelessWidget with Dimension {
         Text("Danh sách chủ đề",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
         SizedBox(height: 15),
-        _listTopic(),
+        Obx( ()=>_listTopic()),
       ],
     );
   }
@@ -43,7 +43,7 @@ class Details extends StatelessWidget with Dimension {
       widgets.add(TopicItem(
           topics: course.topics![i],
           position: i + 1,
-          isSelected: selectedIndex == i,
+          isSelected: _courseDetailsController.selectedIndex.value == i,
           changeSelectedIndex: changeSelectedIndex));
     }
     return Column(children: widgets);

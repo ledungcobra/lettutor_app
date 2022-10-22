@@ -1,37 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/models/course.dart';
 import 'package:lettutor_app/screens/course_details/tabs/details.dart';
 import 'package:lettutor_app/screens/course_details/tabs/pdf_file.dart';
 
-class CourseDetails extends StatefulWidget {
+import 'controllers/course_details_controller.dart';
+
+class CourseDetails extends GetView<CourseDetailsController> {
   final Course course;
-  int selectedIndex;
+  CourseDetailsController _pdfFileController = Get.find();
 
-  CourseDetails({Key? key, required this.course, this.selectedIndex = 0})
-      : super(key: key);
-
-  @override
-  State<CourseDetails> createState() => _CourseDetailsState();
-}
-
-class _CourseDetailsState extends State<CourseDetails> {
-  late int selectedIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedIndex = widget.selectedIndex ?? 0;
+  CourseDetails({required this.course, required int selectedIndex}) {
+    controller.selectedIndex.value = selectedIndex;
+    controller.course.value = course;
   }
-
 
   @override
   Widget build(BuildContext context) {
-
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
           bottom: TabBar(
+            onTap: (index) async {
+              if (index == 1) {
+                await _pdfFileController.loadPdf();
+              }
+            },
             tabs: const [
               Icon(Icons.details, color: Colors.black),
               Icon(Icons.picture_as_pdf, color: Colors.black)
@@ -41,15 +36,11 @@ class _CourseDetailsState extends State<CourseDetails> {
         body: TabBarView(
           children: [
             Details(
-              course: widget.course,
-              selectedIndex: selectedIndex,
-              changeSelectedIndex: (index) => setState(() {
-                selectedIndex = index;
-              }),
+              course: course,
+              changeSelectedIndex: (index) =>
+                  controller.selectedIndex.value = index,
             ),
-            PdfFile(
-              url: widget.course.topics![selectedIndex].nameFile ?? '',
-            )
+            PdfFile()
           ],
         ),
       ),

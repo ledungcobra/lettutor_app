@@ -7,12 +7,11 @@ import 'package:lettutor_app/screens/home/home_controller.dart';
 import 'package:lettutor_app/screens/home/widgets/upcoming_lesson.dart';
 import 'package:lettutor_app/screens/home/widgets/user_info_drawer.dart';
 import 'package:lettutor_app/screens/tutor_detail/tutor_detail.dart';
+import 'package:lettutor_app/screens/tutors/tutors_controller.dart';
 import 'package:lettutor_app/screens/tutors/widgets/tutor_card.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
-import 'package:lettutor_app/widgets/center_error.dart';
-import 'package:lettutor_app/widgets/loading.dart';
 
 class HomeScreen extends GetView<HomeController> {
   late BuildContext context;
@@ -71,7 +70,9 @@ class HomeScreen extends GetView<HomeController> {
     return Column(
       children: recommendTutors
           .map((tutor) => TutorCard(
-              tutor: tutor, onClick: () => _handleShowTutorDetail(tutor)))
+              onLikeClick: () =>controller.like(tutor),
+              tutor: tutor,
+              onClick: () => _handleShowTutorDetail(tutor)))
           .toList(),
     );
   }

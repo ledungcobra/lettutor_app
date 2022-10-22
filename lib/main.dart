@@ -12,6 +12,8 @@ import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
+import 'screens/course_details/controllers/course_details_controller.dart';
+
 void main() {
   setUpIOC();
   runApp(const MyApp());
@@ -23,6 +25,7 @@ void setUpIOC() {
   Get.put(CourseService());
   Get.lazyPut(() => HomeController());
   Get.lazyPut(() => TutorsController());
+  Get.lazyPut(() => CourseDetailsController());
 }
 
 class MyApp extends StatefulWidget with Dimension {
