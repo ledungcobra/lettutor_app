@@ -16,7 +16,6 @@ class TutorsController extends GetxController with StateMixin<List<Tutor>> {
 
   void initData() async {
     change([], status: RxStatus.loading());
-    RxStatus.loading();
     tutors = await _tutorService.getTutors();
     change(tutors, status: RxStatus.success());
     isInit.value = false;
