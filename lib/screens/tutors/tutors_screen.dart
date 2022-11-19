@@ -13,8 +13,6 @@ import 'package:lettutor_app/widgets/skill_chip.dart';
 import 'package:lettutor_app/widgets/not_found.dart';
 
 class TutorsScreen extends GetView<TutorsController> {
-  late double _width;
-  late double _height;
   Rx<Nationality> selectedNationality = nationalities.first.obs;
   RxInt selectedFilterIndex = 0.obs;
   final TutorService _tutorService = Get.find();
@@ -24,8 +22,7 @@ class TutorsScreen extends GetView<TutorsController> {
 
   @override
   Widget build(BuildContext context) {
-    _width = Get.width;
-    _height = Get.height;
+    Get.put(TutorsController());
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
@@ -131,8 +128,8 @@ class TutorsScreen extends GetView<TutorsController> {
 
   Widget _filterSkillsBar() {
     return SizedBox(
-      width: _width,
-      height: 0.06 * _height,
+      width: Get.width,
+      height: 0.06 * Get.height,
       child: ListView.separated(
         itemCount: skillFilters.keys.length,
         scrollDirection: Axis.horizontal,
@@ -196,7 +193,8 @@ class TutorsScreen extends GetView<TutorsController> {
       skillFilters.entries.toList()[selectedFilterIndex.value].value;
 
   FilterCriteria get filterCriteria => FilterCriteria(
-      nationality: selectedNationality.value,
-      skillFilter: selectedSkillFilter,
-      name: tutorName);
+        nationality: selectedNationality.value,
+        skillFilter: selectedSkillFilter,
+        name: tutorName,
+      );
 }

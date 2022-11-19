@@ -8,7 +8,6 @@ import 'controllers/course_details_controller.dart';
 
 class CourseDetails extends GetView<CourseDetailsController> {
   final Course course;
-  CourseDetailsController _pdfFileController = Get.find();
 
   CourseDetails({required this.course, required int selectedIndex}) {
     controller.selectedIndex.value = selectedIndex;
@@ -17,6 +16,7 @@ class CourseDetails extends GetView<CourseDetailsController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(CourseDetailsController());
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -24,7 +24,7 @@ class CourseDetails extends GetView<CourseDetailsController> {
           bottom: TabBar(
             onTap: (index) async {
               if (index == 1) {
-                await _pdfFileController.loadPdf();
+                await controller.loadPdf();
               }
             },
             tabs: const [

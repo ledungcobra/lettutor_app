@@ -3,119 +3,122 @@ import 'package:get/get.dart';
 import 'package:lettutor_app/screens/forgot_password/forgot_password.dart';
 import 'package:lettutor_app/utils/helper.dart';
 
-class FormFields extends StatefulWidget {
-  FormFields({
-    Key? key,
-    required double width,
-  })  : _width = width,
-        super(key: key);
+import '../sign_up_controller.dart';
 
-  final double _width;
+class FormFields extends StatelessWidget {
+  SignUpController signUpController = Get.find();
 
-  @override
-  State<FormFields> createState() => _FormFieldsState();
-}
-
-class _FormFieldsState extends State<FormFields> {
-  bool showPassword = false;
+  FormFields({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          width: widget._width,
-          child: Text(
-            'EMAIL',
-            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.start,
+    return Form(
+      key: signUpController.formKey,
+      child: Column(
+        children: [
+          SizedBox(
+            width: Get.width,
+            child: Text(
+              'EMAIL',
+              style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.start,
+            ),
           ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Enter your email',
+          const SizedBox(
+            height: 10,
           ),
-          validator: validateEmail,
-          onSaved: (value) {},
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          width: widget._width,
-          child: Text(
-            'PASSWORD',
-            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.start,
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        TextFormField(
-          decoration: InputDecoration(
+          TextFormField(
+            keyboardType: TextInputType.emailAddress,
+            initialValue: signUpController.email.value,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            decoration: InputDecoration(
               border: OutlineInputBorder(),
-              hintText: 'Enter your password',
-              suffixIcon: Container(
-                child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        showPassword = !showPassword;
-                      });
-                    },
-                    icon: showPassword
-                        ? Icon(Icons.visibility)
-                        : Icon(Icons.visibility_off)),
-              )),
-          validator: validatePassword,
-          obscureText: !showPassword,
-        ),
-        SizedBox(height: 10),
-        SizedBox(
-          width: widget._width,
-          child: Text(
-            'RePassword',
-            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.start,
+              hintText: 'Enter your email',
+            ),
+            validator: validateEmail,
+            onChanged: (value)=>  signUpController.email.value = value,
+            onSaved: (value) {
+              signUpController.email.value = value ?? "";
+            },
           ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        TextFormField(
-          decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Enter your password',
-              suffixIcon: Container(
-                child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        showPassword = !showPassword;
-                      });
-                    },
-                    icon: showPassword
-                        ? Icon(Icons.visibility)
-                        : Icon(Icons.visibility_off)),
-              )),
-          validator: validatePassword,
-          obscureText: !showPassword,
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Row(children: [
-          TextButton(
-            onPressed: _openForgotPassword,
-            child: const Text('Forgot Password?'),
-            style: ButtonStyle(alignment: Alignment.topLeft),
+          SizedBox(
+            height: 10,
           ),
-        ])
-      ],
+          SizedBox(
+            width: Get.width,
+            child: Text(
+              'PASSWORD',
+              style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter your password',
+                suffixIcon: Container(
+                  child: IconButton(
+                      onPressed: () {
+                        signUpController.showPassword1.value =
+                            !signUpController.showPassword1.value;
+                      },
+                      icon: signUpController.showPassword1.value
+                          ? Icon(Icons.visibility)
+                          : Icon(Icons.visibility_off)),
+                )),
+            validator: validatePassword,
+            obscureText: !signUpController.showPassword1.value,
+            onChanged: (value) => signUpController.password.value = value  ,
+            onSaved: (value) => signUpController.password.value = value ?? "",
+          ),
+          SizedBox(height: 10),
+          SizedBox(
+            width: Get.width,
+            child: Text(
+              'RePassword',
+              style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter your password',
+                suffixIcon: Container(
+                  child: IconButton(
+                      onPressed: () {
+                        signUpController.showPassword2.value =
+                            !signUpController.showPassword2.value;
+                      },
+                      icon: signUpController.showPassword2.value
+                          ? Icon(Icons.visibility)
+                          : Icon(Icons.visibility_off)),
+                )),
+            validator: validatePassword,
+            obscureText: !signUpController.showPassword2.value,
+            onChanged: (value) => signUpController.rePassword.value = value ,
+            onSaved: (value) => signUpController.rePassword.value = value ?? "",
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(children: [
+            TextButton(
+              onPressed: _openForgotPassword,
+              style: ButtonStyle(alignment: Alignment.topLeft),
+              child: const Text('Forgot Password?'),
+            ),
+          ])
+        ],
+      ),
     );
   }
 

@@ -6,6 +6,7 @@ import 'package:lettutor_app/screens/login/login_screen.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/mixing.dart';
+import 'package:lettutor_app/utils/shared_reference.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
@@ -19,6 +20,7 @@ class SettingsScreen extends StatefulWidget with Dimension {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   late BuildContext context;
+  final tokenService = Get.find<TokenService>();
 
   UserInfo? userInfo;
 
@@ -33,7 +35,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     super.initState();
   }
 
-  void _handleLogout() {
+  void _handleLogout()  async {
+    await tokenService.clearTokens();
     Get.offAll(LoginScreen());
   }
 

@@ -23,6 +23,10 @@ class UserInfo {
     return data;
   }
 
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
 
 class User {
@@ -66,7 +70,12 @@ class User {
     avatar = json['avatar'];
     country = json['country'];
     phone = json['phone'];
-    roles = json['roles'].cast<String>();
+    if(json['roles'] != null){
+      roles = <String>[];
+      json['roles'].forEach((v){
+        roles!.add(v);
+      });
+    }
     language = json['language'];
     birthday = json['birthday'];
     isActivated = json['isActivated'];

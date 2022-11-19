@@ -14,7 +14,6 @@ import 'package:lettutor_app/widgets/avatar.dart';
 
 class HomeScreen extends GetView<HomeController> {
 
-  late BuildContext context;
   final UserService _userService = Get.find();
   final TutorService _tutorService = Get.find();
 
@@ -23,7 +22,7 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    this.context = context;
+    Get.put(HomeController());
     return Scaffold(
         endDrawer: UserInfoDrawer(),
         appBar: AppBar(

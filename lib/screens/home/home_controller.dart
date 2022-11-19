@@ -42,4 +42,9 @@ class HomeController extends GetxController{
       return t;
     }).toList();
   }
+  @override
+  void dispose() {
+    print('disposed ');
+    super.dispose();
+  }
 }

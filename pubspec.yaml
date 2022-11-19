@@ -47,7 +47,7 @@ dependencies:
   language_picker: ^0.4.1
   get:
   url_launcher: ^6.1.6
-
+  dio: ^4.0.6
 dev_dependencies:
   flutter_test:
     sdk: flutter

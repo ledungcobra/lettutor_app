@@ -1,42 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lettutor_app/screens/login/login_controller.dart';
 import 'package:lettutor_app/screens/login/widgets/FormFields.dart';
 import 'package:lettutor_app/screens/login/widgets/footer.dart';
 import 'package:lettutor_app/screens/tab_bar_screen/tab_bar_screen.dart';
+import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/helper.dart';
+import 'package:lettutor_app/utils/mixing.dart';
+import 'package:lettutor_app/utils/shared_reference.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
-class LoginScreen extends StatelessWidget {
-  late double _width;
-  late double _height;
+import '../../widgets/loading.dart';
+
+class LoginScreen extends StatelessWidget with HandleUIError{
+  final loginController = Get.find<LoginController>();
+  final userService = Get.find<UserService>();
+  final tokenService = Get.find<TokenService>();
 
   LoginScreen({Key? key}) : super(key: key);
 
+  void _handleLogin() async {
+    try {
+      loginController.loading.value = true;
+      var response = await userService.login(
+          loginController.email.value, loginController.password.value);
+      if(response.hasError){
+        handleError(response.error!);
+        return;
+      }
+      Get.snackbar("Success", "Login success", backgroundColor: Colors.green, colorText: Colors.white);
+      await tokenService.saveAccessToken(response.data!.tokens!.access!.token!);
+      Get.offAll(()=>TabBarScreen());
+    } finally {
+      loginController.loading.value = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    _width = MediaQuery.of(context).size.width;
-    _height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: DEFAULT_PADDING),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _introductionSection(),
-                  const SizedBox(height: 10),
-                  FormFields(width: _width),
-                  const SizedBox(height: 10),
-                  Button(onClick: _handleLogin, title: 'LOGIN'),
-                  Footer(),
-                ],
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: DEFAULT_PADDING),
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _introductionSection(),
+                      const SizedBox(height: 10),
+                      FormFields(),
+                      const SizedBox(height: 10),
+                      Button(onClick: _handleLogin, title: 'LOGIN'),
+                      Footer(),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
+            Obx(() => loginController.loading.isTrue ? Loading() : Container())
+          ],
         ),
       ),
     );
@@ -46,7 +73,7 @@ class LoginScreen extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 0.3 * _height,
+          height: 0.3 * Get.height,
           child: Image.asset(getAssetImage("intro_photo.png")),
         ),
         const SizedBox(
@@ -74,9 +101,5 @@ class LoginScreen extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  void _handleLogin() {
-    Get.offAll(()=>TabBarScreen());
   }
 }

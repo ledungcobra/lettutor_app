@@ -4,28 +4,17 @@ import 'package:lettutor_app/screens/forgot_password/forgot_password.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/helper.dart';
 
-class FormFields extends StatefulWidget {
-  FormFields({
-    Key? key,
-    required double width,
-  })  : _width = width,
-        super(key: key);
+import '../login_controller.dart';
 
-  final double _width;
-
-  @override
-  State<FormFields> createState() => _FormFieldsState();
-}
-
-class _FormFieldsState extends State<FormFields> {
-  bool showPassword = false;
+class FormFields extends StatelessWidget {
+  final loginController = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         SizedBox(
-          width: widget._width,
+          width: Get.width,
           child: Text(
             'EMAIL',
             style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
@@ -42,13 +31,14 @@ class _FormFieldsState extends State<FormFields> {
             hintText: 'Enter your email',
           ),
           validator: validateEmail,
-          onSaved: (value) {},
+          onChanged: (value) => loginController.email.value = value,
+          onSaved: (value) => loginController.email.value = value ?? "",
         ),
         SizedBox(
           height: 10,
         ),
         SizedBox(
-          width: widget._width,
+          width: Get.width,
           child: Text(
             'PASSWORD',
             style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
@@ -58,23 +48,25 @@ class _FormFieldsState extends State<FormFields> {
         const SizedBox(
           height: 10,
         ),
-        TextFormField(
-          decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Enter your password',
-              suffixIcon: Container(
-                child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        showPassword = !showPassword;
-                      });
-                    },
-                    icon: showPassword
-                        ? Icon(Icons.visibility)
-                        : Icon(Icons.visibility_off)),
-              )),
-          validator: validatePassword,
-          obscureText: !showPassword,
+        Obx(
+          () => TextFormField(
+            decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter your password',
+                suffixIcon: Container(
+                  child: IconButton(
+                      onPressed: () {
+                        loginController.showPassword.toggle();
+                      },
+                      icon: loginController.showPassword.value
+                          ? Icon(Icons.visibility)
+                          : Icon(Icons.visibility_off)),
+                )),
+            validator: validatePassword,
+            obscureText: !loginController.showPassword.value,
+            onChanged: (value) => loginController.password.value = value,
+            onSaved: (value) => loginController.password.value = value ?? "",
+          ),
         ),
         SizedBox(
           height: 10,
@@ -82,8 +74,8 @@ class _FormFieldsState extends State<FormFields> {
         Row(children: [
           TextButton(
             onPressed: _showForgotPassword,
-            child: const Text('Forgot Password?'),
             style: ButtonStyle(alignment: Alignment.topLeft),
+            child: const Text('Forgot Password?'),
           ),
         ])
       ],

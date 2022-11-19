@@ -1,40 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/screens/signup/widgets/FormFields.dart';
 import 'package:lettutor_app/screens/signup/widgets/footer.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/helper.dart';
+import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
-class SignUpScreen extends StatelessWidget {
-  late double _width;
-  late double _height;
+import '../../services/user_service.dart';
+import '../../widgets/loading.dart';
+import 'sign_up_controller.dart';
+
+class SignUpScreen extends StatelessWidget with HandleUIError {
+  SignUpController signUpController = Get.find();
+  UserService userService = Get.find();
 
   SignUpScreen({Key? key}) : super(key: key);
 
+  _handleSignUp() async {
+    var state = signUpController.formKey.currentState!;
+    if (!state.validate()) {
+      Get.snackbar("Errors", "There are some errors");
+      return;
+    }
+
+    signUpController.loading.value = true;
+    var userResponse = await userService.register(
+        signUpController.email.value, signUpController.password.value);
+    if (userResponse.hasError) {
+      signUpController.loading.value = false;
+      return handleError(userResponse.error!);
+    }
+    Get.snackbar('Success', 'Register success', backgroundColor: Colors.green);
+    signUpController.loading.value = false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    _width = MediaQuery.of(context).size.width;
-    _height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: DEFAULT_PADDING),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _introductionSection(),
-                  const SizedBox(height: 10),
-                  FormFields(width: _width),
-                  const SizedBox(height: 10),
-                  Button(onClick: () {}, title: 'SIGN UP'),
-                  Footer(),
-                ],
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: DEFAULT_PADDING),
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _introductionSection(),
+                      const SizedBox(height: 10),
+                      FormFields(),
+                      const SizedBox(height: 10),
+                      Button(onClick: _handleSignUp, title: 'SIGN UP'),
+                      Footer(),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
+            Obx(() => signUpController.loading.value ? Loading(): Container())
+          ],
         ),
       ),
     );
@@ -44,7 +71,7 @@ class SignUpScreen extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 0.3 * _height,
+          height: 0.3 * Get.height,
           child: Image.asset(getAssetImage("intro_photo.png")),
         ),
         const SizedBox(
@@ -73,6 +100,4 @@ class SignUpScreen extends StatelessWidget {
       ],
     );
   }
-
-  bool showPassword = false;
 }

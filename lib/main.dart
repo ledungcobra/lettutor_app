@@ -1,32 +1,42 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/screens/courses/courses_screen.dart';
 import 'package:lettutor_app/screens/home/home_controller.dart';
-import 'package:lettutor_app/screens/home/home_screen.dart';
+import 'package:lettutor_app/screens/login/login_controller.dart';
 import 'package:lettutor_app/screens/login/login_screen.dart';
-import 'package:lettutor_app/screens/settings/settings_screen.dart';
+import 'package:lettutor_app/screens/signup/sign_up_controller.dart';
 import 'package:lettutor_app/screens/tutors/tutors_controller.dart';
-import 'package:lettutor_app/screens/tutors/tutors_screen.dart';
-import 'package:lettutor_app/screens/upcoming/upcoming_screen.dart';
 import 'package:lettutor_app/services/course_service.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/services/user_service.dart';
-import 'package:lettutor_app/utils/mixing.dart';
 
 import 'screens/course_details/controllers/course_details_controller.dart';
+import 'utils/shared_reference.dart';
 
-void main() {
-  setUpIOC();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setUpIOC();
   runApp(const App());
 }
 
-void setUpIOC() {
+setUpIOC() async {
+  var dio = Dio();
+  var tokenService = TokenService();
+  var accessToken = await tokenService.getAccessToken();
+  if(accessToken.isNotEmpty){
+    dio.options.headers['Authorization'] = "Bearer $accessToken";
+  }
+  dio.options.headers['Content-Type'] = 'application/json';
+
+  Get.put(dio);
+  Get.put(tokenService);
   Get.put(TutorService());
   Get.put(UserService());
   Get.put(CourseService());
-  Get.lazyPut(()=> HomeController());
+  Get.put(SignUpController());
+  Get.put(LoginController());
+
   Get.lazyPut(() => TutorsController());
-  Get.lazyPut(() => CourseDetailsController());
 }
 
 class App extends StatelessWidget {
@@ -38,10 +48,10 @@ class App extends StatelessWidget {
         title: 'Lettutor',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-        fontFamily: 'Roboto',
-        appBarTheme: AppBarTheme(
-        backgroundColor: Colors.white, foregroundColor: Colors.black),
-    ),
-    home: LoginScreen());
+          fontFamily: 'Roboto',
+          appBarTheme: AppBarTheme(
+              backgroundColor: Colors.white, foregroundColor: Colors.black),
+        ),
+        home: LoginScreen());
   }
 }
