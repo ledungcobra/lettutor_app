@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/models/home_model.dart';
 import 'package:lettutor_app/screens/video_call/video_call_screen.dart';
 import 'package:lettutor_app/utils/constants.dart';
@@ -15,7 +16,7 @@ class UpCommingLession extends StatelessWidget with Dimension{
     var textWhiteStyle =  TextStyle(color: Colors.white, fontSize: 25);
     return Container(
       width: double.infinity,
-      height: height(context) * 0.35,
+      height:Get.height * 0.35,
       color: PRIMARY_COLOR,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 10),

@@ -43,6 +43,7 @@ mixin HandleUIError {
 }
 
 mixin AppAPI {
+  final dio = Get.find<Dio>();
   final baseUrl = 'https://sandbox.api.lettutor.com';
   buildUrl(String endpoint){
     return "$baseUrl$endpoint";

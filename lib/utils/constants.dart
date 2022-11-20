@@ -8,7 +8,7 @@ var CHIP_COLOR = Colors.blue[50];
 var COMMENTS_FILE = "tutor_detail_info_comments.json";
 
 var DEFAULT_AVATAR =
-    "https://www.alliancerehabmed.com/wp-content/uploads/icon-avatar-default.png";
+    "https://www.lewesac.co.uk/wp-content/uploads/2017/12/default-avatar.jpg";
 
 Map<String, SkillFilter> skillFilters = {
   "all": SkillFilter(0, "all", "All"),

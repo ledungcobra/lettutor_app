@@ -30,6 +30,7 @@ class LoginScreen extends StatelessWidget with HandleUIError{
         return;
       }
       Get.snackbar("Success", "Login success", backgroundColor: Colors.green, colorText: Colors.white);
+      userService.setUserInfo(response.data);
       await tokenService.saveAccessToken(response.data!.tokens!.access!.token!);
       Get.offAll(()=>TabBarScreen());
     } finally {

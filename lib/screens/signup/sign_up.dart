@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lettutor_app/screens/home/home_controller.dart';
 import 'package:lettutor_app/screens/signup/widgets/FormFields.dart';
 import 'package:lettutor_app/screens/signup/widgets/footer.dart';
 import 'package:lettutor_app/utils/constants.dart';
@@ -9,6 +10,7 @@ import 'package:lettutor_app/widgets/button.dart';
 
 import '../../services/user_service.dart';
 import '../../widgets/loading.dart';
+import '../tab_bar_screen/tab_bar_screen.dart';
 import 'sign_up_controller.dart';
 
 class SignUpScreen extends StatelessWidget with HandleUIError {
@@ -25,14 +27,16 @@ class SignUpScreen extends StatelessWidget with HandleUIError {
     }
 
     signUpController.loading.value = true;
-    var userResponse = await userService.register(
+    var response = await userService.register(
         signUpController.email.value, signUpController.password.value);
-    if (userResponse.hasError) {
+    if (response.hasError) {
       signUpController.loading.value = false;
-      return handleError(userResponse.error!);
+      return handleError(response.error!);
     }
+    userService.setUserInfo(response.data);
     Get.snackbar('Success', 'Register success', backgroundColor: Colors.green);
     signUpController.loading.value = false;
+    Get.offAll(() => TabBarScreen());
   }
 
   @override
@@ -60,7 +64,7 @@ class SignUpScreen extends StatelessWidget with HandleUIError {
                 ),
               ),
             ),
-            Obx(() => signUpController.loading.value ? Loading(): Container())
+            Obx(() => signUpController.loading.value ? Loading() : Container())
           ],
         ),
       ),

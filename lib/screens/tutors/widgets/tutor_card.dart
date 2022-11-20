@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lettutor_app/models/tutor.dart';
 import 'package:lettutor_app/widgets/skill_chip.dart';
 
+import '../../../widgets/avatar.dart';
+
 class TutorCard extends StatelessWidget {
   final Tutor tutor;
   final void Function() onClick;
@@ -26,6 +28,7 @@ class TutorCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start  ,
               children: [_header(), _body(), _footer()],
             ),
           ),
@@ -38,12 +41,7 @@ class TutorCard extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: 50,
-          height: 50,
-          child: CircleAvatar(
-              backgroundImage: NetworkImage(tutor.avatar ?? ""), radius: 100),
-        ),
+        NetworkAvatar(url: tutor.avatar),
         SizedBox(
           width: 20,
         ),
@@ -62,7 +60,7 @@ class TutorCard extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text(tutor.rating!.toStringAsFixed(2)),
+                      Text(tutor.rating?.toStringAsFixed(2) ?? ''),
                       SizedBox(
                         width: 5,
                       ),
@@ -119,7 +117,11 @@ class TutorCard extends StatelessWidget {
         Row(
           children: [
             IconButton(
-                onPressed: onLikeClick, icon: Icon(tutor.isFavorite ? Icons.favorite: Icons.favorite_border, color: Colors.redAccent,)),
+                onPressed: onLikeClick,
+                icon: Icon(
+                  tutor.isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: Colors.redAccent,
+                )),
             OutlinedButton(onPressed: () {}, child: Text('Book')),
           ],
         )

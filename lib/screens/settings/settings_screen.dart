@@ -1,53 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/user_info.dart';
 import 'package:lettutor_app/screens/history/history_screen.dart';
 import 'package:lettutor_app/screens/login/login_screen.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/utils/constants.dart';
-import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/utils/shared_reference.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
-class SettingsScreen extends StatefulWidget with Dimension {
+class SettingsScreen extends StatelessWidget {
+  final tokenService = Get.find<TokenService>();
+  final userService = Get.find<UserService>();
 
   SettingsScreen({Key? key}) : super(key: key);
 
-  @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  late BuildContext context;
-  final tokenService = Get.find<TokenService>();
-
-  UserInfo? userInfo;
-
-  @override
-  void initState() {
-    Get.find<UserService>()
-        .getUserInfo()
-        .then((value) => setState(() {
-      userInfo = value;
-    }))
-        .catchError((e) => print(e.toString()));
-    super.initState();
-  }
-
-  void _handleLogout()  async {
+  void _handleLogout() async {
     await tokenService.clearTokens();
     Get.offAll(LoginScreen());
   }
 
   _handleOpenHistory() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (ctx) => HistoryScreen()));
+    Get.to(HistoryScreen());
   }
 
   @override
   Widget build(BuildContext context) {
-    this.context = context;
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -89,7 +66,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   _userDetails() {
     return Row(
       children: [
-        NetworkAvatar(url: userInfo?.user?.avatar ?? DEFAULT_AVATAR),
+        NetworkAvatar(url: userService.userInfo.user?.avatar ?? DEFAULT_AVATAR),
         SizedBox(
           width: 20,
         ),
@@ -99,11 +76,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              userInfo?.user?.name ?? "",
+              userService.userInfo.user?.name ?? "",
               style: TextStyle(fontSize: 18),
             ),
             Text(
-              userInfo?.user?.email ?? "",
+              userService.userInfo.user?.email ?? "",
               style: TextStyle(fontSize: 18),
             ),
           ],

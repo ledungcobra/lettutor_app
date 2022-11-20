@@ -9,6 +9,13 @@ import 'package:lettutor_app/utils/mixing.dart';
 
 class UserService with CatchError, AppAPI {
   final Dio dio = Get.find();
+  UserInfo? _userInfo;
+
+  setUserInfo(UserInfo? userInfo){
+    _userInfo = userInfo;
+  }
+
+  UserInfo get userInfo => _userInfo!;
 
   Future<List<Schedule>> getListSchedules() async {
     var result =
