@@ -18,6 +18,7 @@ class LoginScreen extends StatelessWidget with HandleUIError {
   final userService = Get.find<UserService>();
   final tokenService = Get.find<TokenService>();
 
+
   LoginScreen({Key? key}) : super(key: key);
 
   void _handleLogin() async {
@@ -41,7 +42,8 @@ class LoginScreen extends StatelessWidget with HandleUIError {
 
   @override
   Widget build(BuildContext context) {
-    checkForLogin();
+    _handleLogin();
+    // checkForLogin();
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/screens/home/home_controller.dart';
 import 'package:lettutor_app/screens/signup/widgets/FormFields.dart';
 import 'package:lettutor_app/screens/signup/widgets/footer.dart';
 import 'package:lettutor_app/utils/constants.dart';
