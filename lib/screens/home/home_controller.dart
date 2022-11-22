@@ -17,7 +17,7 @@ class HomeController extends GetxController with HandleUIError {
   var page = 1;
   var perPage = 2;
   final RefreshController refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
   @override
   void onInit() async {
@@ -31,24 +31,25 @@ class HomeController extends GetxController with HandleUIError {
     try {
       var homeModel = await _tutorService.getHomeModel();
       header.value = homeModel.header;
-     loadTutors();
+      loadTutors();
     } catch (e) {
       print(e.toString());
     }
   }
 
-  loadTutors() {
-    _tutorService.getTutorsPaging(perPage, page).then((tutorResponse){
-      if (tutorResponse.hasError) {
-        handleError(tutorResponse.error!);
-        listTutors.value = [];
-        return;
-      }
-      listTutors.value = tutorResponse.data!;
-      loadMore.value = true;
-      perPage+=2;
-      refreshController.loadComplete();
-    });
+  loadTutors() async {
+    print("Loading perPage=$perPage page=$page");
+    await Future.delayed(const Duration(milliseconds: 500));
+    var tutorResponse = await _tutorService.getTutorsPaging(page,perPage);
+    if (tutorResponse.hasError) {
+      handleError(tutorResponse.error!);
+      listTutors.value = [];
+      return;
+    }
+    listTutors.value = tutorResponse.data!;
+    loadMore.value = true;
+    page += 2;
+    refreshController.loadComplete();
   }
 
   void findTutorById(String tutorId) {}
@@ -61,6 +62,7 @@ class HomeController extends GetxController with HandleUIError {
       return t;
     }).toList();
   }
+
   @override
   void dispose() {
     super.dispose();

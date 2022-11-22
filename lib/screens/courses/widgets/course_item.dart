@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/models/course.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/loading_image.dart';
@@ -12,6 +13,10 @@ class CourseItem extends StatelessWidget with Dimension {
 
   @override
   Widget build(BuildContext context) {
+    return buildItem();
+  }
+
+  buildItem(){
     return InkWell(
       onTap: onTap,
       child: Card(
@@ -25,8 +30,8 @@ class CourseItem extends StatelessWidget with Dimension {
               Align(
                 alignment: AlignmentDirectional.center,
                 child: SizedBox(
-                  child: LoadingImage(src: course.imageUrl,),
-                  width: width(context) * 0.7,
+                  width: Get.width * 0.7,
+                  child: LoadingImage(src: course.imageUrl),
                 ),
               ),
               Text(

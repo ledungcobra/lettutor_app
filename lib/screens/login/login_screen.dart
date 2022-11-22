@@ -13,7 +13,7 @@ import 'package:lettutor_app/widgets/button.dart';
 
 import '../../widgets/loading.dart';
 
-class LoginScreen extends StatelessWidget with HandleUIError{
+class LoginScreen extends StatelessWidget with HandleUIError {
   final loginController = Get.find<LoginController>();
   final userService = Get.find<UserService>();
   final tokenService = Get.find<TokenService>();
@@ -25,14 +25,15 @@ class LoginScreen extends StatelessWidget with HandleUIError{
       loginController.loading.value = true;
       var response = await userService.login(
           loginController.email.value, loginController.password.value);
-      if(response.hasError){
+      if (response.hasError) {
         handleError(response.error!);
         return;
       }
-      Get.snackbar("Success", "Login success", backgroundColor: Colors.green, colorText: Colors.white);
+      Get.snackbar("Success", "Login success",
+          backgroundColor: Colors.green, colorText: Colors.white);
       userService.setUserInfo(response.data);
       await tokenService.saveAccessToken(response.data!.tokens!.access!.token!);
-      Get.offAll(()=>TabBarScreen());
+      Get.offAll(() => TabBarScreen());
     } finally {
       loginController.loading.value = false;
     }
@@ -40,6 +41,7 @@ class LoginScreen extends StatelessWidget with HandleUIError{
 
   @override
   Widget build(BuildContext context) {
+    checkForLogin();
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -68,6 +70,12 @@ class LoginScreen extends StatelessWidget with HandleUIError{
         ),
       ),
     );
+  }
+
+  void checkForLogin() {
+      tokenService.getAccessToken().then((result) {
+      if (result != '') Get.offAll(() => TabBarScreen());
+    });
   }
 
   Widget _introductionSection() {

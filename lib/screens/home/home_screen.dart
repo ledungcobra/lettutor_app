@@ -14,8 +14,6 @@ import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/loading.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../widgets/loadmore.dart';
-
 class HomeScreen extends GetView<HomeController> {
   final UserService _userService = Get.find();
   final TutorService _tutorService = Get.find();
@@ -58,10 +56,14 @@ class HomeScreen extends GetView<HomeController> {
 
   Widget _homeBody(Header? header, List<Tutor> listTutors) {
     return SizedBox(
-      child: Column(mainAxisSize: MainAxisSize.max, children: [
-        if (header != null) UpCommingLession(header),
-        _recommendTutors(listTutors)
-      ]),
+      height: Get.height,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          if (header != null) UpCommingLession(header),
+          _recommendTutors(listTutors)
+        ],
+      ),
     );
   }
 
@@ -96,12 +98,15 @@ class HomeScreen extends GetView<HomeController> {
           },
         ),
         controller: controller.refreshController,
-        onLoading: controller.loadTutors(),
-        child:  Obx(
-              ()=> ListView.builder(
-          itemCount: controller.listTutors.length,
-          itemBuilder: (context, index) =>TutorCard(
-                onLikeClick: () => controller.like(controller.listTutors[index]),
+        onLoading: () async {
+          await controller.loadTutors();
+        },
+        child: Obx(
+          () => ListView.builder(
+            itemCount: controller.listTutors.length,
+            itemBuilder: (context, index) => TutorCard(
+                onLikeClick: () =>
+                    controller.like(controller.listTutors[index]),
                 tutor: controller.listTutors[index],
                 onClick: () =>
                     _handleShowTutorDetail(controller.listTutors[index])),

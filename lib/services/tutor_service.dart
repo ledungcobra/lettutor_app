@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:lettutor_app/dto/ResponseEntity.dart';
 import 'package:lettutor_app/models/comment.dart';
 import 'package:lettutor_app/models/home_model.dart';
-import 'package:lettutor_app/models/meeting.dart';
 import 'package:lettutor_app/models/tutor.dart';
 import 'package:lettutor_app/models/tutor_detail.dart';
 import 'package:lettutor_app/utils/constants.dart';
@@ -27,7 +24,7 @@ class TutorService with AppAPI, CatchError {
   }
 
   Future<ResponseEntity<List<Tutor>>> getTutorsPaging(
-      int perPage, int page) async {
+      int page, int perPage) async {
     try {
       var url = buildUrl("/tutor/more?perPage=$perPage&page=$page");
       var response = await dio.get(url);
