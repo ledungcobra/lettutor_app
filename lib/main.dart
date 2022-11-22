@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lettutor_app/screens/home/home_controller.dart';
 import 'package:lettutor_app/screens/login/login_controller.dart';
 import 'package:lettutor_app/screens/login/login_screen.dart';
 import 'package:lettutor_app/screens/signup/sign_up_controller.dart';
@@ -35,6 +36,7 @@ setUpIOC() async {
   Get.put(CourseService());
   Get.put(SignUpController());
   Get.put(LoginController());
+  Get.put(HomeController());
   Get.lazyPut(() => TutorsController());
 }
 

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:lettutor_app/models/home_model.dart';
 import 'package:lettutor_app/models/tutor.dart';
 import 'package:lettutor_app/models/user_info.dart';
+import 'package:lettutor_app/screens/home/home_controller.dart';
 import 'package:lettutor_app/screens/home/widgets/upcoming_lesson.dart';
 import 'package:lettutor_app/screens/home/widgets/user_info_drawer.dart';
 import 'package:lettutor_app/screens/tutor_detail/tutor_detail.dart';
@@ -26,58 +27,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with HandleUIError {
   final UserService _userService = Get.find();
   final TutorService _tutorService = Get.find();
-  var listTutors = <Tutor>[].obs;
-  Rx<Header?> header = Rx(null);
-  Rx<TutorDetail?> tutorDetail = Rx(null);
-
-  var page = 1;
-  var perPage = 2;
+  final controller = Get.find<HomeController>();
+  final GlobalKey contentKey = GlobalKey();
+  final GlobalKey refresherKey = GlobalKey();
   final RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
-  @override
-  void initState() {
-    loadingData();
-    super.initState();
-  }
-
-  loadingData() async {
-    try {
-      var homeModel = await _tutorService.getHomeModel();
-      header.value = homeModel.header;
-      loadTutors();
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  loadTutors() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
-    var tutorResponse = await _tutorService.getTutorsPaging(page, perPage);
-    if (tutorResponse.hasError) {
-      handleError(tutorResponse.error!);
-      listTutors.value = [];
-      setState(() {});
-      return;
-    }
-    listTutors.addAll(tutorResponse.data!);
-    if (mounted) {
-      setState(() {});
-    }
-    refreshController.loadComplete();
-    page++;
-  }
-
   void findTutorById(String tutorId) {}
-
-  like(Tutor tutor) {
-    listTutors.value = listTutors.map((t) {
-      if (t == tutor) {
-        t.isFavorite = !t.isFavorite;
-      }
-      return t;
-    }).toList();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,18 +64,19 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
           )
         ],
       ),
-      body: _refreshItem(),
+      body: _homeBody(),
     );
   }
 
-  Widget _homeBody(Header? header, List<Tutor> listTutors) {
+  Widget _homeBody() {
     return SizedBox(
       height: Get.height,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          if (header != null) UpCommingLession(header),
-          _recommendTutors(listTutors)
+          if (controller.header.value != null)
+            UpCommingLession(controller.header.value!),
+          _recommendTutors()
         ],
       ),
     );
@@ -130,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
     Get.to(TutorDetailScreen(tutorDetail: tutorDetail));
   }
 
-  _recommendTutors(List<Tutor> recommendTutors) {
+  _recommendTutors() {
     return Expanded(
       child: _refreshItem(),
     );
@@ -138,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
 
   _refreshItem() {
     return SmartRefresher(
+      key: refresherKey,
       enablePullDown: true,
       enablePullUp: true,
       header: WaterDropHeader(),
@@ -163,15 +121,23 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
       ),
       controller: refreshController,
       onLoading: () async {
-        await loadTutors();
+        await controller.loadTutors();
+        if (mounted) {
+          setState(() {});
+        }
+        refreshController.loadComplete();
       },
       child: ListView.builder(
-        // key: _contentKey,
-        itemCount: listTutors.length,
+        key: contentKey,
+        itemCount: controller.listTutors.length,
         itemBuilder: (context, index) => TutorCard(
-            onLikeClick: () => like(listTutors[index]),
-            tutor: listTutors[index],
-            onClick: () => _handleShowTutorDetail(listTutors[index])),
+          onLikeClick: () {
+            controller.like(controller.listTutors[index]);
+            setState(() {});
+          },
+          tutor: controller.listTutors[index],
+          onClick: () => _handleShowTutorDetail(controller.listTutors[index]),
+        ),
       ),
     );
   }
