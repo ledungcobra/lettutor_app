@@ -19,11 +19,13 @@ mixin Dimension {
 mixin CatchError {
   handleError(Object e) {
     if (e is DioError) {
+      print(e);
       String message = e.response!.data['message'].toString();
       return ResponseEntity(
           data: null, error: ErrorResponse(message: message, statusCode: 400));
+    }else{
+      print(e);
     }
-    print(e);
     return ResponseEntity(
       data: null,
       error: ErrorResponse(message: "Some thing went wrong", statusCode: 400),

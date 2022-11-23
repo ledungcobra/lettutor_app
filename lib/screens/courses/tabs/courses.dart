@@ -8,6 +8,7 @@ import 'package:lettutor_app/utils/mixing.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../models/course.dart';
+import '../../../widgets/load_more_footer.dart';
 
 class CoursesTab extends StatefulWidget {
   CoursesTab({Key? key}) : super(key: key);
@@ -26,7 +27,6 @@ class _CoursesTabState extends State<CoursesTab> with HandleUIError {
   int page = 1;
   int perPage = 2;
   var courses = <Course>[];
-
 
   @override
   void initState() {
@@ -54,44 +54,40 @@ class _CoursesTabState extends State<CoursesTab> with HandleUIError {
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(
-        key: _refresherKey,
-        enablePullDown: true,
-        enablePullUp: true,
-        header: WaterDropHeader(),
-        physics: BouncingScrollPhysics(),
-        footer: CustomFooter(
-          builder: (context, mode) {
-            Widget body;
-            if (mode == LoadStatus.idle) {
-              body = Text("pull up load");
-            } else if (mode == LoadStatus.loading) {
-              body = CupertinoActivityIndicator();
-            } else if (mode == LoadStatus.failed) {
-              body = Text("Load Failed!Click retry!");
-            } else if (mode == LoadStatus.canLoading) {
-              body = Text("release to load more");
-            } else {
-              body = Text("No more Data");
-            }
-            return SizedBox(
-              height: 50.0,
-              child: Center(child: body),
-            );
+      key: _refresherKey,
+      enablePullUp: true,
+     
+      header: WaterDropHeader(),
+      physics: BouncingScrollPhysics(),
+      footer: LoadMoreFooter(),
+      controller: refreshController,
+      onLoading: () async {
+        await loadCourses();
+      },
+      child: ListView.builder(
+        key: _contentKey,
+        itemCount: courses.length,
+        itemBuilder: (context, index) => CourseItem(
+          course: courses[index],
+          onTap: () async {
+            await _loadCourse(courses[index]);
           },
         ),
-        controller: refreshController,
-        onLoading: () async {
-          await loadCourses();
-        },
-        child: ListView.builder(
-          key: _contentKey,
-          itemCount: courses.length,
-          itemBuilder: (context, index) => CourseItem(
-            course: courses[index],
-            onTap: () => Get.to(
-              CourseOverview(course: courses[index]),
-            ),
-          ),
-        ));
+      ),
+    );
+  }
+
+  _loadCourse(Course course) async {
+    if (course.id == null) {
+      Get.snackbar("Error", 'Invalid course',
+          colorText: Colors.white, backgroundColor: Colors.red);
+      return;
+    }
+    var response = await coursesService.getCourseDetail(course.id!);
+    if (response.hasError) {
+      handleError(response.error!);
+      return;
+    }
+    Get.to(CourseOverview(course: response.data!));
   }
 }

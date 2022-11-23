@@ -4,27 +4,43 @@ import 'package:lettutor_app/models/book.dart';
 import 'package:lettutor_app/screens/courses/widgets/book_item.dart';
 import 'package:lettutor_app/services/course_service.dart';
 import 'package:lettutor_app/widgets/loading.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class BooksTab extends StatelessWidget {
-  CourseService _courseService = Get.find();
+import '../../../widgets/load_more_footer.dart';
+import 'books_controller.dart';
 
+class BooksTab extends StatefulWidget {
   BooksTab({Key? key}) : super(key: key);
 
   @override
+  State<BooksTab> createState() => _BooksTabState();
+}
+
+class _BooksTabState extends State<BooksTab> {
+  final controller = Get.find<BooksController>();
+  final GlobalKey _refresherKey = GlobalKey();
+
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      builder: ((context, snapshot) {
-        if (snapshot.hasError) {
-          return AlertDialog(
-            content: Text(snapshot.error.toString()),
-          );
+    return SmartRefresher(
+      key: _refresherKey,
+      enablePullUp: true,
+     
+      header: WaterDropHeader(),
+      physics: BouncingScrollPhysics(),
+      footer: LoadMoreFooter(),
+      controller: refreshController,
+      onLoading: () async {
+        await controller.loadBooks();
+        if(mounted){
+          setState(() {});
         }
-        if (snapshot.hasData) {
-          return _listBooks(snapshot.data as List<Book>);
-        }
-        return Loading();
-      }),
-      future: _courseService.getBooks(),
+        refreshController.loadComplete();
+      },
+      child: _listBooks(controller.books),
     );
   }
 

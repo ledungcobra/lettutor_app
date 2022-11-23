@@ -16,6 +16,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../models/tutor_detail.dart';
 import '../../utils/mixing.dart';
+import '../../widgets/load_more_footer.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -83,8 +84,12 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
   }
 
   void _handleShowTutorDetail(Tutor tutor) async {
-    var tutorDetail = await _tutorService.getTutorDetail(tutor.userId!);
-    Get.to(TutorDetailScreen(tutorDetail: tutorDetail));
+    var response = await _tutorService.getTutorDetail(tutor.userId!);
+    if(response.hasError){
+      handleError(response.error!);
+      return;
+    }
+    Get.to(TutorDetailScreen(tutorDetail: response.data!));
   }
 
   _recommendTutors() {
@@ -96,29 +101,10 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
   _refreshItem() {
     return SmartRefresher(
       key: refresherKey,
-      enablePullDown: true,
       enablePullUp: true,
+     
       header: WaterDropHeader(),
-      footer: CustomFooter(
-        builder: (context, mode) {
-          Widget body;
-          if (mode == LoadStatus.idle) {
-            body = Text("pull up load");
-          } else if (mode == LoadStatus.loading) {
-            body = CupertinoActivityIndicator();
-          } else if (mode == LoadStatus.failed) {
-            body = Text("Load Failed!Click retry!");
-          } else if (mode == LoadStatus.canLoading) {
-            body = Text("release to load more");
-          } else {
-            body = Text("No more Data");
-          }
-          return SizedBox(
-            height: 55.0,
-            child: Center(child: body),
-          );
-        },
-      ),
+      footer: LoadMoreFooter(),
       controller: refreshController,
       onLoading: () async {
         await controller.loadTutors();

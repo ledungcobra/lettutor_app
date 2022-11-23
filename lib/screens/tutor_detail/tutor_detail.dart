@@ -14,11 +14,13 @@ import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 import 'package:lettutor_app/widgets/title_button.dart';
 
+import '../../dto/ResponseEntity.dart';
+
 class TutorDetailScreen extends StatelessWidget with Dimension {
   var courseExpanded = true.obs;
   var commentExpanded = true.obs;
   final TutorDetail tutorDetail;
-  TutorService _tutorService = Get.find();
+  final _tutorService = Get.find<TutorService>();
   late BuildContext context;
 
   TutorDetailScreen({super.key, required this.tutorDetail});
@@ -126,7 +128,8 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
           height: 10,
         ),
         Button(
-            onClick: () => Booking.showFullModal(context, tutorDetail.user!.id!),
+            onClick: () =>
+                Booking.showFullModal(context, tutorDetail.user!.id!),
             title: 'Book')
       ],
     );
@@ -261,21 +264,22 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
     );
   }
 
-  FutureBuilder<List<Comment>> _comments() {
+  _comments() {
     return FutureBuilder(
-      future: _tutorService.getComments(tutorDetail.user!.id!),
+      future: _tutorService.getFeedbacksPaging(tutorDetail.user!.id!, 1, 12),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Container();
         }
         if (snapshot.hasData) {
-          var comments = snapshot.data as List<Comment>;
+          var response = snapshot.data as ResponseEntity<List<Comment>>;
+
           return SizedBox(
-            height: height(context) / 2,
+            height: Get.height / 2,
             child: ListView.builder(
-              itemCount: comments.length,
+              itemCount: response.data!.length,
               itemBuilder: (context, index) {
-                var comment = comments[index];
+                var comment = response.data![index];
                 return CommentItem(comment: comment);
               },
             ),

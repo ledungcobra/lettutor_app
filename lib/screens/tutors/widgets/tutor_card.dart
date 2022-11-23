@@ -28,7 +28,7 @@ class TutorCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start  ,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [_header(), _body(), _footer()],
             ),
           ),
@@ -80,7 +80,7 @@ class TutorCard extends StatelessWidget {
                       margin: EdgeInsets.only(right: 5),
                       child: SkillChip(
                           selected: true,
-                          value: tutor.getSpecialties()[index].name),
+                          value: tutor.getSpecialties()[index].description ?? ""),
                     ),
                     itemCount: tutor.getSpecialties().length,
                   ))

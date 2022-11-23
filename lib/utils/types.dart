@@ -1,3 +1,4 @@
+import 'package:lettutor_app/models/category_items.dart';
 import 'package:lettutor_app/models/tutor.dart';
 
 class Nationality {
@@ -7,17 +8,9 @@ class Nationality {
   Nationality(this.display, this.val);
 }
 
-class SkillFilter {
-  num id;
-  String key;
-  String name;
-
-  SkillFilter(this.id, this.key, this.name);
-}
-
 class FilterCriteria {
   final String name;
-  final SkillFilter skillFilter;
+  final Category skillFilter;
   final Nationality nationality;
 
   FilterCriteria(

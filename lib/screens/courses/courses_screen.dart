@@ -21,29 +21,6 @@ class _CoursesScreenState extends State<CoursesScreen>
     super.initState();
   }
 
-  /*
-   child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Courses',
-          ),
-          bottom: TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.school, color: Colors.black,)),
-              Tab(icon: Icon(Icons.book, color: Colors.black,)),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
-          children: [
-            CoursesTab(),
-            BooksTab(),
-          ],
-        ),
-      ),
-   */
-
   @override
   Widget build(BuildContext context) {
     return RefreshConfiguration.copyAncestor(

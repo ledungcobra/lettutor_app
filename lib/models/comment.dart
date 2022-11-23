@@ -1,4 +1,3 @@
-import 'package:lettutor_app/models/user_info.dart';
 
 class Comment {
   String? id;

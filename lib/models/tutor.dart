@@ -1,5 +1,7 @@
-import 'package:lettutor_app/utils/constants.dart';
-import 'package:lettutor_app/utils/types.dart';
+import 'package:get/get.dart';
+import 'package:lettutor_app/models/category_items.dart';
+
+import '../services/utils_service.dart';
 
 class Tutor {
   String? email;
@@ -35,6 +37,7 @@ class Tutor {
   bool? isOnline;
 
   bool isFavorite = false;
+  final utilService = Get.find<UtilService>();
 
   Tutor(
       {this.email,
@@ -140,12 +143,11 @@ class Tutor {
     return data;
   }
 
-  List<SkillFilter> getSpecialties() {
+  List<Category> getSpecialties() {
     return specialties!
         .split(RegExp(","))
-        .map((specialty) =>
-            skillFilters[specialty] ??
-            SkillFilter(0, specialty, specialty.toUpperCase()))
+        .map(
+            (specialty) => utilService.specialties[specialty] ?? Category(description: specialty))
         .toList();
   }
 }

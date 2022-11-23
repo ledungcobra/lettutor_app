@@ -11,6 +11,9 @@ import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import 'screens/course_details/controllers/course_details_controller.dart';
+import 'screens/courses/tabs/books_controller.dart';
+import 'services/utils_service.dart';
 import 'utils/shared_reference.dart';
 import 'widgets/refresh_scroll_behavior.dart';
 
@@ -23,21 +26,28 @@ void main() async {
 setUpIOC() async {
   var dio = Dio();
   var tokenService = TokenService();
+  Get.put(tokenService);
+
   var accessToken = await tokenService.getAccessToken();
   if (accessToken.isNotEmpty) {
     dio.options.headers['Authorization'] = "Bearer $accessToken";
   }
   dio.options.headers['Content-Type'] = 'application/json';
-
   Get.put(dio);
-  Get.put(tokenService);
+
+  var utilService = UtilService();
+  await utilService.init();
+  Get.put(utilService);
+
   Get.put(TutorService());
   Get.put(UserService());
   Get.put(CourseService());
   Get.put(SignUpController());
   Get.put(LoginController());
   Get.put(HomeController());
-  Get.lazyPut(() => TutorsController());
+  Get.put(BooksController());
+  Get.put(CourseDetailsController());
+  Get.put(TutorsController());
 }
 
 class App extends StatelessWidget {
