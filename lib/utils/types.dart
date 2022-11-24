@@ -9,12 +9,12 @@ class Nationality {
 
 class FilterCriteria {
   final String name;
-  final Category skillFilter;
+  final Category specialty;
   final List<Nationality> nationality;
 
   FilterCriteria(
       {required this.nationality,
-      required this.skillFilter,
+      required this.specialty,
       required this.name});
 
   Map getNationalities(){
@@ -34,6 +34,15 @@ class FilterCriteria {
       }
       result[value.val] = true;
     }
+    return result;
+  }
+
+  List<String?> getSpecialties(){
+    var result = <String?>[];
+    if(specialty.key == 'all'){
+      return result;
+    }
+    result.add(specialty.key);
     return result;
   }
 }

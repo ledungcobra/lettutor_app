@@ -57,7 +57,7 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
             child: Column(
               children: [
                 _filterNationalityBar(),
-                _filterSkillsBar(),
+                _filterSpecialtiesBar(),
                 tutorsList(),
               ],
             ),
@@ -139,7 +139,7 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
     );
   }
 
-  Widget _filterSkillsBar() {
+  Widget _filterSpecialtiesBar() {
     var skills = controller.skills;
     return SizedBox(
       width: Get.width,

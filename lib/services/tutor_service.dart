@@ -93,10 +93,9 @@ class TutorService with AppAPI, CatchError {
     data['filters'] = filters;
     filters['date'] = null;
     filters['nationality'] =  filterCriteria.getNationalities();
-
+    filters['specialties'] = filterCriteria.getSpecialties();
     filters['tutoringTimeAvailable'] = [null, null];
     data['date'] = null;
-
     if (search != null && search.isNotEmpty) {
       data['search'] = search;
     }

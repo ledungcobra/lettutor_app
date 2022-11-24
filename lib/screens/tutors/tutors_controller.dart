@@ -4,8 +4,8 @@ import 'package:lettutor_app/models/tutor.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/utils/types.dart';
+
 import '../../services/utils_service.dart';
-import '../../utils/constants.dart';
 
 class TutorsController extends GetxController with HandleUIError {
   final TutorService _tutorService = Get.find();
@@ -19,7 +19,7 @@ class TutorsController extends GetxController with HandleUIError {
 
   FilterCriteria get filterCriteria => FilterCriteria(
         nationality: selectedNationalities,
-        skillFilter: selectedSkillFilter,
+        specialty: selectedSkillFilter,
         name: tutorName,
       );
 

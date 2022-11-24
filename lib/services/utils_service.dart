@@ -22,6 +22,19 @@ class UtilService with AppAPI, CatchError {
           }
         }
       }
+      specialties['all'] = Category(key: 'all', description: 'All');
+
+      response = await dio.get(buildUrl('/learn-topic'));
+      for (var item in response.data){
+        var category = Category(id: item['id'].toString(), key: item['key'], description: item['name']);
+        specialties[category.key] = category;
+      }
+
+      response = await dio.get(buildUrl('/test-preparation'));
+      for (var item in response.data){
+        var category = Category(id: item['id'].toString(), key: item['key'], description: item['name']);
+        specialties[category.key] = category;
+      }
 
       for (var item in categoryList) {
         if(item.title == "specialties"){
@@ -30,6 +43,7 @@ class UtilService with AppAPI, CatchError {
           }
         }
       }
+
     } catch (e) {
       handleError(e);
     }
