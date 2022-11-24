@@ -11,33 +11,36 @@ import 'package:lettutor_app/screens/profile/widgets/normal_text_form_filed.dart
 import 'package:lettutor_app/screens/profile/widgets/phone_text_form_field.dart';
 import 'package:lettutor_app/screens/profile/widgets/update_button.dart';
 import 'package:lettutor_app/services/user_service.dart';
+import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/loading.dart';
 
 class ProfileScreen extends StatefulWidget {
-
   ProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> with HandleUIError {
   UserInfo? userInfo;
 
   @override
   void initState() {
-    Get.find<UserService>()
-        .getUserInfo()
-        .then((value) => setState(() {
-      userInfo = value;
-    }))
-        .catchError((e) => print(e.toString()));
+    Get.find<UserService>().getUserInfo().then((response) {
+      if (response.hasError) {
+        handleError(response.error!);
+        return;
+      }
+      setState(() {
+        userInfo = response.data!;
+      });
+    }).catchError((e) => print(e.toString()));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if(userInfo == null){
+    if (userInfo == null) {
       return Loading();
     }
     return Scaffold(
@@ -56,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Spacer(),
-                    EditPhoto( userInfo?.user),
+                    EditPhoto(userInfo?.user),
                     Spacer(),
                   ],
                 ),
@@ -64,31 +67,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Align(
                   alignment: AlignmentDirectional.center,
                   child: Text(
-                   userInfo?.user?.name ?? "Unknown",
+                    userInfo?.user?.name ?? "Unknown",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Divider(),
-                NormalTextFormField(name:  userInfo?.user?.name ?? "Unknown", hintText: "Enter your name", title: "Name",),
+                NormalTextFormField(
+                  name: userInfo?.user?.name ?? "Unknown",
+                  hintText: "Enter your name",
+                  title: "Name",
+                ),
                 SizedBox(height: 10),
                 EmailTextFormField(email: userInfo?.user?.email ?? ""),
                 SizedBox(height: 10),
                 CountryTextFormField(title: "Country"),
                 SizedBox(height: 10),
-                PhoneTextFormField(phoneNumber: userInfo?.user?.phone?? "Not available"),
+                PhoneTextFormField(
+                    phoneNumber: userInfo?.user?.phone ?? "Not available"),
                 SizedBox(height: 10),
-                BirthdayTextFormField(title: "Birthday", birthday: userInfo?.user?.birthday ?? ""),
+                BirthdayTextFormField(
+                    title: "Birthday",
+                    birthday: userInfo?.user?.birthday ?? ""),
                 SizedBox(height: 10),
                 LevelTextFormField(level: userInfo?.user?.level ?? ""),
                 SizedBox(height: 10),
-                CoursesTextFormField(title: "Self Description", hintText: "Self description",),
+                CoursesTextFormField(
+                  title: "Self Description",
+                  hintText: "Self description",
+                ),
                 SizedBox(height: 20),
                 UpdateButton()
               ],
             ),
           ),
         ),
-      )
+      ),
     );
   }
 }

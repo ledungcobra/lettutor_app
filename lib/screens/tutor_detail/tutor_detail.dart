@@ -169,7 +169,7 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
           style: TextStyle(fontSize: 18),
         ),
         gap,
-        TextAndChips(text: 'Language', chips: tutorDetail.getSpecialties()),
+        TextAndChips(text: 'Languages', chips: tutorDetail.getLanguages()),
         halfGap,
         Text(
           "Interest",

@@ -16,6 +16,7 @@ class NetworkAvatar extends StatelessWidget {
       width: width,
       height: height,
       child:Avatar(
+        useCache: true,
         sources: [
           NetworkSource(url ?? DEFAULT_AVATAR),
           NetworkSource(DEFAULT_AVATAR)

@@ -39,6 +39,8 @@ class Tutor {
   bool isFavorite = false;
   final utilService = Get.find<UtilService>();
 
+  String? secondId;
+
   Tutor(
       {this.email,
       this.google,
@@ -103,6 +105,7 @@ class Tutor {
     isNative = json['isNative'];
     price = json['price'];
     isOnline = json['isOnline'];
+    secondId = json['secondId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -140,14 +143,16 @@ class Tutor {
     data['isNative'] = this.isNative;
     data['price'] = this.price;
     data['isOnline'] = this.isOnline;
+    data['secondId'] = this.secondId;
     return data;
   }
 
   List<Category> getSpecialties() {
-    return specialties!
+    return (specialties ?? "")
         .split(RegExp(","))
-        .map(
-            (specialty) => utilService.specialties[specialty] ?? Category(description: specialty))
+        .map((specialty) =>
+            utilService.specialties[specialty] ??
+            Category(description: specialty))
         .toList();
   }
 }

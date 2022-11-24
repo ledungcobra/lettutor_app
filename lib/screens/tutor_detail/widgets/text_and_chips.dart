@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lettutor_app/models/category_items.dart';
 import 'package:lettutor_app/utils/constants.dart';
 
 class TextAndChips extends StatelessWidget {
@@ -8,7 +9,7 @@ class TextAndChips extends StatelessWidget {
     required this.chips,
   }) : super(key: key);
   final String text;
-  final List<String> chips;
+  final List<Category> chips;
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -26,7 +27,7 @@ class TextAndChips extends StatelessWidget {
               chips.length,
                   (index) => Chip(
                 label: Text(
-                  chips[index],
+                  chips[index].description ?? "",
                   style: const TextStyle(color: PRIMARY_COLOR, fontSize: 12),
                 ),
                 backgroundColor: CHIP_COLOR,

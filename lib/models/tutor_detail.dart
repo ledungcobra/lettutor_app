@@ -1,4 +1,6 @@
-
+import 'package:get/get.dart';
+import 'package:lettutor_app/models/category_items.dart';
+import 'package:lettutor_app/services/utils_service.dart';
 
 class TutorDetail {
   String? video;
@@ -17,6 +19,7 @@ class TutorDetail {
   bool? isFavorite;
   num? avgRating;
   int? totalFeedback;
+  final utilService = Get.find<UtilService>();
 
   TutorDetail(
       {this.video,
@@ -78,8 +81,22 @@ class TutorDetail {
     return data;
   }
 
-  List<String> getSpecialties() {
-    return specialties!.split(RegExp(",")).toList();
+  List<Category> getSpecialties() {
+    return  specialties!
+        .split(RegExp(","))
+        .map((cat) => utilService.specialties[cat])
+        .where((element) => element != null)
+        .map((x)=> x!)
+        .toList();
+  }
+
+  List<Category> getLanguages() {
+    return specialties!
+        .split(RegExp(","))
+        .map((cat) => utilService.languages[cat])
+        .where((element) => element != null)
+        .map((x)=> x!)
+        .toList();
   }
 
   List<Courses> getCourses() {

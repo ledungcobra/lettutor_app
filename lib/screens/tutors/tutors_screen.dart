@@ -7,7 +7,9 @@ import 'package:lettutor_app/screens/tutors/widgets/tutor_card.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/mixing.dart';
+import 'package:lettutor_app/utils/types.dart';
 import 'package:lettutor_app/widgets/skill_chip.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../widgets/load_more_footer.dart';
@@ -31,6 +33,7 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
     controller.onInit();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     Get.put(TutorsController());
@@ -113,22 +116,21 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(50)),
-              child: Obx(
-                () => DropdownButton(
-                  underline: Container(),
-                  onChanged: (value) {
-                    controller.selectedNationality.value = (nationalities
-                        .firstWhere((element) => element.val == value));
+              child:  MultiSelectDialogField(
+                chipDisplay: MultiSelectChipDisplay<Nationality>()..disabled=true,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.zero
+                ),
+
+                  title:Text('Chọn quốc gia') ,
+                  buttonText:Text('Chọn quốc gia'),
+                  items: nationalities.map((e) => MultiSelectItem(e, e.display)).toList(),
+                  listType: MultiSelectListType.LIST,
+                  initialValue: [nationalities.first],
+                  onConfirm: (values) {
+                    controller.selectedNationalities.value = values;
                     filter();
                   },
-                  value: controller.selectedNationality.value.val,
-                  items: nationalities
-                      .map(
-                        (e) => DropdownMenuItem(
-                            value: e.val, child: Text(e.display)),
-                      )
-                      .toList(),
-                ),
               ),
             )
           ],

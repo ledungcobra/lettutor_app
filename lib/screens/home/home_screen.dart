@@ -14,6 +14,7 @@ import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../dto/ResponseEntity.dart';
 import '../../models/tutor_detail.dart';
 import '../../utils/mixing.dart';
 import '../../widgets/load_more_footer.dart';
@@ -49,13 +50,17 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
                 return Text(snapshot.error.toString());
               }
               if (snapshot.hasData) {
-                var userData = snapshot.data as UserInfo;
+                var response = snapshot.data as ResponseEntity<UserInfo?>;
+                if(response.hasError){
+                  handleError(response.error!);
+                  return Container();
+                }
                 return InkWell(
                   onTap: () => Scaffold.of(context).openEndDrawer(),
                   child: NetworkAvatar(
                     height: 40,
                     width: 40,
-                    url: userData.user!.avatar!,
+                    url: response.data!.user!.avatar!,
                   ),
                 );
               }

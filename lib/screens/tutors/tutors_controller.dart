@@ -12,22 +12,22 @@ class TutorsController extends GetxController with HandleUIError {
   final _tutors = <Tutor>[].obs;
   var page = 1;
   var perPage = 3;
-  final Rx<Nationality> selectedNationality = nationalities.first.obs;
+  final selectedNationalities = <Nationality>[].obs;
   final RxInt selectedFilterIndex = 0.obs;
   var tutorName = "";
   final _utilService = Get.find<UtilService>();
 
   FilterCriteria get filterCriteria => FilterCriteria(
-        nationality: selectedNationality.value,
+        nationality: selectedNationalities,
         skillFilter: selectedSkillFilter,
         name: tutorName,
       );
 
-  Category get selectedSkillFilter =>
-      _utilService.specialties.entries.toList()[selectedFilterIndex.value].value;
+  Category get selectedSkillFilter => _utilService.specialties.entries
+      .toList()[selectedFilterIndex.value]
+      .value;
 
-  List<Tutor> get tutors =>
-      _tutors.where((tutor) => filterCriteria.isOk(tutor)).toList();
+  List<Tutor> get tutors => _tutors;
 
   Map<String?, Category> get skills => _utilService.specialties;
 
@@ -37,25 +37,31 @@ class TutorsController extends GetxController with HandleUIError {
     initData();
   }
 
-  void initData() async {
-    await loadTutors();
+  void initData() {
+    loadTutors();
   }
 
   loadTutors() async {
-    var response = await _tutorService.getTutorsPaging(page, perPage);
+    print('Get tutor page=$page perPage=$perPage');
+    var response = await _tutorService.searchTutor(tutorName, filterCriteria,page, perPage);
     if (response.hasError) {
       handleError(response.error!);
       return;
     }
+    print('Size ${response.data!.length}');
     _tutors.addAll(response.data!);
     page++;
   }
 
-  void filter() {}
+  void filter() {
+    page = 1;
+    _tutors.clear();
+    loadTutors();
+  }
 
   void like(String userId) {
     print("Like $userId");
-    print(_tutors.map((t)=>t.userId));
+    print(_tutors.map((t) => t.userId));
     _tutors.value = _tutors.map((t) {
       if (t.userId == userId) {
         t.isFavorite = !t.isFavorite;

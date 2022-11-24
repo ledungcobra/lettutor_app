@@ -12,8 +12,8 @@ var DEFAULT_AVATAR =
 
 List<Nationality> nationalities = [
   Nationality("Chọn quốc gia", "all"),
-  Nationality("Gia sư nước ngoài", "oversea"),
-  Nationality("Gia sư Viêt Nam", "vn"),
-  Nationality("Gia sư Bản Ngữ", "native"),
+  Nationality("Gia sư nước ngoài", "isOversea"),
+  Nationality("Gia sư Viêt Nam", "isVietNamese"),
+  Nationality("Gia sư Bản Ngữ", "isNative"),
 ];
 

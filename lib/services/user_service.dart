@@ -32,10 +32,6 @@ class UserService with CatchError, AppAPI {
     return result;
   }
 
-  Future<UserInfo> getUserInfo() async {
-    return UserInfo.fromJson((await readObjectJson("user.json")));
-  }
-
   Future<ResponseEntity<UserInfo?>> register(
       String email, String password) async {
     try {
@@ -52,6 +48,16 @@ class UserService with CatchError, AppAPI {
     try {
       var response = await dio.post(buildUrl('/auth/login'),
           data: {"email": email, "password": password});
+      return ResponseEntity(
+          data: UserInfo.fromJson(response.data), error: null);
+    } catch (e) {
+      return handleError(e);
+    }
+  }
+
+  Future<ResponseEntity<UserInfo?>> getUserInfo() async {
+    try {
+      var response = await dio.get(buildUrl('/user/info'));
       return ResponseEntity(
           data: UserInfo.fromJson(response.data), error: null);
     } catch (e) {

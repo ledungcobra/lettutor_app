@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../dto/ResponseEntity.dart';
 import '../models/error.dart';
+import 'shared_reference.dart';
 
 mixin Dimension {
   double width(BuildContext context) {
@@ -47,7 +48,14 @@ mixin HandleUIError {
 mixin AppAPI {
   final dio = Get.find<Dio>();
   final baseUrl = 'https://sandbox.api.lettutor.com';
+  final tokenService = Get.find<TokenService>();
   buildUrl(String endpoint){
     return "$baseUrl$endpoint";
+  }
+  reloadToken() async {
+    var accessToken = await tokenService.getAccessToken();
+    if (accessToken.isNotEmpty) {
+      dio.options.headers['Authorization'] = "Bearer $accessToken";
+    }
   }
 }

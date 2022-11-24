@@ -38,7 +38,6 @@ class HomeController extends GetxController  with HandleUIError{
 
 
   loadTutors() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
     var tutorResponse = await _tutorService.getTutorsPaging(page, perPage);
     if (tutorResponse.hasError) {
       handleError(tutorResponse.error!);
