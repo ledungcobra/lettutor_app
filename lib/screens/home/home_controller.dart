@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
+import '../../models/booking_item.dart';
 import '../../models/home_model.dart';
 import '../../models/tutor.dart';
 import '../../models/tutor_detail.dart';
@@ -11,7 +12,7 @@ class HomeController extends GetxController  with HandleUIError{
   final TutorService _tutorService = Get.find();
 
   var listTutors = <Tutor>[].obs;
-  Rx<Header?> header = Rx(null);
+  Rx<BookingItem?> header = Rx(null);
   Rx<TutorDetail?> tutorDetail = Rx(null);
 
   var page = 1;
@@ -28,8 +29,11 @@ class HomeController extends GetxController  with HandleUIError{
 
   loadingData() async {
     try {
-      var homeModel = await _tutorService.getHomeModel();
-      header.value = homeModel.header;
+      var upComingResponse = await _tutorService.getBookingItems();
+      print(upComingResponse.toString());
+      if(upComingResponse.hasData && upComingResponse!.data!.isNotEmpty){
+        header.value = upComingResponse!.data!.first!;
+      }
       loadTutors();
     } catch (e) {
       print(e.toString());

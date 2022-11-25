@@ -51,15 +51,15 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
               }
               if (snapshot.hasData) {
                 var response = snapshot.data as ResponseEntity<UserInfo?>;
-                if(response.hasError){
+                if (response.hasError) {
                   handleError(response.error!);
                   return Container();
                 }
                 return InkWell(
                   onTap: () => Scaffold.of(context).openEndDrawer(),
                   child: NetworkAvatar(
-                    height: 40,
-                    width: 40,
+                    height: 30,
+                    width: 55,
                     url: response.data!.user!.avatar!,
                   ),
                 );
@@ -80,8 +80,12 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          if (controller.header.value != null)
-            UpCommingLession(controller.header.value!),
+          Obx(() {
+            if (controller.header.value != null) {
+              return UpCommingLession(controller.header.value!);
+            }
+            return SizedBox.shrink();
+          }),
           _recommendTutors()
         ],
       ),
@@ -90,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
 
   void _handleShowTutorDetail(Tutor tutor) async {
     var response = await _tutorService.getTutorDetail(tutor.userId!);
-    if(response.hasError){
+    if (response.hasError) {
       handleError(response.error!);
       return;
     }
@@ -107,7 +111,6 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
     return SmartRefresher(
       key: refresherKey,
       enablePullUp: true,
-     
       header: WaterDropHeader(),
       footer: LoadMoreFooter(),
       controller: refreshController,

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:lettutor_app/screens/home/home_controller.dart';
 import 'package:lettutor_app/screens/login/login_controller.dart';
 import 'package:lettutor_app/screens/login/login_screen.dart';
@@ -38,7 +39,7 @@ setUpIOC() async {
   var utilService = UtilService();
   await utilService.init();
   Get.put(utilService);
-
+  Get.put(DateFormat('yyyy-MM-dd hh:mm'));
   Get.put(TutorService());
   Get.put(UserService());
   Get.put(CourseService());

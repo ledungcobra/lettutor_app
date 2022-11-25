@@ -1,19 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/models/history/history.dart';
+import 'package:get/get.dart';
+import 'package:lettutor_app/services/utils_service.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
-import 'package:lettutor_app/widgets/stars.dart';
+
+import '../../../models/history_item.dart';
+import '../../../widgets/divider.dart';
+import '../../../widgets/stars.dart';
+import 'feedback_item.dart';
+import 'rating_tutor.dart';
+import 'report_dialog.dart';
 
 class HistoryItem extends StatelessWidget with Dimension {
-  final History history;
+  final ClassHistory history;
+  final utilService = Get.find<UtilService>();
 
-  const HistoryItem({Key? key, required this.history}) : super(key: key);
+  HistoryItem({Key? key, required this.history}) : super(key: key);
+
+  String get session =>
+      '${timeStart.hour}:${timeStart.minute} - ${timeEnd.hour}:${timeEnd.minute}';
+
+  get timeStart => DateTime.fromMillisecondsSinceEpoch(
+      history.scheduleDetailInfo!.startPeriodTimestamp!);
+
+  get timeEnd => DateTime.fromMillisecondsSinceEpoch(
+      history.scheduleDetailInfo!.endPeriodTimestamp!);
+
+  ClassReview? get reviews => history.classReview;
 
   _messageNow() {}
 
   @override
   Widget build(BuildContext context) {
+    var tutor = history.scheduleDetailInfo?.scheduleInfo?.tutorInfo!;
+
     return Column(
       children: [
         Container(
@@ -25,15 +46,16 @@ class HistoryItem extends StatelessWidget with Dimension {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                  'Lession time ${history.lessonDetail!.start!} - ${history.lessonDetail!.end!}'),
+              Text('Lesson time $session'),
               Row(
                 children: [
-                  Text(history.teacherInfo!.nationality!),
+                  Text(utilService.languages[tutor!.country]?.description
+                          ?.toString() ??
+                      ""),
                   IconButton(
                       onPressed: _messageNow,
                       icon: Icon(Icons.message_outlined, color: PRIMARY_COLOR)),
-                  NetworkAvatar(url: history.teacherInfo!.avatar!),
+                  NetworkAvatar(url: tutor.avatar),
                 ],
               )
             ],
@@ -57,20 +79,42 @@ class HistoryItem extends StatelessWidget with Dimension {
                 height: 10,
               ),
               Container(height: 1, width: double.infinity, color: Colors.grey),
-              if (history.reviews!.isEmpty)
-                Text('Tutor haven\'t reviewed yet')
-              else
-                TutorReview()
+              _tutorReview(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                      onPressed: _handleOpenRating,
+                      child: Text('Add a Rating')),
+                  TextButton(
+                      onPressed: _handleOpenReport, child: Text('Report')),
+                ],
+              )
             ],
           ),
         ),
         Container(height: 1, width: double.infinity, color: Colors.blueAccent),
-        SizedBox(height: 20)
+        SizedBox(height: 2),
+        _feedbacks(),
+        SizedBox(height: 40),
       ],
     );
   }
 
-  Widget TutorReview() {
+  _handleOpenRating() {
+    Get.dialog(RatingTutorDialog(history: history));
+  }
+
+  _handleOpenReport() {
+    Get.dialog(ReportDialog(
+      history: history,
+    ));
+  }
+
+  Widget _tutorReview() {
+    if (reviews == null) {
+      return Text('Tutor haven\'t reviewed yet');
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -79,37 +123,55 @@ class HistoryItem extends StatelessWidget with Dimension {
           height: 10,
         ),
         Text(
-          'Session ${history.lessonDetail?.start?.toString()}-${history.lessonDetail?.end?.toString()}',
+          'Session $session',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        Text('Lesson status: ${history.lessonDetail?.levelStatus?.toString()}'),
-        Text('Lesson progress: ${history.lessonDetail?.progress?.toString()}'),
-        Column(
-          children: history.reviews?.map((e) => _skillRating(e)).toList() ?? [],
-        ),
-        Text('Overall comment: ${history.comment?.toString()}'),
+        Text('Lesson status: ${reviews?.lessonStatus?.status?.toString()}'),
+        Text('Book: ${reviews?.book}-${reviews?.unit}-${reviews?.lesson}'),
+        if (reviews?.lessonProgress != null &&
+            reviews!.lessonProgress!.isNotEmpty)
+          Text('Lesson progress ${reviews?.lessonProgress}'),
+        _skillRating(
+            'Behaviour', reviews?.behaviorRating, reviews?.behaviorComment),
+        _skillRating(
+            'Listening', reviews?.listeningRating, reviews?.listeningComment),
+        _skillRating(
+            'Speaking', reviews?.speakingRating, reviews?.speakingComment),
+        _skillRating(
+            'Vocabulary ', reviews?.vocabularyRating, reviews?.behaviorComment),
+        Text('Overall comment: ${reviews?.overallComment?.toString() ?? ""}'),
         SizedBox(height: 10),
         Container(height: 1, width: double.infinity, color: Colors.grey),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextButton(onPressed: () {}, child: Text('Add a Rating')),
-            TextButton(onPressed: () {}, child: Text('Report')),
-          ],
-        )
       ],
     );
   }
 
-  Widget _skillRating(Reviews review) {
+  Widget _skillRating(String? skill, int? start, String? comment) {
+    if (start == null || comment == null) {
+      return SizedBox.shrink();
+    }
     return Row(
       children: [
-        Text(review.type ?? ''),
+        Text(skill ?? ""),
         Stars(
           onRatingChanged: (v) {},
-          rating: review.star ?? 0,
+          rating: (start ?? 0).toDouble(),
         ),
+        Text(comment ?? "")
       ],
     );
+  }
+
+  _feedbacks() {
+    if (history.feedbacks == null || history.feedbacks!.isEmpty) {
+      return SizedBox.shrink();
+    }
+    var feedbacks = history.feedbacks!;
+    return ListView.separated(
+        shrinkWrap: true,
+        itemBuilder: (context, index) =>
+            FeedbackItem(key: UniqueKey(), feedback: feedbacks[index]),
+        separatorBuilder: (context, index) => MyDivider(),
+        itemCount: feedbacks.length);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:avatars/avatars.dart';
 import 'package:flutter/material.dart';
 import 'package:lettutor_app/utils/constants.dart';
+import 'package:lettutor_app/utils/helper.dart';
 
 class NetworkAvatar extends StatelessWidget {
   final String? url;
@@ -16,9 +17,10 @@ class NetworkAvatar extends StatelessWidget {
       width: width,
       height: height,
       child:Avatar(
+        loader: Image.asset(getAssetImage('not_found.png')),
         useCache: true,
         sources: [
-          NetworkSource(url ?? DEFAULT_AVATAR),
+          NetworkSource(url  ?? DEFAULT_AVATAR),
           NetworkSource(DEFAULT_AVATAR)
         ],
       )

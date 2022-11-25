@@ -46,3 +46,11 @@ class FilterCriteria {
     return result;
   }
 }
+
+
+class Reason{
+  int id;
+  String description;
+
+  Reason(this.id, this.description);
+}
