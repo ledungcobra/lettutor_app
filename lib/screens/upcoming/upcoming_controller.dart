@@ -25,7 +25,7 @@ class UpcomingController extends GetxController with HandleUIError {
     if (success) {
       Get.snackbar(
         'Success',
-        'Reported to the tutor',
+        'Updated request to the tutor',
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
@@ -35,7 +35,7 @@ class UpcomingController extends GetxController with HandleUIError {
     } else {
       Get.snackbar(
         'Error',
-        'Error to report this tutor',
+        'Error to update this request',
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );

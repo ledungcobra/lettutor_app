@@ -24,7 +24,6 @@ class TutorCard extends StatefulWidget {
 class _TutorCardState extends State<TutorCard> {
   @override
   Widget build(BuildContext context) {
-    print('Render ${widget.tutor.userId}');
     return InkWell(
       onTap: widget.onClick,
       child: Card(

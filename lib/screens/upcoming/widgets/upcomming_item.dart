@@ -7,6 +7,7 @@ import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
 import '../../../services/tutor_service.dart';
+import '../../video_call/jitsy_util.dart';
 import 'cancel_dialog.dart';
 
 class UpcomingItem extends StatelessWidget {
@@ -24,7 +25,9 @@ class UpcomingItem extends StatelessWidget {
     Get.dialog(CancelDialog(bookingItem: bookingItem));
   }
 
-  _handleGoMeeting() {}
+  _handleGoMeeting() async  {
+    await joinMeetingJitsi(bookingItem);
+  }
 
   @override
   Widget build(BuildContext context) {

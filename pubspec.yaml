@@ -52,6 +52,11 @@ dependencies:
   multi_select_flutter: ^4.1.2
   avatars: ^2.0.2
   intl: ^0.17.0
+  jitsi_meet:
+    git:
+      url: https://github.com/dispersik/jitsi_meet_fork
+      ref: master
+  jwt_decoder: ^2.0.1
 
 dev_dependencies:
   flutter_test:
