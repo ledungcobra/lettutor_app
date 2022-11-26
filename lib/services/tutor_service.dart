@@ -107,7 +107,6 @@ class TutorService with AppAPI, CatchError {
 
   Future<ResponseEntity> performLike(String userId) async {
     try {
-      print('Userid $userId');
       var url = buildUrl("/user/manageFavoriteTutor");
       Map<dynamic, dynamic> data = {'tutorId': userId};
       var response = await dio.post(url, data: data);

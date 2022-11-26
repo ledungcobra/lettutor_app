@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lettutor_app/screens/video_call/jitsy_util.dart';
 import 'package:lettutor_app/screens/video_call/video_call_screen.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/mixing.dart';
@@ -78,9 +79,8 @@ class _UpCommingLessionState extends State<UpCommingLession> {
             Text('Total lesson time is ${duration.inHours} hours ${duration.inMinutes - duration.inHours * 60} minutes'),
             Button(
               title: 'Enter lesson room',
-              onClick: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (ctx) => VideoCallScreen()));
+              onClick: ()  async {
+                await joinMeetingJitsi(widget.header);
               },
               color: Colors.white,
               textColor: PRIMARY_COLOR,
