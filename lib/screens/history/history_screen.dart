@@ -28,7 +28,6 @@ class _HistoryScreenState extends State<HistoryScreen> with HandleUIError {
         future: widget._userService.getHistories(1000, 1),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            print(snapshot.error);
             return Container();
           }
           if (snapshot.hasData) {

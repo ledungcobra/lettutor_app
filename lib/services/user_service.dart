@@ -72,4 +72,13 @@ class UserService with CatchError, AppAPI {
       return handleError(e);
     }
   }
+
+  Future<int> getTotalTime()async {
+    try {
+      var response = await dio.get(buildUrl('/call/total'));
+      return response.data['total'];
+    } catch (e) {
+      return 0;
+    }
+  }
 }

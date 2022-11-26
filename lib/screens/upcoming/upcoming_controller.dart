@@ -55,8 +55,8 @@ class UpcomingController extends GetxController with HandleUIError {
 
     var response = await tutorService.cancelBookingRequest(
         bookingItem.id!, selectedReason, reportText);
-    Get.back();
     if (response.hasData) {
+      Get.back(result: true);
       Get.snackbar(
         'Success',
         response.data,
@@ -65,6 +65,7 @@ class UpcomingController extends GetxController with HandleUIError {
       );
       bookingItems.value = bookingItems.where((item)=> item.id != bookingItem.id).toList();
     } else {
+      Get.back(result: true);
       Get.snackbar(
         'Error',
         response.error?.message ?? "",

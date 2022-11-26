@@ -116,21 +116,21 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(50)),
-              child:  MultiSelectDialogField(
-                chipDisplay: MultiSelectChipDisplay<Nationality>()..disabled=true,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.zero
-                ),
-
-                  title:Text('Chọn quốc gia') ,
-                  buttonText:Text('Chọn quốc gia'),
-                  items: nationalities.map((e) => MultiSelectItem(e, e.display)).toList(),
-                  listType: MultiSelectListType.LIST,
-                  initialValue: [nationalities.first],
-                  onConfirm: (values) {
-                    controller.selectedNationalities.value = values;
-                    filter();
-                  },
+              child: MultiSelectDialogField(
+                chipDisplay: MultiSelectChipDisplay<Nationality>()
+                  ..disabled = true,
+                decoration: BoxDecoration(borderRadius: BorderRadius.zero),
+                title: Text('Chọn quốc gia'),
+                buttonText: Text('Chọn quốc gia'),
+                items: nationalities
+                    .map((e) => MultiSelectItem(e, e.display))
+                    .toList(),
+                listType: MultiSelectListType.LIST,
+                initialValue: [nationalities.first],
+                onConfirm: (values) {
+                  controller.selectedNationalities.value = values;
+                  filter();
+                },
               ),
             )
           ],
@@ -170,10 +170,18 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
         () => SmartRefresher(
           key: _refresherKey,
           enablePullUp: true,
+          enablePullDown: true,
           header: WaterDropHeader(),
           physics: BouncingScrollPhysics(),
           footer: LoadMoreFooter(),
           controller: refreshController,
+          onRefresh: () async {
+            await controller.refreshTutors();
+            if (mounted) {
+              setState(() {});
+            }
+            refreshController.refreshCompleted();
+          },
           onLoading: () async {
             await controller.loadTutors();
             if (mounted) {
@@ -186,7 +194,10 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
                 .map((tutor) => TutorCard(
                     tutor: tutor,
                     onClick: () => _handleShowTutorDetail(tutor),
-                    onLikeClick: () => controller.like(tutor.userId!)))
+                    onLikeClick: () async {
+                      await controller.like(tutor.userId!);
+                      setState(() {});
+                    }))
                 .toList(),
           ),
         ),
@@ -200,7 +211,7 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
       handleError(response.error!);
       return;
     }
-    Get.to(TutorDetailScreen(tutorDetail: response.data!));
+    Get.to(TutorDetailScreen(tutorDetail: response.data!, tutorId: tutor.userId!));
   }
 
   void _handleSearch(String? newValue) {

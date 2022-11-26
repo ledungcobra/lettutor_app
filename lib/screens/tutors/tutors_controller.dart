@@ -41,16 +41,27 @@ class TutorsController extends GetxController with HandleUIError {
     await loadTutors();
   }
 
+  refreshTutors() async {
+    page--;
+    if(page<0){
+      page = 1;
+    }
+    _tutors.clear();
+    await _load();
+  }
+
   loadTutors() async {
-    print('Get tutor page=$page perPage=$perPage');
+    await _load();
+    page++;
+  }
+
+  _load() async {
     var response = await _tutorService.searchTutor(tutorName, filterCriteria,page, perPage);
     if (response.hasError) {
       handleError(response.error!);
       return;
     }
-    print('Size ${response.data!.length}');
     _tutors.addAll(response.data!);
-    page++;
   }
 
   void filter() {
@@ -59,14 +70,14 @@ class TutorsController extends GetxController with HandleUIError {
     loadTutors();
   }
 
-  void like(String userId) {
-    print("Like $userId");
-    print(_tutors.map((t) => t.userId));
-    _tutors.value = _tutors.map((t) {
-      if (t.userId == userId) {
-        t.isFavorite = !t.isFavorite;
-      }
-      return t;
-    }).toList();
+  like(String userId) async {
+    var index = _tutors.indexWhere((element) => element.userId == userId);
+    if(index != -1){
+      tutors[index].isFavorite = !tutors[index].isFavorite;
+    }
+    var response = await _tutorService.performLike(userId);
+    if(response.hasError){
+      return handleError(response.error!);
+    }
   }
 }

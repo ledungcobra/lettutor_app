@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/models/comment.dart';
 import 'package:lettutor_app/models/tutor_detail.dart';
-import 'package:lettutor_app/screens/tutor_detail/widgets/booking.dart';
+import 'package:lettutor_app/screens/tutor_detail/widgets/schedule_list.dart';
 import 'package:lettutor_app/screens/tutor_detail/widgets/comment_item.dart';
 import 'package:lettutor_app/screens/tutor_detail/widgets/course_preview_button.dart';
 import 'package:lettutor_app/screens/tutor_detail/widgets/text_and_chips.dart';
@@ -16,18 +15,20 @@ import 'package:lettutor_app/widgets/title_button.dart';
 
 import '../../dto/ResponseEntity.dart';
 
-class TutorDetailScreen extends StatelessWidget with Dimension {
+class TutorDetailScreen extends StatelessWidget with Dimension, HandleUIError {
   var courseExpanded = true.obs;
   var commentExpanded = true.obs;
-  final TutorDetail tutorDetail;
+  final _tutorDetail = TutorDetail().obs;
   final _tutorService = Get.find<TutorService>();
-  late BuildContext context;
+  final String tutorId;
+  TutorDetailScreen({super.key, required tutorDetail, required this.tutorId}) {
+    _tutorDetail.value = tutorDetail;
+  }
 
-  TutorDetailScreen({super.key, required this.tutorDetail});
+  TutorDetail get tutorDetail => _tutorDetail.value;
 
   @override
   Widget build(BuildContext context) {
-    this.context = context;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.lightBlueAccent,
@@ -114,10 +115,14 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
                 title: 'Message',
                 icon: Icons.message_outlined,
                 onPress: _onPressMessageNow),
-            TitleButton(
-                title: 'Favorite',
-                icon: Icons.favorite_outline,
-                onPress: _onPressFavorite),
+            Obx(() {
+              return TitleButton(
+                  title: 'Favorite',
+                  icon: _tutorDetail.value.isFavorite!
+                      ? Icons.favorite
+                      : Icons.favorite_outline,
+                  onPress: () async => _onPressFavorite());
+            }),
             TitleButton(
                 title: 'Report',
                 icon: Icons.info_outline,
@@ -129,7 +134,7 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
         ),
         Button(
             onClick: () =>
-                Booking.showFullModal(context, tutorDetail.user!.id!),
+                ScheduleList.showFullModal(Get.context!, tutorId),
             title: 'Book')
       ],
     );
@@ -290,7 +295,14 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
     );
   }
 
-  void _onPressFavorite() {}
+  void _onPressFavorite() async {
+    _tutorDetail.value.isFavorite = !_tutorDetail.value.isFavorite!;
+    _tutorDetail.value = TutorDetail.fromJson(_tutorDetail.value.toJson());
+    var response = await _tutorService.performLike(tutorDetail.user?.id ?? "");
+    if (response.hasError) {
+      return handleError(response.error!);
+    }
+  }
 
   void _onPressReport() {
     Get.snackbar('Reporting', 'Sending report to admin',

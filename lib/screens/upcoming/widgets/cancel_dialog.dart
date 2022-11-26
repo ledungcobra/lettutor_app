@@ -77,7 +77,7 @@ class CancelDialog extends StatelessWidget {
       actions: [
         TextButton(
           child: const Text("Close"),
-          onPressed: () => Get.back(),
+          onPressed: () => Get.back(result: false),
         ),
         ElevatedButton(
             onPressed: () => controller.handleCancel(

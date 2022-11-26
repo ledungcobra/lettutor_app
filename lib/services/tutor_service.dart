@@ -10,6 +10,7 @@ import 'package:lettutor_app/utils/types.dart';
 import '../models/booking_item.dart';
 import '../models/dto/become_teacher_dto.dart';
 import '../models/dto/error.dart';
+import '../models/schedule_info.dart';
 
 class TutorService with AppAPI, CatchError {
   Future<ResponseEntity<List<Comment>>> getFeedbacksPaging(
@@ -46,7 +47,7 @@ class TutorService with AppAPI, CatchError {
       var favoriteTutorIds = await getFavoriteTutorIds();
       for (var tutor in response.data['tutors']['rows']) {
         var t = Tutor.fromJson(tutor);
-        t.isFavorite = favoriteTutorIds.contains(t.id);
+        t.isFavorite = favoriteTutorIds.contains(t.userId);
         result.add(t);
       }
       return ResponseEntity(data: result, error: null);
@@ -77,7 +78,7 @@ class TutorService with AppAPI, CatchError {
       var favoriteTutorIds = await getFavoriteTutorIds();
       for (var tutor in response.data['rows']) {
         var t = Tutor.fromJson(tutor);
-        t.isFavorite = favoriteTutorIds.contains(t.id);
+        t.isFavorite = favoriteTutorIds.contains(t.userId);
         result.add(t);
       }
       return ResponseEntity(data: result);
@@ -104,9 +105,9 @@ class TutorService with AppAPI, CatchError {
     return data;
   }
 
-  // TODO using this
   Future<ResponseEntity> performLike(String userId) async {
     try {
+      print('Userid $userId');
       var url = buildUrl("/user/manageFavoriteTutor");
       Map<dynamic, dynamic> data = {'tutorId': userId};
       var response = await dio.post(url, data: data);
@@ -201,6 +202,38 @@ class TutorService with AppAPI, CatchError {
           error: ErrorResponse(
               statusCode: 400,
               message: e.response!.data['message'].toString()));
+    }
+  }
+
+  Future<ResponseEntity<List<TutorScheduleInfo>>> getTutorSchedules(
+      String tutorId) async {
+    try {
+      var now = DateTime.now();
+      var next = now.add(Duration(days: 7));
+      var url = buildUrl(
+          '/schedule?tutorId=$tutorId&startTimestamp=${now.millisecondsSinceEpoch}&endTimestamp=${next.millisecondsSinceEpoch}');
+      print(url);
+      var response = await dio.get(url);
+      var result = <TutorScheduleInfo>[];
+      for (var item in response.data['scheduleOfTutor']) {
+        result.add(TutorScheduleInfo.fromJson(item));
+      }
+      return ResponseEntity(data: result);
+    } catch (e) {
+      return handleError(e);
+    }
+  }
+
+  Future<bool> bookAClass(List<String> bookingDetailIds, String note) async {
+    try {
+      var url = buildUrl('/booking');
+      await dio.post(url, data: {
+        'scheduleDetailIds': bookingDetailIds,
+        'note': note
+      });
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }

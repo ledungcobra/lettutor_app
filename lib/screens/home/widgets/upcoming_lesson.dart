@@ -12,8 +12,8 @@ import '../../../models/booking_item.dart';
 
 class UpCommingLession extends StatefulWidget {
   BookingItem header;
-
-  UpCommingLession(this.header);
+  final int totalTime;
+  UpCommingLession(this.header, this.totalTime);
 
   @override
   State<UpCommingLession> createState() => _UpCommingLessionState();
@@ -50,6 +50,7 @@ class _UpCommingLessionState extends State<UpCommingLession> {
   @override
   Widget build(BuildContext context) {
     var textWhiteStyle = TextStyle(color: Colors.white, fontSize: 25);
+    final duration = Duration(minutes: widget.totalTime);
 
     return Container(
       width: double.infinity,
@@ -73,6 +74,8 @@ class _UpCommingLessionState extends State<UpCommingLession> {
               remainingTimeText,
               style: TextStyle(color: Colors.yellow),
             ),
+            SizedBox(height: 10),
+            Text('Total lesson time is ${duration.inHours} hours ${duration.inMinutes - duration.inHours * 60} minutes'),
             Button(
               title: 'Enter lesson room',
               onClick: () {
