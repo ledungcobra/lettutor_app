@@ -158,12 +158,10 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
         key: contentKey,
         itemCount: controller.listTutors.length,
         itemBuilder: (context, index) => TutorCard(
-          onLikeClick: () async {
-            await controller.like(controller.listTutors[index].userId);
-            setState(() {});
-          },
+          key: ObjectKey(controller.listTutors[index]),
           tutor: controller.listTutors[index],
           onClick: () => _handleShowTutorDetail(controller.listTutors[index]),
+          likable: controller,
         ),
       ),
     );

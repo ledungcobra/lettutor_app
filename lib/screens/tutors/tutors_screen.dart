@@ -193,11 +193,7 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
             children: controller.tutors
                 .map((tutor) => TutorCard(
                     tutor: tutor,
-                    onClick: () => _handleShowTutorDetail(tutor),
-                    onLikeClick: () async {
-                      await controller.like(tutor.userId!);
-                      setState(() {});
-                    }))
+                    onClick: () => _handleShowTutorDetail(tutor),likable: controller))
                 .toList(),
           ),
         ),

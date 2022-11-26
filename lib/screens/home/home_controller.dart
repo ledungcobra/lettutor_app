@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:lettutor_app/utils/mixing.dart';
+import 'package:lettutor_app/utils/types.dart';
 
 import '../../models/booking_item.dart';
 import '../../models/home_model.dart';
@@ -8,7 +9,7 @@ import '../../models/tutor_detail.dart';
 import '../../services/tutor_service.dart';
 import '../../services/user_service.dart';
 
-class HomeController extends GetxController with HandleUIError {
+class HomeController extends GetxController with HandleUIError implements Likable {
   final TutorService _tutorService = Get.find();
   final userService = Get.find<UserService>();
   var listTutors = <Tutor>[].obs;
@@ -76,12 +77,9 @@ class HomeController extends GetxController with HandleUIError {
     await getUpcomingLesson();
   }
 
-  like(String? tutorId) async  {
-    var index = listTutors.indexWhere((element) => element.userId == tutorId);
-    if(index != -1){
-      listTutors[index].isFavorite = !listTutors[index].isFavorite;
-    }
-    var response = await _tutorService.performLike(tutorId!);
+  like(Tutor tutor) async  {
+    tutor.isFavorite = !tutor.isFavorite;
+    var response = await _tutorService.performLike(tutor.userId!);
     if(response.hasError){
       return handleError(response.error!);
     }

@@ -1,5 +1,7 @@
 import 'package:lettutor_app/models/category_items.dart';
 
+import '../models/tutor.dart';
+
 class Nationality {
   String display;
   String val;
@@ -53,4 +55,8 @@ class Reason{
   String description;
 
   Reason(this.id, this.description);
+}
+
+abstract class Likable {
+  Future<dynamic> like(Tutor tutor);
 }

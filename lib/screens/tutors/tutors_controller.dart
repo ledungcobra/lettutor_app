@@ -7,7 +7,9 @@ import 'package:lettutor_app/utils/types.dart';
 
 import '../../services/utils_service.dart';
 
-class TutorsController extends GetxController with HandleUIError {
+class TutorsController extends GetxController
+    with HandleUIError
+    implements Likable {
   final TutorService _tutorService = Get.find();
   final _tutors = <Tutor>[].obs;
   var page = 1;
@@ -37,13 +39,13 @@ class TutorsController extends GetxController with HandleUIError {
     initData();
   }
 
-  void initData() async  {
+  void initData() async {
     await loadTutors();
   }
 
   refreshTutors() async {
     page--;
-    if(page<0){
+    if (page < 0) {
       page = 1;
     }
     _tutors.clear();
@@ -56,7 +58,8 @@ class TutorsController extends GetxController with HandleUIError {
   }
 
   _load() async {
-    var response = await _tutorService.searchTutor(tutorName, filterCriteria,page, perPage);
+    var response = await _tutorService.searchTutor(
+        tutorName, filterCriteria, page, perPage);
     if (response.hasError) {
       handleError(response.error!);
       return;
@@ -70,13 +73,11 @@ class TutorsController extends GetxController with HandleUIError {
     loadTutors();
   }
 
-  like(String userId) async {
-    var index = _tutors.indexWhere((element) => element.userId == userId);
-    if(index != -1){
-      tutors[index].isFavorite = !tutors[index].isFavorite;
-    }
-    var response = await _tutorService.performLike(userId);
-    if(response.hasError){
+  @override
+  Future like(Tutor tutor) async {
+    tutor.isFavorite = !tutor.isFavorite;
+    var response = await _tutorService.performLike(tutor.userId!);
+    if (response.hasError) {
       return handleError(response.error!);
     }
   }

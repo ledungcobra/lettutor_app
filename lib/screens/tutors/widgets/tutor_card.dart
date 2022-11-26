@@ -2,24 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:lettutor_app/models/tutor.dart';
 import 'package:lettutor_app/widgets/skill_chip.dart';
 
+import '../../../utils/types.dart';
 import '../../../widgets/avatar.dart';
 
-class TutorCard extends StatelessWidget {
+class TutorCard extends StatefulWidget {
+
   final Tutor tutor;
   final void Function() onClick;
-  final void Function() onLikeClick;
+  final Likable likable;
 
-  TutorCard(
-      {Key? key,
-      required this.tutor,
-      required this.onClick,
-      required this.onLikeClick})
+  TutorCard({Key? key,
+    required this.tutor,
+    required this.onClick, required this.likable,
+  })
       : super(key: key);
 
   @override
+  State<TutorCard> createState() => _TutorCardState();
+}
+
+class _TutorCardState extends State<TutorCard> {
+  @override
   Widget build(BuildContext context) {
+    print('Render ${widget.tutor.userId}');
     return InkWell(
-      onTap: onClick,
+      onTap: widget.onClick,
       child: Card(
         elevation: 10,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -41,7 +48,7 @@ class TutorCard extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        NetworkAvatar(url: tutor.avatar),
+        NetworkAvatar(url: widget.tutor.avatar),
         SizedBox(
           width: 20,
         ),
@@ -55,12 +62,12 @@ class TutorCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    tutor.name ?? "",
+                    widget.tutor.name ?? "",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Row(
                     children: [
-                      Text(tutor.rating?.toStringAsFixed(2) ?? ''),
+                      Text(widget.tutor.rating?.toStringAsFixed(2) ?? ''),
                       SizedBox(
                         width: 5,
                       ),
@@ -76,13 +83,17 @@ class TutorCard extends StatelessWidget {
                   height: 50,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => Container(
-                      margin: EdgeInsets.only(right: 5),
-                      child: SkillChip(
-                          selected: true,
-                          value: tutor.getSpecialties()[index].description ?? ""),
-                    ),
-                    itemCount: tutor.getSpecialties().length,
+                    itemBuilder: (context, index) =>
+                        Container(
+                          margin: EdgeInsets.only(right: 5),
+                          child: SkillChip(
+                              selected: true,
+                              value: widget.tutor.getSpecialties()[index]
+                                  .description ?? ""),
+                        ),
+                    itemCount: widget.tutor
+                        .getSpecialties()
+                        .length,
                   ))
             ],
           ),
@@ -95,7 +106,7 @@ class TutorCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(right: 13.0),
       child: Text(
-        tutor.bio ?? "",
+        widget.tutor.bio ?? "",
         overflow: TextOverflow.ellipsis,
         maxLines: 3,
         softWrap: false,
@@ -119,7 +130,8 @@ class TutorCard extends StatelessWidget {
             IconButton(
                 onPressed: onLikeClick,
                 icon: Icon(
-                  tutor.isFavorite ? Icons.favorite : Icons.favorite_border,
+                  widget.tutor.isFavorite ? Icons.favorite : Icons
+                      .favorite_border,
                   color: Colors.redAccent,
                 )),
             OutlinedButton(onPressed: () {}, child: Text('Book')),
@@ -127,5 +139,10 @@ class TutorCard extends StatelessWidget {
         )
       ],
     );
+  }
+
+  onLikeClick() async {
+    await widget.likable.like(widget.tutor);
+    setState(() {});
   }
 }
