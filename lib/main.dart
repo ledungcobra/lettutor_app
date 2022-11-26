@@ -14,6 +14,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'screens/course_details/controllers/course_details_controller.dart';
 import 'screens/courses/tabs/books_controller.dart';
+import 'screens/upcoming/upcoming_controller.dart';
 import 'services/utils_service.dart';
 import 'utils/shared_reference.dart';
 import 'widgets/refresh_scroll_behavior.dart';
@@ -49,6 +50,7 @@ setUpIOC() async {
   Get.put(BooksController());
   Get.put(CourseDetailsController());
   Get.put(TutorsController());
+  Get.put(UpcomingController());
 }
 
 class App extends StatelessWidget {

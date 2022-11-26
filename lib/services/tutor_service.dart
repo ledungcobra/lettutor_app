@@ -9,6 +9,7 @@ import 'package:lettutor_app/utils/types.dart';
 
 import '../models/booking_item.dart';
 import '../models/dto/become_teacher_dto.dart';
+import '../models/dto/error.dart';
 
 class TutorService with AppAPI, CatchError {
   Future<ResponseEntity<List<Comment>>> getFeedbacksPaging(
@@ -71,7 +72,6 @@ class TutorService with AppAPI, CatchError {
       var url = buildUrl("/tutor/search");
       Map<dynamic, dynamic> data =
           _buildBodyFilter(page, perPage, search, filterCriteria);
-      print('Body ${jsonEncode(data)}');
       var response = await dio.post(url, data: data);
       var result = <Tutor>[];
       var favoriteTutorIds = await getFavoriteTutorIds();
@@ -128,38 +128,36 @@ class TutorService with AppAPI, CatchError {
     }
   }
 
-
-  Future<ResponseEntity<List<BookingItem>>> getBookingItems()async {
-    try{
-      var response = await dio.get(buildUrl('/booking/next?dateTime=${DateTime.now().millisecondsSinceEpoch}'));
+  Future<ResponseEntity<List<BookingItem>>> getUpcomingCourse() async {
+    try {
+      var response = await dio.get(buildUrl(
+          '/booking/next?dateTime=${DateTime.now().millisecondsSinceEpoch}'));
       var result = <BookingItem>[];
-      for (var item in response.data['data']){
+      for (var item in response.data['data']) {
         result.add(BookingItem.fromJson(item));
       }
       return ResponseEntity(data: result);
-    }catch(e){
+    } catch (e) {
       return handleError(e);
     }
   }
 
   Future<bool> saveReport(String note, String? bookingId, int reasonId) async {
-    try{
-      var body = {
-        'note': note,
-        'reasonId': reasonId,
-        'bookingId': bookingId
-      };
-      var result = await dio.put(buildUrl('/lesson-report/save-report'),data: body);
+    try {
+      var body = {'note': note, 'reasonId': reasonId, 'bookingId': bookingId};
+      var result =
+          await dio.put(buildUrl('/lesson-report/save-report'), data: body);
       print(result);
       return true;
-    }catch(e){
+    } catch (e) {
       print(e);
       return false;
     }
   }
 
-  Future<bool> ratingTutor(String content, int rating, String userId,String bookingId) async {
-    try{
+  Future<bool> ratingTutor(
+      String content, int rating, String userId, String bookingId) async {
+    try {
       var body = {
         'userId': userId,
         'rating': rating,
@@ -167,12 +165,42 @@ class TutorService with AppAPI, CatchError {
         'bookingId': bookingId
       };
       print(body.toString());
-      var result = await dio.post(buildUrl('/user/feedbackTutor'),data: body);
+      var result = await dio.post(buildUrl('/user/feedbackTutor'), data: body);
       print(result);
       return true;
-    }catch(e){
+    } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<bool> editBookingRequest(String newRequest, String? bookingId) async {
+    try {
+      var result = await dio.post(
+          buildUrl('/booking/student-request/$bookingId'),
+          data: {"studentRequest": newRequest});
+      return result.data['data'].length > 0 && result.data['data'][0] == 1;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<ResponseEntity> cancelBookingRequest(
+      String bookingId, int cancelReason, String note) async {
+    try {
+      var result =
+          await dio.delete(buildUrl('/booking/schedule-detail'), data: {
+        'scheduleDetailId': bookingId,
+        'cancelInfo': {'cancelReasonId': cancelReason, 'note': note}
+      });
+      return ResponseEntity(data: result.data['message']);
+    } catch (e1) {
+      var e = e1 as dynamic;
+      return ResponseEntity(
+          error: ErrorResponse(
+              statusCode: 400,
+              message: e.response!.data['message'].toString()));
     }
   }
 }

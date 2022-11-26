@@ -9,7 +9,7 @@ import '../../../models/history_item.dart';
 import '../../../widgets/divider.dart';
 import '../../../widgets/stars.dart';
 import 'feedback_item.dart';
-import 'rating_tutor.dart';
+import 'rating_tutor_dialog.dart';
 import 'report_dialog.dart';
 
 class HistoryItem extends StatelessWidget with Dimension {

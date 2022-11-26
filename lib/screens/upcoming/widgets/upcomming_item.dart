@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/models/schedule.dart';
+import 'package:get/get.dart';
+import 'package:lettutor_app/models/booking_item.dart';
+import 'package:lettutor_app/screens/upcoming/widgets/request_edit_dialog.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
-class MeetingItem extends StatelessWidget {
-  final Schedule schedule;
+import '../../../services/tutor_service.dart';
+import 'cancel_dialog.dart';
 
-  const MeetingItem({Key? key, required this.schedule}) : super(key: key);
+class UpcomingItem extends StatelessWidget {
+  final BookingItem bookingItem;
+  final tutorService = Get.find<TutorService>();
+
+  ScheduleInfo? get scheduleInfo =>
+      bookingItem.scheduleDetailInfo?.scheduleInfo;
+
+  UpcomingItem({Key? key, required this.bookingItem}) : super(key: key);
 
   _messageNow() {}
 
-  _handleCancelUpcoming() {}
+  _handleCancelUpcoming() async {
+    Get.dialog(CancelDialog(bookingItem: bookingItem));
+  }
 
   _handleGoMeeting() {}
 
@@ -28,8 +39,8 @@ class MeetingItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(schedule.date!),
-                  Text('${schedule.startTime!}-${schedule.endTime!}')
+                  Text(scheduleInfo?.date ?? "Date not found"),
+                  Text('${scheduleInfo?.startTime}-${scheduleInfo?.endTime!}')
                 ],
               ),
               SizedBox(height: 10),
@@ -38,11 +49,12 @@ class MeetingItem extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      NetworkAvatar(url: schedule.teacherInfo!.avatar!),
+                      NetworkAvatar(url: scheduleInfo?.tutorInfo?.avatar),
                       SizedBox(
                         height: 2,
                       ),
-                      Text(schedule.teacherInfo!.nationality!),
+                      Text(scheduleInfo?.tutorInfo?.country ??
+                          "Not found country"),
                       SizedBox(
                         height: 2,
                       ),
@@ -79,7 +91,10 @@ class MeetingItem extends StatelessWidget {
                                     ],
                                   ),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Get.dialog(RequestEditDialog(
+                                          bookingItem: bookingItem));
+                                    },
                                     child: Text(
                                       'Edit Request',
                                       style: TextStyle(
@@ -91,12 +106,16 @@ class MeetingItem extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            child: Text(
-                              'Currently there no requests for this class. Please write down any request for the teacher',
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 13),
+                          Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                bookingItem.studentRequest ??
+                                    'Currently there no requests for this class. Please write down any request for the teacher',
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 13),
+                              ),
                             ),
                           ),
                         ],

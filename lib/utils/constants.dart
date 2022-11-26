@@ -17,10 +17,18 @@ List<Nationality> nationalities = [
   Nationality("Gia sư Bản Ngữ", "isNative"),
 ];
 
-List<Reason> reasons = [
+List<Reason> reportReason = [
   Reason(0, 'Select reason'),
   Reason(1, 'Tutor was late'),
   Reason(2, 'Tutor was absent'),
   Reason(3, 'Network unstable'),
+  Reason(4, 'Other'),
+];
+
+List<Reason> cancelReason = [
+  Reason(0, 'Select reason'),
+  Reason(1, 'Reschedule at another time'),
+  Reason(2, 'Busy at that time'),
+  Reason(3, 'Asked by the tutor'),
   Reason(4, 'Other'),
 ];

@@ -37,8 +37,8 @@ class TutorsController extends GetxController with HandleUIError {
     initData();
   }
 
-  void initData() {
-    loadTutors();
+  void initData() async  {
+    await loadTutors();
   }
 
   loadTutors() async {

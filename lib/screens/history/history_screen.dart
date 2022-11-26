@@ -5,6 +5,8 @@ import 'package:lettutor_app/screens/history/widgets/history_item.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
+import '../../widgets/loading.dart';
+
 class HistoryScreen extends StatefulWidget {
   UserService _userService = Get.find();
 
@@ -37,7 +39,7 @@ class _HistoryScreenState extends State<HistoryScreen> with HandleUIError {
             }
             return _listHistory(response.data!);
           }
-          return Center(child: CircularProgressIndicator());
+          return Center(child: Loading());
         },
       ),
     );

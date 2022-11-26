@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/schedule.dart';
-import 'package:lettutor_app/screens/upcoming/widgets/schedule_item.dart';
-import 'package:lettutor_app/services/user_service.dart';
+import 'package:lettutor_app/screens/upcoming/widgets/upcomming_item.dart';
 
-class UpcomingScreen extends StatelessWidget {
-  UserService userService = Get.find();
+import '../../widgets/loading.dart';
+import 'upcoming_controller.dart';
 
+class UpcomingScreen extends StatefulWidget {
   UpcomingScreen({Key? key}) : super(key: key) {}
+
+  @override
+  State<UpcomingScreen> createState() => _UpcomingScreenState();
+}
+
+class _UpcomingScreenState extends State<UpcomingScreen> {
+  final upcomingController = Get.find<UpcomingController>();
+
+  @override
+  void initState() {
+    super.initState();
+    upcomingController.loadData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,53 +38,16 @@ class UpcomingScreen extends StatelessWidget {
   }
 
   Widget _listSchedule() {
-    return FutureBuilder(
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          var schedules = snapshot.data as List<Schedule>;
-          return ListView(
-            children: schedules
-                .map((schedule) => MeetingItem(schedule: schedule))
+    return Obx(() => upcomingController.bookingItems.isEmpty
+        ? Loading()
+        : ListView(
+            key: UniqueKey(),
+            children: upcomingController.bookingItems
+                .map((item) => UpcomingItem(
+                      key: UniqueKey(),
+                      bookingItem: item,
+                    ))
                 .toList(),
-          );
-        }
-        if (snapshot.hasError) {
-          return Container();
-        }
-        return CircularProgressIndicator();
-      },
-      future: userService.getListSchedules(),
-    );
-  }
-
-  Future<void> _showMyDialog(context, target, error) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('An error occur when loading $target'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  error,
-                  style: TextStyle(color: Colors.red),
-                ),
-                Text('Would you like to approve of this message?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Approve'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+          ));
   }
 }
