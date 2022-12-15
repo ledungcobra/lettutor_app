@@ -7,13 +7,26 @@ import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/shared_reference.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SettingsScreen extends StatelessWidget {
-  final tokenService = Get.find<TokenService>();
-  final userService = Get.find<UserService>();
+class SettingsScreen extends StatefulWidget {
 
   SettingsScreen({Key? key}) : super(key: key);
 
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  final tokenService = Get.find<TokenService>();
+  final userService = Get.find<UserService>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getThemeStatus();
+  }
   void _handleLogout() async {
     await tokenService.clearTokens();
     Get.offAll(LoginScreen());
@@ -21,6 +34,23 @@ class SettingsScreen extends StatelessWidget {
 
   _handleOpenHistory() {
     Get.to(HistoryScreen());
+  }
+
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  final _isLightTheme = false.obs;
+
+  _saveThemeStatus() async {
+    SharedPreferences pref = await _prefs;
+    pref.setBool('theme', _isLightTheme.value);
+  }
+
+  _getThemeStatus() async {
+    var _isLight = _prefs.then((SharedPreferences prefs) {
+      return prefs.getBool('theme') != null ? prefs.getBool('theme') : true;
+    }).obs;
+    _isLightTheme.value = await _isLight.value ?? true;
+    Get.changeThemeMode(_isLightTheme.value ? ThemeMode.light : ThemeMode.dark);
   }
 
   @override
@@ -48,6 +78,19 @@ class SettingsScreen extends StatelessWidget {
                 color: Colors.black,
               ),
               radius: 50,
+            ),
+            ObxValue(
+              (data) => Switch(
+                value: _isLightTheme.value,
+                onChanged: (val) {
+                  _isLightTheme.value = val;
+                  Get.changeThemeMode(
+                    _isLightTheme.value ? ThemeMode.light : ThemeMode.dark,
+                  );
+                  _saveThemeStatus();
+                },
+              ),
+              false.obs,
             ),
             SizedBox(
               height: 5,

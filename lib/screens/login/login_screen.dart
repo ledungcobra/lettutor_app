@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/screens/login/login_controller.dart';
@@ -30,6 +31,7 @@ class LoginScreen extends StatelessWidget with HandleUIError {
         handleError(response.error!);
         return;
       }
+      print(response);
       Get.snackbar("Success", "Login success",
           backgroundColor: Colors.green, colorText: Colors.white);
       userService.setUserInfo(response.data);

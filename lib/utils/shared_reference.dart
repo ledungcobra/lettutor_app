@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenService {
@@ -6,6 +8,7 @@ class TokenService {
 
   Future<void> saveAccessToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
+    Get.find<Dio>().options.headers['Authorization'] = "Bearer $token";
     await prefs.setString(AccessToken, token);
   }
 
@@ -20,7 +23,6 @@ class TokenService {
   }
 
   clearTokens() async {
-    print('clear tokens');
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(AccessToken);
     await prefs.remove(RefreshToken);

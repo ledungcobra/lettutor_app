@@ -82,7 +82,7 @@ class _UpCommingLessionState extends State<UpCommingLession> {
               onClick: ()  async {
                 await joinMeetingJitsi(widget.header);
               },
-              color: Colors.white,
+              color: Get.isDarkMode ? Colors.black45: Colors.white,
               textColor: PRIMARY_COLOR,
               full: false,
               radius: 20,

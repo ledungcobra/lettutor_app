@@ -10,6 +10,7 @@ import 'package:lettutor_app/screens/tutors/tutors_controller.dart';
 import 'package:lettutor_app/services/course_service.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/services/user_service.dart';
+import 'package:lettutor_app/utils/constants.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'screens/course_details/controllers/course_details_controller.dart';
@@ -22,7 +23,7 @@ import 'widgets/refresh_scroll_behavior.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setUpIOC();
-  runApp(const App());
+  runApp(App());
 }
 
 setUpIOC() async {
@@ -54,7 +55,32 @@ setUpIOC() async {
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  App({Key? key}) : super(key: key);
+
+  final _darkTheme = ThemeData(
+    accentColor: Colors.red,
+    primaryColor:PRIMARY_COLOR,
+    fontFamily: 'Roboto',
+    appBarTheme: AppBarTheme(
+        backgroundColor: Colors.grey, foregroundColor: Colors.black),
+    brightness: Brightness.dark,
+    buttonTheme: ButtonThemeData(
+      buttonColor: Colors.amber,
+      disabledColor: Colors.grey,
+    ),
+  );
+
+  final _lightTheme = ThemeData(
+    accentColor: Colors.pink,
+    appBarTheme: AppBarTheme(
+        backgroundColor: Colors.grey, foregroundColor: Colors.white),
+    brightness: Brightness.light,
+    primaryColor: Colors.blue,
+    buttonTheme: ButtonThemeData(
+      buttonColor: Colors.blue,
+      disabledColor: Colors.grey,
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -74,16 +100,15 @@ class App extends StatelessWidget {
           localizationsDelegates: const [
             RefreshLocalizations.delegate,
           ],
-          builder: (context, child){
-            return ScrollConfiguration(behavior: RefreshScrollBehavior(), child: child!);
+          theme: _lightTheme,
+          darkTheme: _darkTheme,
+          themeMode: ThemeMode.system,
+          builder: (context, child) {
+            return ScrollConfiguration(
+                behavior: RefreshScrollBehavior(), child: child!);
           },
           title: 'Lettutor',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            fontFamily: 'Roboto',
-            appBarTheme: AppBarTheme(
-                backgroundColor: Colors.white, foregroundColor: Colors.black),
-          ),
           home: LoginScreen()),
     );
   }
