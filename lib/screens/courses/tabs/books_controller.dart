@@ -24,10 +24,8 @@ class BooksController extends GetxController with HandleUIError{
     page++;
   }
 
-  @override
-  void onInit() {
-    super.onInit();
+  void init() {
+    books.clear();
     loadBooks();
   }
-
 }

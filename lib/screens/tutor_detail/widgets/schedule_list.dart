@@ -24,7 +24,6 @@ class ScheduleList with HandleUIError {
       pageBuilder: (_, __, ___) {
         return Scaffold(
           appBar: AppBar(
-              backgroundColor: Colors.white,
               centerTitle: true,
               leading: IconButton(
                   icon: Icon(

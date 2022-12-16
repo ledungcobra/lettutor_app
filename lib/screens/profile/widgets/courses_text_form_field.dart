@@ -1,34 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lettutor_app/services/utils_service.dart';
+
+import '../../../models/category_items.dart';
 
 class CoursesTextFormField extends StatefulWidget {
-  const CoursesTextFormField({
-    Key? key, required this.title, required this.hintText,
+  final List<Category> selectedLearnTopics;
+  final List<Category> selectedTestPreparations;
+  final Function(List<Category> selectedLearnTopics,
+      List<Category> selectedPreparations) onDone;
+
+  CoursesTextFormField({
+    Key? key,
+    required this.title,
+    required this.hintText,
+    required this.selectedLearnTopics,
+    required this.selectedTestPreparations,
+    required this.onDone,
   }) : super(key: key);
   final String title;
   final String hintText;
+
   @override
   State<CoursesTextFormField> createState() => _CoursesTextFormFieldState();
 }
 
 class _CoursesTextFormFieldState extends State<CoursesTextFormField> {
-  static final List<String> _courses = [
-    "English for kids",
-    "Business English",
-    "Conversational English",
-    "STARTERS",
-    "MOVERS",
-    "FLYERS",
-    "KET",
-    "PET",
-    "IELTS",
-    "TOEFL",
-    "TOEIC",
-  ];
-  List<String> selectedCourses = [];
-  var value = TextEditingController();
+  final utilService = Get.find<UtilService>();
+  List<Category> selectedLearnTopics = [];
+  List<Category> selectedTestPreparations = [];
+
+  var textController = TextEditingController();
+
   @override
   void initState() {
-    value.text = "";
+    selectedLearnTopics = widget.selectedLearnTopics;
+    selectedTestPreparations = widget.selectedTestPreparations;
+    buildSelectionText();
     super.initState();
   }
 
@@ -43,7 +51,6 @@ class _CoursesTextFormFieldState extends State<CoursesTextFormField> {
             Text(
               widget.title,
               style: const TextStyle(
-                color: Colors.black,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -53,7 +60,7 @@ class _CoursesTextFormFieldState extends State<CoursesTextFormField> {
         ),
         const SizedBox(height: 10),
         TextFormField(
-          controller: value,
+          controller: textController,
           readOnly: true,
           maxLines: null,
           keyboardType: TextInputType.multiline,
@@ -72,27 +79,16 @@ class _CoursesTextFormFieldState extends State<CoursesTextFormField> {
             builder: (context) {
               return StatefulBuilder(builder: (context, setState) {
                 return AlertDialog(
-                  title: const Text("Select your level"),
+                  title: const Text(
+                      "Select subject \nTest preparation you want to learn"),
                   content: SingleChildScrollView(
                     child: SizedBox(
                       width: double.infinity,
                       child: Column(
-                        children: _courses
-                            .map(
-                              (e) => CheckboxListTile(
-                                value: selectedCourses.contains(e),
-                                onChanged: (value) {
-                                  setState(() {
-                                    value!
-                                        ? selectedCourses.add(e)
-                                        : selectedCourses.removeWhere(
-                                            (element) => element == e);
-                                  });
-                                },
-                                title: Text(e),
-                              ),
-                            )
-                            .toList(),
+                        children: [
+                          ...learnTopicsList(setState),
+                          ...testPreparationList(setState)
+                        ],
                       ),
                     ),
                   ),
@@ -100,10 +96,8 @@ class _CoursesTextFormFieldState extends State<CoursesTextFormField> {
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        value.text = "";
-                        for (var i = 0; i < selectedCourses.length; i++) {
-                          value.text += selectedCourses[i] + ", ";
-                        }
+                        buildSelectionText();
+                        widget.onDone(selectedLearnTopics, selectedTestPreparations);
                       },
                       child: const Text("Ok"),
                     ),
@@ -115,5 +109,57 @@ class _CoursesTextFormFieldState extends State<CoursesTextFormField> {
         ),
       ],
     );
+  }
+
+  List<CheckboxListTile> learnTopicsList(StateSetter setState) {
+    return utilService.learnTopics.values
+        .map(
+          (e) => CheckboxListTile(
+            value: selectedLearnTopics.contains(e),
+            onChanged: (value) {
+              setState(() {
+                if (value!) {
+                  selectedLearnTopics.add(e);
+                } else {
+                  selectedLearnTopics.removeWhere((element) => element == e);
+                }
+              });
+            },
+            title: Text(e.description ?? ""),
+          ),
+        )
+        .toList();
+  }
+
+  List<CheckboxListTile> testPreparationList(StateSetter setState) {
+    return utilService.testPreparations.values
+        .map(
+          (e) => CheckboxListTile(
+            value: selectedTestPreparations.contains(e),
+            onChanged: (value) {
+              setState(() {
+                if (value!) {
+                  selectedTestPreparations.add(e);
+                } else {
+                  selectedTestPreparations
+                      .removeWhere((element) => element == e);
+                }
+              });
+            },
+            title: Text(e.description ?? ""),
+          ),
+        )
+        .toList();
+  }
+
+  buildSelectionText() {
+    textController.text = "";
+    for (var i = 0; i < selectedLearnTopics.length; i++) {
+      textController.text += "${selectedLearnTopics[i].description ?? ""}, ";
+    }
+    for (var i = 0; i < selectedTestPreparations.length; i++) {
+      textController.text +=
+          "${selectedTestPreparations[i].description ?? ""}, ";
+    }
   }
 }

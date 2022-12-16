@@ -25,7 +25,7 @@ class UpcomingItem extends StatelessWidget {
     Get.dialog(CancelDialog(bookingItem: bookingItem));
   }
 
-  _handleGoMeeting() async  {
+  _handleGoMeeting() async {
     await joinMeetingJitsi(bookingItem);
   }
 
@@ -77,7 +77,7 @@ class UpcomingItem extends StatelessWidget {
                         children: [
                           Container(
                             height: 45,
-                            color: Colors.grey[100],
+                            color: Get.isDarkMode ? null : Colors.grey[100],
                             child: Padding(
                               padding: const EdgeInsets.all(6.0),
                               child: Row(
@@ -95,8 +95,10 @@ class UpcomingItem extends StatelessWidget {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      Get.dialog(RequestEditDialog(
-                                          bookingItem: bookingItem));
+                                      Get.dialog(
+                                        RequestEditDialog(
+                                            bookingItem: bookingItem),
+                                      );
                                     },
                                     child: Text(
                                       'Edit Request',
@@ -136,7 +138,7 @@ class UpcomingItem extends StatelessWidget {
                     radius: 10,
                     title: 'Cancel',
                     onClick: _handleCancelUpcoming,
-                    color: Colors.red,
+                    color: Get.theme.accentColor,
                   ),
                   SizedBox(width: 20),
                   Button(

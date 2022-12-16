@@ -56,7 +56,7 @@ class _UpCommingLessionState extends State<UpCommingLession> {
     return Container(
       width: double.infinity,
       height: Get.height * 0.35,
-      color: PRIMARY_COLOR,
+      color: Get.theme.primaryColorDark,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 10),
         child: Column(
@@ -76,14 +76,14 @@ class _UpCommingLessionState extends State<UpCommingLession> {
               style: TextStyle(color: Colors.yellow),
             ),
             SizedBox(height: 10),
-            Text('Total lesson time is ${duration.inHours} hours ${duration.inMinutes - duration.inHours * 60} minutes'),
+            Text('Total lesson time is ${duration.inHours} hours ${duration.inMinutes - duration.inHours * 60} minutes', style: Get.isDarkMode ? Get.theme.textTheme.button: TextStyle(color: Colors.white, fontSize: 16)),
             Button(
               title: 'Enter lesson room',
               onClick: ()  async {
                 await joinMeetingJitsi(widget.header);
               },
-              color: Get.isDarkMode ? Colors.black45: Colors.white,
-              textColor: PRIMARY_COLOR,
+              color: Get.isDarkMode ? Get.theme.backgroundColor: Colors.white,
+              textColor: Get.theme.primaryColor,
               full: false,
               radius: 20,
             )

@@ -6,6 +6,7 @@ import 'package:lettutor_app/screens/login/widgets/FormFields.dart';
 import 'package:lettutor_app/screens/login/widgets/footer.dart';
 import 'package:lettutor_app/screens/tab_bar_screen/tab_bar_screen.dart';
 import 'package:lettutor_app/services/user_service.dart';
+import 'package:lettutor_app/services/utils_service.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/helper.dart';
 import 'package:lettutor_app/utils/mixing.dart';
@@ -18,7 +19,7 @@ class LoginScreen extends StatelessWidget with HandleUIError {
   final loginController = Get.find<LoginController>();
   final userService = Get.find<UserService>();
   final tokenService = Get.find<TokenService>();
-
+  final utilService = Get.find<UtilService>();
 
   LoginScreen({Key? key}) : super(key: key);
 
@@ -31,11 +32,11 @@ class LoginScreen extends StatelessWidget with HandleUIError {
         handleError(response.error!);
         return;
       }
-      print(response);
       Get.snackbar("Success", "Login success",
           backgroundColor: Colors.green, colorText: Colors.white);
       userService.setUserInfo(response.data);
       await tokenService.saveAccessToken(response.data!.tokens!.access!.token!);
+      await utilService.init();
       Get.offAll(() => TabBarScreen());
     } finally {
       loginController.loading.value = false;
@@ -44,10 +45,10 @@ class LoginScreen extends StatelessWidget with HandleUIError {
 
   @override
   Widget build(BuildContext context) {
-    _handleLogin();
+    // _handleLogin();
     // checkForLogin();
     return Scaffold(
-      backgroundColor: Colors.white,
+
       body: SafeArea(
         child: Stack(
           children: [

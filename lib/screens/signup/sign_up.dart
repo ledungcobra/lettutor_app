@@ -35,13 +35,11 @@ class SignUpScreen extends StatelessWidget with HandleUIError {
     userService.setUserInfo(response.data);
     Get.snackbar('Success', 'Register success', backgroundColor: Colors.green);
     signUpController.loading.value = false;
-    Get.offAll(() => TabBarScreen());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class BirthdayTextFormField extends StatefulWidget {
-  final String title;
-  final String birthday;
+import '../profile_controller.dart';
 
-  const BirthdayTextFormField(
-      {Key? key, required this.title, required this.birthday})
+class BirthdayTextFormField extends StatefulWidget {
+  
+  final String title;
+  String? birthday;
+
+  BirthdayTextFormField({Key? key, required this.title, this.birthday, required Function(String v) onDone})
       : super(key: key);
 
   @override
@@ -14,14 +17,15 @@ class BirthdayTextFormField extends StatefulWidget {
 }
 
 class _BirthdayTextFormFieldState extends State<BirthdayTextFormField> {
-  TextEditingController textController = TextEditingController();
 
-  //text editing controller for text field
+  TextEditingController textController = TextEditingController();
+  final controller = Get.find<ProfileController>(tag: 'profile_controller');
 
   @override
   void initState() {
-    textController.text = DateFormat('yyyy-MM-dd').format(
-        DateTime.parse(widget.birthday)); //set the initial value of text field
+    textController.text = widget.birthday != null && widget.birthday!.isNotEmpty
+        ? DateFormat('yyyy-MM-dd').format(DateTime.parse(widget.birthday!))
+        :  DateFormat('yyyy-MM-dd').format(DateTime.now()); //set the initial value of text field
     super.initState();
   }
 
@@ -35,7 +39,6 @@ class _BirthdayTextFormFieldState extends State<BirthdayTextFormField> {
             Text(
               widget.title,
               style: const TextStyle(
-                color: Colors.black,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -45,13 +48,12 @@ class _BirthdayTextFormFieldState extends State<BirthdayTextFormField> {
         ),
         const SizedBox(height: 10),
         TextField(
-          controller: textController, //editing controller of this TextField
+          controller: textController,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
-            suffixIcon: Icon(
-                Icons.calendar_today), //icon of text fieldlabel text of field
+            suffixIcon: Icon(Icons.calendar_today),
           ),
-          readOnly: true, //set it true, so that user will not able to edit text
+          readOnly: true,
           onTap: () async {
             DateTime? pickedDate = await showDatePicker(
               context: context,

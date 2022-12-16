@@ -13,9 +13,7 @@ class ClassHistory {
   String? updatedAt;
   String? recordUrl;
   String? cancelReasonId;
-  Null? lessonPlanId;
   String? cancelNote;
-  Null? calendarId;
   bool? isDeleted;
   ScheduleDetailInfo? scheduleDetailInfo;
   ClassReview? classReview;
@@ -37,9 +35,7 @@ class ClassHistory {
         this.updatedAt,
         this.recordUrl,
         this.cancelReasonId,
-        this.lessonPlanId,
         this.cancelNote,
-        this.calendarId,
         this.isDeleted,
         this.scheduleDetailInfo,
         this.classReview,
@@ -61,9 +57,7 @@ class ClassHistory {
     updatedAt = json['updatedAt'];
     recordUrl = json['recordUrl'];
     cancelReasonId = json['cancelReasonId'];
-    lessonPlanId = json['lessonPlanId'];
     cancelNote = json['cancelNote'];
-    calendarId = json['calendarId'];
     isDeleted = json['isDeleted'];
     scheduleDetailInfo = json['scheduleDetailInfo'] != null
         ? new ScheduleDetailInfo.fromJson(json['scheduleDetailInfo'])
@@ -96,9 +90,7 @@ class ClassHistory {
     data['updatedAt'] = this.updatedAt;
     data['recordUrl'] = this.recordUrl;
     data['cancelReasonId'] = this.cancelReasonId;
-    data['lessonPlanId'] = this.lessonPlanId;
     data['cancelNote'] = this.cancelNote;
-    data['calendarId'] = this.calendarId;
     data['isDeleted'] = this.isDeleted;
     if (this.scheduleDetailInfo != null) {
       data['scheduleDetailInfo'] = this.scheduleDetailInfo!.toJson();
@@ -232,9 +224,6 @@ class TutorInfo {
   String? id;
   String? level;
   String? email;
-  Null? google;
-  Null? facebook;
-  Null? apple;
   String? avatar;
   String? name;
   String? country;
@@ -261,9 +250,6 @@ class TutorInfo {
       {this.id,
         this.level,
         this.email,
-        this.google,
-        this.facebook,
-        this.apple,
         this.avatar,
         this.name,
         this.country,
@@ -290,9 +276,6 @@ class TutorInfo {
     id = json['id'];
     level = json['level'];
     email = json['email'];
-    google = json['google'];
-    facebook = json['facebook'];
-    apple = json['apple'];
     avatar = json['avatar'];
     name = json['name'];
     country = json['country'];
@@ -321,9 +304,6 @@ class TutorInfo {
     data['id'] = this.id;
     data['level'] = this.level;
     data['email'] = this.email;
-    data['google'] = this.google;
-    data['facebook'] = this.facebook;
-    data['apple'] = this.apple;
     data['avatar'] = this.avatar;
     data['name'] = this.name;
     data['country'] = this.country;
@@ -351,19 +331,19 @@ class TutorInfo {
 
 class ClassReview {
   String? bookingId;
-  int? lessonStatusId;
+  num? lessonStatusId;
   String? book;
   String? unit;
   String? lesson;
   Null? page;
   String? lessonProgress;
-  int? behaviorRating;
+  num? behaviorRating;
   String? behaviorComment;
-  int? listeningRating;
+  num? listeningRating;
   String? listeningComment;
-  int? speakingRating;
+  num? speakingRating;
   String? speakingComment;
-  int? vocabularyRating;
+  num? vocabularyRating;
   String? vocabularyComment;
   String? homeworkComment;
   String? overallComment;
@@ -439,7 +419,7 @@ class ClassReview {
 }
 
 class LessonStatus {
-  int? id;
+  num? id;
   String? status;
   String? createdAt;
   String? updatedAt;
@@ -470,7 +450,7 @@ class Feedbacks {
   String? bookingId;
   String? firstId;
   String? secondId;
-  int? rating;
+  num? rating;
   String? content;
   String? createdAt;
   String? updatedAt;

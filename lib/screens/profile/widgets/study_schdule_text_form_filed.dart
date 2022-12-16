@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/screens/profile/profile_controller.dart';
 
-class PhoneTextFormField extends StatelessWidget {
+import '../profile_controller.dart';
+
+class StudyScheduleTextFormField extends StatelessWidget {
   final controller = Get.find<ProfileController>(tag: 'profile_controller');
+  final String hintText;
+  final String title;
+  final String value;
 
-  PhoneTextFormField({
+  StudyScheduleTextFormField({
     Key? key,
+    required this.hintText,
+    required this.title,
+    required this.value,
   }) : super(key: key);
 
   @override
@@ -15,10 +22,10 @@ class PhoneTextFormField extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              "Phone Number",
-              style: TextStyle(
+              title,
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -28,24 +35,20 @@ class PhoneTextFormField extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         TextFormField(
-          keyboardType: TextInputType.number,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: "Enter your phone number",
+          maxLines: null,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: hintText,
           ),
-          onChanged: (v) => controller.phone.value = v,
-          initialValue: controller.phone.value,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter some text';
-            } else {
-              if (!RegExp(r"^(?:[+0]9)?[0-9]{10}$").hasMatch(value)) {
-                return 'Invalid phone number';
-              }
             }
             return null;
           },
-          onSaved: (val) => controller.phone.value = val ?? "",
+          initialValue: value,
+          onSaved: (val) => controller.studySchedule.value = val ?? "",
+          onChanged: (v) => controller.studySchedule.value = v,
         ),
       ],
     );

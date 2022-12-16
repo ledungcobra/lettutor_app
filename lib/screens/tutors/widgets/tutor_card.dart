@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/models/tutor.dart';
 import 'package:lettutor_app/widgets/skill_chip.dart';
 
@@ -109,12 +110,7 @@ class _TutorCardState extends State<TutorCard> {
         overflow: TextOverflow.ellipsis,
         maxLines: 3,
         softWrap: false,
-        style: TextStyle(
-          fontSize: 14.0,
-          fontFamily: 'Roboto',
-          color: Colors.black54,
-          fontWeight: FontWeight.w500,
-        ),
+        style: Get.theme.textTheme.bodyText2,
       ),
     );
   }
@@ -133,7 +129,7 @@ class _TutorCardState extends State<TutorCard> {
                       .favorite_border,
                   color: Colors.redAccent,
                 )),
-            OutlinedButton(onPressed: () {}, child: Text('Book')),
+            // OutlinedButton(onPressed: () {}, child: Text('Book')),
           ],
         )
       ],

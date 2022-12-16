@@ -33,15 +33,12 @@ class TutorsController extends GetxController
 
   Map<String?, Category> get skills => _utilService.specialties;
 
-  @override
-  void onInit() {
-    super.onInit();
-    initData();
-  }
-
-  void initData() async {
+  void init() async {
+    _tutors.clear();
     await loadTutors();
   }
+
+  void initData() async {}
 
   refreshTutors() async {
     page--;

@@ -40,9 +40,10 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
 
   @override
   void initState() {
+    controller.init();
     listViewController.addListener(() {
       if (listViewController.offset >
-              listViewController.position.minScrollExtent &&
+              listViewController.position.minScrollExtent + 20 &&
           !listViewController.position.outOfRange) {
         showHeader.value = false;
       } else {
@@ -95,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
+
           Obx(() {
             if (showHeader.isFalse) {
               return SizedBox.shrink();

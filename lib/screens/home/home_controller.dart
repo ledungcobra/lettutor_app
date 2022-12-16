@@ -20,9 +20,9 @@ class HomeController extends GetxController with HandleUIError implements Likabl
   var page = 1;
   var perPage = 2;
 
-  @override
-  void onInit() {
-    super.onInit();
+  void init() {
+    header.value = null;
+    tutorDetail.value = null;
     loadingData();
   }
 

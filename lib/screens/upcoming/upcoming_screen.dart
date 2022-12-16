@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/screens/upcoming/widgets/upcomming_item.dart';
+import 'package:lettutor_app/widgets/not_found.dart';
 
 import '../../widgets/loading.dart';
 import 'upcoming_controller.dart';
@@ -14,11 +17,23 @@ class UpcomingScreen extends StatefulWidget {
 
 class _UpcomingScreenState extends State<UpcomingScreen> {
   final upcomingController = Get.find<UpcomingController>();
+  Timer? timer;
+  final elapsedTime = 0.obs;
 
   @override
   void initState() {
-    super.initState();
     upcomingController.loadData();
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      elapsedTime.value = elapsedTime.value + 1;
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    timer?.cancel();
   }
 
   @override
@@ -38,16 +53,23 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
   }
 
   Widget _listSchedule() {
-    return Obx(() => upcomingController.bookingItems.isEmpty
-        ? Loading()
-        : ListView(
-            key: UniqueKey(),
-            children: upcomingController.bookingItems
-                .map((item) => UpcomingItem(
-                      key: UniqueKey(),
-                      bookingItem: item,
-                    ))
-                .toList(),
-          ));
+    return Obx(
+        () => upcomingController.bookingItems.isEmpty && elapsedTime.value <= 8
+            ? Loading()
+            : upcomingController.bookingItems.isEmpty
+                ? Row(
+                    children: [
+                      NotFound(),
+                    ],
+                  )
+                : ListView(
+                    key: UniqueKey(),
+                    children: upcomingController.bookingItems
+                        .map((item) => UpcomingItem(
+                              key: UniqueKey(),
+                              bookingItem: item,
+                            ))
+                        .toList(),
+                  ));
   }
 }

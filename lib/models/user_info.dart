@@ -9,7 +9,7 @@ class UserInfo {
   UserInfo.fromJson(Map<String, dynamic> json) {
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
     tokens =
-    json['tokens'] != null ? new Tokens.fromJson(json['tokens']) : null;
+        json['tokens'] != null ? new Tokens.fromJson(json['tokens']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -41,27 +41,31 @@ class User {
   String? birthday;
   bool? isActivated;
   String? level;
+  String? studySchedule;
   List<LearnTopics>? learnTopics;
+  List<LearnTopics>? testPreparations;
   bool? isPhoneActivated;
   int? timezone;
   bool? canSendMessage;
 
   User(
       {this.id,
-        this.email,
-        this.name,
-        this.avatar,
-        this.country,
-        this.phone,
-        this.roles,
-        this.language,
-        this.birthday,
-        this.isActivated,
-        this.level,
-        this.learnTopics,
-        this.isPhoneActivated,
-        this.timezone,
-        this.canSendMessage});
+      this.email,
+      this.name,
+      this.avatar,
+      this.country,
+      this.phone,
+      this.roles,
+      this.language,
+      this.birthday,
+      this.isActivated,
+      this.level,
+      this.learnTopics,
+      this.testPreparations,
+      this.isPhoneActivated,
+      this.timezone,
+      this.studySchedule,
+      this.canSendMessage});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -70,9 +74,9 @@ class User {
     avatar = json['avatar'];
     country = json['country'];
     phone = json['phone'];
-    if(json['roles'] != null){
+    if (json['roles'] != null) {
       roles = <String>[];
-      json['roles'].forEach((v){
+      json['roles'].forEach((v) {
         roles!.add(v);
       });
     }
@@ -80,10 +84,18 @@ class User {
     birthday = json['birthday'];
     isActivated = json['isActivated'];
     level = json['level'];
+
     if (json['learnTopics'] != null) {
       learnTopics = <LearnTopics>[];
       json['learnTopics'].forEach((v) {
         learnTopics!.add(new LearnTopics.fromJson(v));
+      });
+    }
+    studySchedule = json['studySchedule'];
+    if (json['testPreparations'] != null) {
+      testPreparations = <LearnTopics>[];
+      json['testPreparations'].forEach((v) {
+        testPreparations!.add(new LearnTopics.fromJson(v));
       });
     }
     isPhoneActivated = json['isPhoneActivated'];
@@ -101,11 +113,16 @@ class User {
     data['phone'] = this.phone;
     data['roles'] = this.roles;
     data['language'] = this.language;
+    data['studySchedule'] = this.studySchedule;
     data['birthday'] = this.birthday;
     data['isActivated'] = this.isActivated;
     data['level'] = this.level;
-    if (this.learnTopics != null) {
+    if (learnTopics != null) {
       data['learnTopics'] = this.learnTopics!.map((v) => v.toJson()).toList();
+    }
+    if (testPreparations != null) {
+      data['testPreparations'] =
+          this.testPreparations!.map((v) => v.toJson()).toList();
     }
     data['isPhoneActivated'] = this.isPhoneActivated;
     data['timezone'] = this.timezone;
@@ -144,9 +161,9 @@ class Tokens {
 
   Tokens.fromJson(Map<String, dynamic> json) {
     access =
-    json['access'] != null ? new Access.fromJson(json['access']) : null;
+        json['access'] != null ? new Access.fromJson(json['access']) : null;
     refresh =
-    json['refresh'] != null ? new Access.fromJson(json['refresh']) : null;
+        json['refresh'] != null ? new Access.fromJson(json['refresh']) : null;
   }
 
   Map<String, dynamic> toJson() {

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class NormalTextFormField extends StatelessWidget {
-  const NormalTextFormField({
+import '../profile_controller.dart';
+
+class NameFormField extends StatelessWidget {
+  NameFormField({
     Key? key,
     required this.hintText,
     required this.title,
-    required this.name,
   }) : super(key: key);
+
+  final controller = Get.find<ProfileController>(tag: 'profile_controller');
   final String hintText;
   final String title;
-  final String name;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -20,7 +24,6 @@ class NormalTextFormField extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                color: Colors.black,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -30,7 +33,6 @@ class NormalTextFormField extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         TextFormField(
-          keyboardType: TextInputType.none,
           maxLines: null,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
@@ -42,8 +44,9 @@ class NormalTextFormField extends StatelessWidget {
             }
             return null;
           },
-          initialValue: name,
-          onSaved: (val) {},
+          initialValue: controller.name.value,
+          onSaved: (val) => controller.name.value = val ?? "",
+          onChanged: (v) => controller.name.value = v,
         ),
       ],
     );

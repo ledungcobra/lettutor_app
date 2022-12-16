@@ -14,7 +14,7 @@ class NoUpcomingLesson extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: Get.height * 0.18,
-      color: PRIMARY_COLOR,
+      color: Get.theme.primaryColorDark,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 10),
         child: Column(

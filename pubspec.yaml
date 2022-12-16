@@ -57,6 +57,7 @@ dependencies:
       url: https://github.com/dispersik/jitsi_meet_fork
       ref: master
   jwt_decoder: ^2.0.1
+  flutter_profile_picture: ^2.0.0
 
 dev_dependencies:
   flutter_test:

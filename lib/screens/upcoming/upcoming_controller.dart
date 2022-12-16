@@ -74,5 +74,4 @@ class UpcomingController extends GetxController with HandleUIError {
       );
     }
   }
-
 }

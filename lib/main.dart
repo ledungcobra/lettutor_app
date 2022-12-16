@@ -10,7 +10,6 @@ import 'package:lettutor_app/screens/tutors/tutors_controller.dart';
 import 'package:lettutor_app/services/course_service.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/services/user_service.dart';
-import 'package:lettutor_app/utils/constants.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'screens/course_details/controllers/course_details_controller.dart';
@@ -18,6 +17,7 @@ import 'screens/courses/tabs/books_controller.dart';
 import 'screens/upcoming/upcoming_controller.dart';
 import 'services/utils_service.dart';
 import 'utils/shared_reference.dart';
+import 'utils/theme_controller.dart';
 import 'widgets/refresh_scroll_behavior.dart';
 
 void main() async {
@@ -37,10 +37,12 @@ setUpIOC() async {
   }
   dio.options.headers['Content-Type'] = 'application/json';
   Get.put(dio);
+  final themeController = ThemeController();
+  themeController.init();
 
-  var utilService = UtilService();
-  await utilService.init();
+  final utilService = UtilService();
   Get.put(utilService);
+  Get.put(themeController);
   Get.put(DateFormat('yyyy-MM-dd hh:mm'));
   Get.put(TutorService());
   Get.put(UserService());
@@ -59,10 +61,10 @@ class App extends StatelessWidget {
 
   final _darkTheme = ThemeData(
     accentColor: Colors.red,
-    primaryColor:PRIMARY_COLOR,
+    primaryColor: Colors.amber,
     fontFamily: 'Roboto',
     appBarTheme: AppBarTheme(
-        backgroundColor: Colors.grey, foregroundColor: Colors.black),
+        backgroundColor: Colors.grey, foregroundColor: Colors.white),
     brightness: Brightness.dark,
     buttonTheme: ButtonThemeData(
       buttonColor: Colors.amber,
@@ -73,7 +75,7 @@ class App extends StatelessWidget {
   final _lightTheme = ThemeData(
     accentColor: Colors.pink,
     appBarTheme: AppBarTheme(
-        backgroundColor: Colors.grey, foregroundColor: Colors.white),
+        backgroundColor: Colors.grey, foregroundColor: Colors.black),
     brightness: Brightness.light,
     primaryColor: Colors.blue,
     buttonTheme: ButtonThemeData(

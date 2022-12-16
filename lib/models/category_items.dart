@@ -52,4 +52,12 @@ class Category {
     data['key'] = this.key;
     return data;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Category && runtimeType == other.runtimeType && key == other.key;
+
+  @override
+  int get hashCode => key.hashCode;
 }

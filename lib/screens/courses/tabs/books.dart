@@ -22,7 +22,11 @@ class _BooksTabState extends State<BooksTab> {
 
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
-
+  @override
+  void initState() {
+    controller.init();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(

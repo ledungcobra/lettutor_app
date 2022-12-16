@@ -164,7 +164,6 @@ class TutorService with AppAPI, CatchError {
         'content': content,
         'bookingId': bookingId
       };
-      print(body.toString());
       var result = await dio.post(buildUrl('/user/feedbackTutor'), data: body);
       print(result);
       return true;

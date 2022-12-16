@@ -16,7 +16,6 @@ class EmailTextFormField extends StatelessWidget {
             Text(
               "Email address",
               style: TextStyle(
-                color: Colors.black,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),

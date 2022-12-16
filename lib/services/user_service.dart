@@ -6,6 +6,7 @@ import 'package:lettutor_app/models/user_info.dart';
 import 'package:lettutor_app/utils/helper.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
+import '../dto/profile_dto.dart';
 import '../models/history_item.dart';
 
 class UserService with CatchError, AppAPI {
@@ -79,6 +80,27 @@ class UserService with CatchError, AppAPI {
       return response.data['total'];
     } catch (e) {
       return 0;
+    }
+  }
+
+  Future<String> sendForgotPassword(String email) async {
+    try {
+      var response = await dio.post(buildUrl('/user/forgotPassword'), data: {
+        'email': email
+      });
+      return response.data['message'];
+    } catch (e) {
+      print(e);
+      return "Forgot password error";
+    }
+  }
+
+  Future<User> updateProfile(ProfileDto profile) async {
+    try {
+      var response = await dio.put(buildUrl('/user/info'), data: profile.toJson());
+      return User.fromJson(response.data['user']);
+    } catch (e) {
+      return handleError(e);
     }
   }
 }

@@ -16,8 +16,8 @@ class UserInfoDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(
-              color: PRIMARY_COLOR,
+            decoration:  BoxDecoration(
+              color: Get.isDarkMode ? Colors.black45: Get.theme.primaryColor,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,12 +46,12 @@ class UserInfoDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(
               Icons.person_outline_sharp,
-              color: Colors.black,
+              // color: Colors.black,
               size: 28,
             ),
             title: const Text(
               'Profile',
-              style: TextStyle(fontSize: 16, color: Colors.black),
+              style: TextStyle(fontSize: 16),
             ),
             onTap: () {
               // Open Profile
@@ -62,12 +62,12 @@ class UserInfoDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(
               Icons.school,
-              color: Colors.black,
+              // color: Colors.black,
               size: 28,
             ),
             title: const Text(
               'Become Tutor',
-              style: TextStyle(fontSize: 16, color: Colors.black),
+              style: TextStyle(fontSize: 16),
             ),
             onTap: () {
               Get.snackbar('Notification', 'Becoming tutor',
@@ -77,12 +77,12 @@ class UserInfoDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(
               Icons.menu_book,
-              color: Colors.black,
+              // color: Colors.black,
               size: 28,
             ),
             title: const Text(
               'List of courses',
-              style: TextStyle(fontSize: 16, color: Colors.black),
+              style: TextStyle(fontSize: 16),
             ),
             onTap: () {},
           ),

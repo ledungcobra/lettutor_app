@@ -9,8 +9,9 @@ import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SettingsScreen extends StatefulWidget {
+import '../../utils/theme_controller.dart';
 
+class SettingsScreen extends StatefulWidget {
   SettingsScreen({Key? key}) : super(key: key);
 
   @override
@@ -20,13 +21,8 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final tokenService = Get.find<TokenService>();
   final userService = Get.find<UserService>();
+  final themeController = Get.find<ThemeController>();
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _getThemeStatus();
-  }
   void _handleLogout() async {
     await tokenService.clearTokens();
     Get.offAll(LoginScreen());
@@ -36,71 +32,63 @@ class _SettingsScreenState extends State<SettingsScreen> {
     Get.to(HistoryScreen());
   }
 
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
-  final _isLightTheme = false.obs;
-
-  _saveThemeStatus() async {
-    SharedPreferences pref = await _prefs;
-    pref.setBool('theme', _isLightTheme.value);
-  }
-
-  _getThemeStatus() async {
-    var _isLight = _prefs.then((SharedPreferences prefs) {
-      return prefs.getBool('theme') != null ? prefs.getBool('theme') : true;
-    }).obs;
-    _isLightTheme.value = await _isLight.value ?? true;
-    Get.changeThemeMode(_isLightTheme.value ? ThemeMode.light : ThemeMode.dark);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text('Settings', style: Get.theme.textTheme.bodyText1),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _userDetails(),
-            SizedBox(
-              height: 100,
-            ),
-            Button(
-              title: 'Booking History',
-              onClick: _handleOpenHistory,
-              color: Colors.white,
-              textColor: Colors.black54,
-              leadingIcon: Icon(
-                Icons.history,
-                color: Colors.black,
+        child: Obx(
+          ()=>  Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _userDetails(),
+              SizedBox(
+                height: 100,
               ),
-              radius: 50,
-            ),
-            ObxValue(
-              (data) => Switch(
-                value: _isLightTheme.value,
-                onChanged: (val) {
-                  _isLightTheme.value = val;
+              Button(
+                title: 'Booking History',
+                onClick: _handleOpenHistory,
+                color: Get.isDarkMode ? Colors.black : Get.theme.primaryColor,
+                // textColor: Colors.black54,
+                leadingIcon: Icon(
+                  Icons.history,
+                  color: Get.isDarkMode ? Colors.white : Colors.black45,
+                ),
+                radius: 50,
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Button(
+                title: themeController.isLight.value ? 'Dark mode' : 'Light mode',
+                onClick: () async {
                   Get.changeThemeMode(
-                    _isLightTheme.value ? ThemeMode.light : ThemeMode.dark,
+                    Get.isDarkMode ? ThemeMode.light : ThemeMode.dark,
                   );
-                  _saveThemeStatus();
+                  themeController.toggle();
+                  await themeController.saveThemeStatus();
                 },
+                color: themeController.isLight.value ? Colors.black : Get.theme.primaryColor,
+                // textColor: Colors.black54,
+                leadingIcon: Icon(
+                  themeController.isLight.value ? Icons.dark_mode : Icons.light_mode,
+                  color: Get.isDarkMode ? Colors.white : Colors.black45,
+                ),
+                radius: 50,
               ),
-              false.obs,
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Button(
-              title: 'Logout',
-              onClick: _handleLogout,
-              color: Colors.red,
-            )
-          ],
+              SizedBox(
+                height: 5,
+              ),
+              Button(
+                title: 'Logout',
+                onClick: _handleLogout,
+                color: Get.theme.accentColor,
+              )
+            ],
+          ),
         ),
       ),
     );

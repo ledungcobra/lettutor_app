@@ -30,7 +30,7 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
 
   @override
   void initState() {
-    controller.onInit();
+    controller.init();
     super.initState();
   }
 
@@ -39,7 +39,6 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
     Get.put(TutorsController());
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
         appBar: AppBar(
             title: Row(
               children: [
@@ -49,8 +48,7 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
                 ),
                 _searchField()
               ],
-            ),
-            backgroundColor: Colors.white),
+            )),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

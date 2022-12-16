@@ -132,13 +132,13 @@ class HistoryItem extends StatelessWidget with Dimension {
             reviews!.lessonProgress!.isNotEmpty)
           Text('Lesson progress ${reviews?.lessonProgress}'),
         _skillRating(
-            'Behaviour', reviews?.behaviorRating, reviews?.behaviorComment),
+            'Behaviour', reviews?.behaviorRating?.toInt() ?? 0, reviews?.behaviorComment),
         _skillRating(
-            'Listening', reviews?.listeningRating, reviews?.listeningComment),
+            'Listening', reviews?.listeningRating?.toInt() ?? 0, reviews?.listeningComment),
         _skillRating(
-            'Speaking', reviews?.speakingRating, reviews?.speakingComment),
+            'Speaking', reviews?.speakingRating?.toInt() ?? 0, reviews?.speakingComment),
         _skillRating(
-            'Vocabulary ', reviews?.vocabularyRating, reviews?.behaviorComment),
+            'Vocabulary ', reviews?.vocabularyRating?.toInt() ?? 0, reviews?.behaviorComment),
         Text('Overall comment: ${reviews?.overallComment?.toString() ?? ""}'),
         SizedBox(height: 10),
         Container(height: 1, width: double.infinity, color: Colors.grey),
