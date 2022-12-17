@@ -46,9 +46,8 @@ class LoginScreen extends StatelessWidget with HandleUIError {
   @override
   Widget build(BuildContext context) {
     // _handleLogin();
-    // checkForLogin();
+    checkForLogin();
     return Scaffold(
-
       body: SafeArea(
         child: Stack(
           children: [
@@ -78,7 +77,7 @@ class LoginScreen extends StatelessWidget with HandleUIError {
   }
 
   void checkForLogin() {
-      tokenService.getAccessToken().then((result) {
+    tokenService.getAccessToken().then((result) {
       if (result != '') Get.offAll(() => TabBarScreen());
     });
   }

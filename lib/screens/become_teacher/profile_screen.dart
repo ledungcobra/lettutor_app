@@ -19,14 +19,15 @@ import 'package:lettutor_app/widgets/loading.dart';
 import '../../widgets/button.dart';
 import 'widgets/study_schdule_text_form_filed.dart';
 
-class ProfileScreen extends StatefulWidget {
-  ProfileScreen({Key? key}) : super(key: key);
+class BecomeTeacherScreen extends StatefulWidget {
+  BecomeTeacherScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<BecomeTeacherScreen> createState() => _BecomeTeacherScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> with HandleUIError {
+class _BecomeTeacherScreenState extends State<BecomeTeacherScreen> with HandleUIError {
+
   UserInfo? userInfo;
   final userService = Get.find<UserService>();
   final utilService = Get.find<UtilService>();

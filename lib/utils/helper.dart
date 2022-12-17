@@ -10,7 +10,7 @@ String? validateEmail(String? value) {
     return "Please input email";
   }
   if (!RegExp(
-          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+          r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$")
       .hasMatch(value)) {
     return "Invalid Email";
   }

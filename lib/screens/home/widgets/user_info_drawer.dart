@@ -70,22 +70,11 @@ class UserInfoDrawer extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             onTap: () {
+
               Get.snackbar('Notification', 'Becoming tutor',
                   backgroundColor: Colors.greenAccent);
             },
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.menu_book,
-              // color: Colors.black,
-              size: 28,
-            ),
-            title: const Text(
-              'List of courses',
-              style: TextStyle(fontSize: 16),
-            ),
-            onTap: () {},
-          ),
+          )
         ],
       ),
     );

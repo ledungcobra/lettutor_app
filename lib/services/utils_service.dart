@@ -57,7 +57,6 @@ class UtilService with AppAPI, CatchError {
         testPreparations[category.id] = category;
       }
 
-      print(testPreparations);
       for (var item in categoryList) {
         if (item.title == "specialties") {
           for (var value in item.categories!) {
