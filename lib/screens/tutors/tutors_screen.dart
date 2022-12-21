@@ -13,6 +13,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../widgets/load_more_footer.dart';
+import '../../widgets/search_bar.dart';
 
 class TutorsScreen extends StatefulWidget {
   TutorsScreen();
@@ -24,8 +25,7 @@ class TutorsScreen extends StatefulWidget {
 class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
   final controller = Get.find<TutorsController>();
   final TutorService _tutorService = Get.find();
-  RefreshController refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController refreshController = RefreshController(initialRefresh: true);
   final GlobalKey _refresherKey = GlobalKey();
 
   @override
@@ -41,14 +41,15 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
             title: Row(
-              children: [
-                Text(
-                  'Tutors',
-                  style: TextStyle(color: Colors.blue),
-                ),
-                _searchField()
-              ],
-            )),
+          children: [
+            Text(
+              'Tutors',
+              style: TextStyle(color: Colors.blue),
+            ),
+            SearchBar(
+                handleSearch: _handleSearch, placeholder: 'Enter tutor name')
+          ],
+        )),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -61,36 +62,6 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
             ),
           ),
         ));
-  }
-
-  Widget _searchField() {
-    return Expanded(
-      flex: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextFormField(
-          onFieldSubmitted: _handleSearch,
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 0),
-            hintText: 'Enter tutor name',
-            prefixIcon: Icon(Icons.search),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(50.0),
-              borderSide: BorderSide(
-                color: Colors.blue,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(25.0),
-              borderSide: BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _filterNationalityBar() {
@@ -191,7 +162,8 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
             children: controller.tutors
                 .map((tutor) => TutorCard(
                     tutor: tutor,
-                    onClick: () => _handleShowTutorDetail(tutor),likable: controller))
+                    onClick: () => _handleShowTutorDetail(tutor),
+                    likable: controller))
                 .toList(),
           ),
         ),
@@ -205,7 +177,8 @@ class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
       handleError(response.error!);
       return;
     }
-    Get.to(TutorDetailScreen(tutorDetail: response.data!, tutorId: tutor.userId!));
+    Get.to(
+        TutorDetailScreen(tutorDetail: response.data!, tutorId: tutor.userId!));
   }
 
   void _handleSearch(String? newValue) {

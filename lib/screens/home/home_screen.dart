@@ -28,11 +28,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with HandleUIError {
   final UserService _userService = Get.find();
   final TutorService _tutorService = Get.find();
-  final controller = Get.find<HomeController>();
+
+  get controller => Get.find<HomeController>();
   final GlobalKey contentKey = GlobalKey();
   final GlobalKey refresherKey = GlobalKey();
+
   final RefreshController refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
   final listViewController = ScrollController();
   final showHeader = true.obs;
 
@@ -40,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
 
   @override
   void initState() {
+    Get.put(HomeController());
     controller.init();
     listViewController.addListener(() {
       if (listViewController.offset >
@@ -76,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
                   child: NetworkAvatar(
                     height: 30,
                     width: 55,
-                    url: response.data!.user!.avatar!,
+                    url: response.data?.user?.avatar ?? "",
                   ),
                 );
               }
@@ -96,7 +99,6 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-
           Obx(() {
             if (showHeader.isFalse) {
               return SizedBox.shrink();
@@ -143,10 +145,10 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
       controller: refreshController,
       onLoading: () async {
         await controller.loadNextTutors();
+        refreshController.loadComplete();
         if (mounted) {
           setState(() {});
         }
-        refreshController.loadComplete();
       },
       onRefresh: () async {
         await controller.refreshTutors();

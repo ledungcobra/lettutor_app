@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:lettutor_app/utils/mixing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenService {
@@ -20,6 +21,16 @@ class TokenService {
   Future<String> getAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(AccessToken) ?? "";
+  }
+
+  Future<bool> checkToken() async {
+    try {
+      await Get.find<Dio>()
+          .get('https://sandbox.api.lettutor.com/category');
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   clearTokens() async {

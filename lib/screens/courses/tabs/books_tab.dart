@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/models/book.dart';
 import 'package:lettutor_app/screens/courses/widgets/book_item.dart';
-import 'package:lettutor_app/services/course_service.dart';
-import 'package:lettutor_app/widgets/loading.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../widgets/load_more_footer.dart';
@@ -17,13 +15,14 @@ class BooksTab extends StatefulWidget {
 }
 
 class _BooksTabState extends State<BooksTab> {
-  final controller = Get.find<BooksController>();
+  BooksController get controller => Get.find<BooksController>();
   final GlobalKey _refresherKey = GlobalKey();
 
   RefreshController refreshController =
-      RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: true);
   @override
   void initState() {
+    Get.put(BooksController());
     controller.init();
     super.initState();
   }
@@ -37,6 +36,13 @@ class _BooksTabState extends State<BooksTab> {
       physics: BouncingScrollPhysics(),
       footer: LoadMoreFooter(),
       controller: refreshController,
+      onRefresh: () async {
+        await controller.loadBooks();
+        if(mounted){
+          setState(() {});
+        }
+        refreshController.refreshCompleted();
+      },
       onLoading: () async {
         await controller.loadBooks();
         if(mounted){

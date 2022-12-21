@@ -28,9 +28,13 @@ class CourseService with AppAPI, CatchError {
     }
   }
 
-  Future<ResponseEntity<List<Book>>> getBooksPagination(int page, int perPage) async {
+  Future<ResponseEntity<List<Book>>> getBooksPagination(int page, int perPage, [String? name]) async {
     try {
-      var response = await dio.get(buildUrl("/e-book?page=$page&size=$perPage"));
+      var query = 'page=$page&size=$perPage';
+      if(name != null){
+        query += '&q=$name';
+      }
+      var response = await dio.get(buildUrl("/e-book?$query"));
       var courses = <Book>[];
       for(var course in response.data['data']['rows']){
         courses.add(Book.fromJson(course));

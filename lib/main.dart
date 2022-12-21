@@ -29,14 +29,15 @@ void main() async {
 setUpIOC() async {
   var dio = Dio();
   var tokenService = TokenService();
-  Get.put(tokenService);
-
   var accessToken = await tokenService.getAccessToken();
   if (accessToken.isNotEmpty) {
     dio.options.headers['Authorization'] = "Bearer $accessToken";
   }
   dio.options.headers['Content-Type'] = 'application/json';
   Get.put(dio);
+  Get.put(tokenService);
+
+
   final themeController = ThemeController();
   themeController.init();
 
@@ -49,8 +50,7 @@ setUpIOC() async {
   Get.put(CourseService());
   Get.put(SignUpController());
   Get.put(LoginController());
-  Get.put(HomeController());
-  Get.put(BooksController());
+
   Get.put(CourseDetailsController());
   Get.put(TutorsController());
   Get.put(UpcomingController());

@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/screens/login/login_controller.dart';
@@ -12,7 +11,6 @@ import 'package:lettutor_app/utils/helper.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/utils/shared_reference.dart';
 import 'package:lettutor_app/widgets/button.dart';
-
 import '../../widgets/loading.dart';
 
 class LoginScreen extends StatelessWidget with HandleUIError {
@@ -22,26 +20,6 @@ class LoginScreen extends StatelessWidget with HandleUIError {
   final utilService = Get.find<UtilService>();
 
   LoginScreen({Key? key}) : super(key: key);
-
-  void _handleLogin() async {
-    try {
-      loginController.loading.value = true;
-      var response = await userService.login(
-          loginController.email.value, loginController.password.value);
-      if (response.hasError) {
-        handleError(response.error!);
-        return;
-      }
-      Get.snackbar("Success", "Login success",
-          backgroundColor: Colors.green, colorText: Colors.white);
-      userService.setUserInfo(response.data);
-      await tokenService.saveAccessToken(response.data!.tokens!.access!.token!);
-      await utilService.init();
-      Get.offAll(() => TabBarScreen());
-    } finally {
-      loginController.loading.value = false;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,10 +54,38 @@ class LoginScreen extends StatelessWidget with HandleUIError {
     );
   }
 
-  void checkForLogin() {
-    tokenService.getAccessToken().then((result) {
-      if (result != '') Get.offAll(() => TabBarScreen());
-    });
+  void checkForLogin() async {
+    final result = await tokenService.checkToken();
+    if (result) {
+      await utilService.init();
+      final userInfo = await userService.getUserInfo();
+      if(userInfo.hasError){
+
+        return;
+      }
+      userService.setUserInfo(userInfo.data);
+      Get.offAll(() => TabBarScreen());
+    }
+  }
+
+  void _handleLogin() async {
+    try {
+      loginController.loading.value = true;
+      var response = await userService.login(
+          loginController.email.value, loginController.password.value);
+      if (response.hasError) {
+        handleError(response.error!);
+        return;
+      }
+      Get.snackbar("Success", "Login success",
+          backgroundColor: Colors.green, colorText: Colors.white);
+      userService.setUserInfo(response.data);
+      await tokenService.saveAccessToken(response.data!.tokens!.access!.token!);
+
+      Get.offAll(() => TabBarScreen());
+    } finally {
+      loginController.loading.value = false;
+    }
   }
 
   Widget _introductionSection() {

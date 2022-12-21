@@ -40,7 +40,7 @@ class BookItem extends StatelessWidget with Dimension {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   SizedBox(height: 10),
                   Text(book.description ?? "",
-                      style: TextStyle(color: Colors.black45)),
+                      style: TextStyle(color: Get.isDarkMode? Colors.white: Colors.black45)),
                   SizedBox(height: 30),
                   Text(
                     LEVEL_TO_TEXT[book.level ?? ""] ?? "",

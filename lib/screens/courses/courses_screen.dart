@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/screens/courses/tabs/books.dart';
-import 'package:lettutor_app/screens/courses/tabs/courses.dart';
+import 'package:lettutor_app/screens/courses/tabs/books_tab.dart';
+import 'package:lettutor_app/screens/courses/tabs/courses_tab.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class CoursesScreen extends StatefulWidget {

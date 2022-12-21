@@ -9,7 +9,7 @@ import '../dto/profile_dto.dart';
 import '../models/history_item.dart';
 
 class UserService with CatchError, AppAPI {
-  final d.Dio dio = Get.find();
+
   UserInfo? _userInfo;
 
   setUserInfo(UserInfo? userInfo) {

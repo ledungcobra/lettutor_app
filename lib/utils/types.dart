@@ -5,7 +5,19 @@ import '../models/tutor.dart';
 class Nationality {
   String display;
   String val;
+
   Nationality(this.display, this.val);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Nationality &&
+          runtimeType == other.runtimeType &&
+          display == other.display &&
+          val == other.val;
+
+  @override
+  int get hashCode => display.hashCode ^ val.hashCode;
 }
 
 class FilterCriteria {
@@ -16,19 +28,24 @@ class FilterCriteria {
   FilterCriteria(
       {required this.nationality,
       required this.specialty,
-      required this.name});
+      required this.name}) {}
 
-  Map getNationalities(){
+  Map getNationalities() {
     var result = {};
-    if(nationality.isEmpty){
+    if (nationality.isEmpty) {
+      return result;
+    }
+    if (nationality.contains(Nationality("Gia sư nước ngoài", "isOversea")) &&
+        nationality.contains(Nationality("Gia sư Viêt Nam", "isVietNamese")) &&
+        nationality.contains(Nationality("Gia sư Bản Ngữ", "isNative"))) {
       return result;
     }
     for (var value in nationality) {
-      if(value.val == "all"){
+      if (value.val == "all") {
         result.clear();
         return result;
       }
-      if(value.val == "isOversea"){
+      if (value.val == "isOversea") {
         result['isVietNamese'] = false;
         result['isNative'] = false;
         return result;
@@ -38,9 +55,9 @@ class FilterCriteria {
     return result;
   }
 
-  List<String?> getSpecialties(){
+  List<String?> getSpecialties() {
     var result = <String?>[];
-    if(specialty.key == 'all'){
+    if (specialty.key == 'all') {
       return result;
     }
     result.add(specialty.key);
@@ -48,8 +65,7 @@ class FilterCriteria {
   }
 }
 
-
-class Reason{
+class Reason {
   int id;
   String description;
 

@@ -9,6 +9,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../models/course.dart';
 import '../../../widgets/load_more_footer.dart';
+import 'courses_controller.dart';
 
 class CoursesTab extends StatefulWidget {
   CoursesTab({Key? key}) : super(key: key);
@@ -18,37 +19,17 @@ class CoursesTab extends StatefulWidget {
 }
 
 class _CoursesTabState extends State<CoursesTab> with HandleUIError {
-  final coursesService = Get.find<CourseService>();
   final GlobalKey _contentKey = GlobalKey();
   final GlobalKey _refresherKey = GlobalKey();
-  RefreshController refreshController =
-      RefreshController(initialRefresh: false);
+  final coursesService = Get.find<CourseService>();
 
-  int page = 1;
-  int perPage = 2;
-  var courses = <Course>[];
+  CoursesController get controller => Get.find<CoursesController>();
+  RefreshController refreshController = RefreshController(initialRefresh: true);
 
   @override
   void initState() {
+    Get.put(CoursesController());
     super.initState();
-    loadCourses();
-  }
-
-  loadCourses() async {
-    print('Current page=$page size=$perPage');
-    await Future.delayed(const Duration(milliseconds: 500));
-    var r = await coursesService.getCoursesPagination(page, perPage);
-    if (r.hasError) {
-      handleError(r.error!);
-      setState(() {});
-      return;
-    }
-    courses.addAll(r.data!);
-    if (mounted) {
-      setState(() {});
-    }
-    refreshController.loadComplete();
-    page++;
   }
 
   @override
@@ -56,21 +37,31 @@ class _CoursesTabState extends State<CoursesTab> with HandleUIError {
     return SmartRefresher(
       key: _refresherKey,
       enablePullUp: true,
-     
       header: WaterDropHeader(),
       physics: BouncingScrollPhysics(),
       footer: LoadMoreFooter(),
       controller: refreshController,
+      onRefresh: () async {
+        await controller.loadCourses();
+        if (mounted) {
+          setState(() {});
+        }
+        refreshController.refreshCompleted();
+      },
       onLoading: () async {
-        await loadCourses();
+        await controller.loadCourses();
+        if (mounted) {
+          setState(() {});
+        }
+        refreshController.loadComplete();
       },
       child: ListView.builder(
         key: _contentKey,
-        itemCount: courses.length,
+        itemCount: controller.courses.length,
         itemBuilder: (context, index) => CourseItem(
-          course: courses[index],
+          course: controller.courses[index],
           onTap: () async {
-            await _loadCourse(courses[index]);
+            await _loadCourse(controller.courses[index]);
           },
         ),
       ),
