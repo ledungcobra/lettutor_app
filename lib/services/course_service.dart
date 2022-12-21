@@ -15,9 +15,14 @@ class CourseService with AppAPI, CatchError {
         .then((value) => value.map((v) => Book.fromJson(v)).toList());
   }
 
-  Future<ResponseEntity<List<Course>>> getCoursesPagination(int page, int perPage) async {
+  Future<ResponseEntity<List<Course>>> getCoursesPagination(int page, int perPage, [String? courseName]) async {
     try {
-      var response = await dio.get(buildUrl("/course?page=$page&size=$perPage"));
+      var query = "page=$page&size=$perPage";
+      if(courseName != null){
+        query +='&q=$courseName';
+      }
+      var response = await dio.get(buildUrl("/course?$query"));
+      print(query);
       var courses = <Course>[];
       for(var course in response.data['data']['rows']){
         courses.add(Course.fromJson(course));

@@ -13,7 +13,7 @@ class SearchBar extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(7.0),
         child: TextFormField(
           onFieldSubmitted: handleSearch,
           decoration: InputDecoration(
@@ -23,7 +23,7 @@ class SearchBar extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(50.0),
               borderSide: BorderSide(
-                color: Colors.blue,
+                color: Colors.transparent,
               ),
             ),
             enabledBorder: OutlineInputBorder(

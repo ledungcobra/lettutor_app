@@ -13,6 +13,7 @@ import 'courses_controller.dart';
 
 class CoursesTab extends StatefulWidget {
   CoursesTab({Key? key}) : super(key: key);
+  RefreshController refreshController = RefreshController(initialRefresh: true);
 
   @override
   State<CoursesTab> createState() => _CoursesTabState();
@@ -24,7 +25,7 @@ class _CoursesTabState extends State<CoursesTab> with HandleUIError {
   final coursesService = Get.find<CourseService>();
 
   CoursesController get controller => Get.find<CoursesController>();
-  RefreshController refreshController = RefreshController(initialRefresh: true);
+  RefreshController get refreshController => widget.refreshController;
 
   @override
   void initState() {
@@ -42,6 +43,7 @@ class _CoursesTabState extends State<CoursesTab> with HandleUIError {
       footer: LoadMoreFooter(),
       controller: refreshController,
       onRefresh: () async {
+        controller.reset();
         await controller.loadCourses();
         if (mounted) {
           setState(() {});

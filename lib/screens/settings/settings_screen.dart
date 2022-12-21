@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/theme_controller.dart';
 
 class SettingsScreen extends StatefulWidget {
-  SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({Key? key}) : super(key: key);
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -34,7 +34,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings', style: Get.theme.textTheme.bodyText1),
@@ -42,7 +41,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Obx(
-          ()=>  Column(
+          () => Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _userDetails(),
@@ -58,13 +57,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Icons.history,
                   color: Get.isDarkMode ? Colors.white : Colors.black45,
                 ),
-                radius: 50,
               ),
               SizedBox(
                 height: 5,
               ),
               Button(
-                title: themeController.isLight.value ? 'Dark mode' : 'Light mode',
+                title:
+                    themeController.isLight.value ? 'Dark mode' : 'Light mode',
                 onClick: () async {
                   Get.changeThemeMode(
                     Get.isDarkMode ? ThemeMode.light : ThemeMode.dark,
@@ -72,13 +71,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   themeController.toggle();
                   await themeController.saveThemeStatus();
                 },
-                color: themeController.isLight.value ? Colors.black : Get.theme.primaryColor,
+                color: Get.isDarkMode ? Colors.black : Get.theme.primaryColor,
                 // textColor: Colors.black54,
                 leadingIcon: Icon(
-                  themeController.isLight.value ? Icons.dark_mode : Icons.light_mode,
+                  themeController.isLight.value
+                      ? Icons.dark_mode
+                      : Icons.light_mode,
                   color: Get.isDarkMode ? Colors.white : Colors.black45,
                 ),
-                radius: 50,
               ),
               SizedBox(
                 height: 5,
@@ -86,7 +86,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Button(
                 title: 'Logout',
                 onClick: _handleLogout,
-                color: Get.theme.accentColor,
+                color: !Get.isDarkMode ? Colors.white10 : Colors.blueGrey,
               )
             ],
           ),

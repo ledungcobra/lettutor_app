@@ -6,7 +6,7 @@ import '../../../services/course_service.dart';
 
 class BooksController extends GetxController with HandleUIError {
   final CourseService _courseService = Get.find();
-  final String? bookName = null;
+  String? bookName = null;
   int page = 1;
   int perPage = 2;
   var books = <Book>[];
@@ -22,7 +22,12 @@ class BooksController extends GetxController with HandleUIError {
   }
 
   void init() {
-    books.clear();
+    reset();
     loadBooks();
+  }
+
+  reset() {
+    books.clear();
+    page = 1;
   }
 }
