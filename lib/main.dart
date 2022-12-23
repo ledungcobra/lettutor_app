@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:lettutor_app/screens/home/home_controller.dart';
 import 'package:lettutor_app/screens/login/login_controller.dart';
 import 'package:lettutor_app/screens/login/login_screen.dart';
 import 'package:lettutor_app/screens/signup/sign_up_controller.dart';
@@ -11,9 +10,7 @@ import 'package:lettutor_app/services/course_service.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 import 'screens/course_details/controllers/course_details_controller.dart';
-import 'screens/courses/tabs/books_controller.dart';
 import 'screens/upcoming/upcoming_controller.dart';
 import 'services/utils_service.dart';
 import 'utils/shared_reference.dart';
@@ -36,7 +33,6 @@ setUpIOC() async {
   dio.options.headers['Content-Type'] = 'application/json';
   Get.put(dio);
   Get.put(tokenService);
-
 
   final themeController = ThemeController();
   themeController.init();

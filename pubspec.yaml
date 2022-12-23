@@ -58,6 +58,7 @@ dependencies:
       ref: master
   jwt_decoder: ^2.0.1
   flutter_profile_picture: ^2.0.0
+  socket_io_client: ^2.0.0
 
 dev_dependencies:
   flutter_test:

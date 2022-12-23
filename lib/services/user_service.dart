@@ -33,7 +33,6 @@ class UserService with CatchError, AppAPI {
   Future<ResponseEntity<UserInfo?>> login(String email, String password) async {
     try {
       var body = {"email": email, "password": password};
-      print(body);
       var response = await dio.post(buildUrl('/auth/login'), data: body);
       return ResponseEntity(
           data: UserInfo.fromJson(response.data), error: null);

@@ -19,7 +19,6 @@ class ReportDialog extends StatelessWidget {
   final reportText = ''.obs;
 
   _handleSendReport() async {
-    print('Sending');
     if (selectedReason.value.id == 0) {
       Get.snackbar(
         'Error',
