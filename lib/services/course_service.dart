@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:lettutor_app/dto/ResponseEntity.dart';
+import 'package:lettutor_app/models/response_entity.dart';
 import 'package:lettutor_app/models/book.dart';
 import 'package:lettutor_app/models/course.dart';
 import 'package:lettutor_app/services/user_service.dart';

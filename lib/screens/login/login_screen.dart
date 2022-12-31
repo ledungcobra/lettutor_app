@@ -12,14 +12,14 @@ import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/utils/shared_reference.dart';
 import 'package:lettutor_app/widgets/button.dart';
 import '../../widgets/loading.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+// import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class LoginScreen extends StatelessWidget with HandleUIError {
+
   final loginController = Get.find<LoginController>();
   final userService = Get.find<UserService>();
   final tokenService = Get.find<TokenService>();
   final utilService = Get.find<UtilService>();
-  final socket = Get.find<IO.Socket>();
 
   LoginScreen({Key? key}) : super(key: key);
 
@@ -65,9 +65,6 @@ class LoginScreen extends StatelessWidget with HandleUIError {
         return;
       }
       userService.setUserInfo(userInfo.data);
-      socket.emit(
-          "connection:login", {"user": userInfo.data?.user?.toJson() ?? {}}.toString());
-      socket.emit("chat:getRecentList");
       Get.offAll(() => TabBarScreen());
     }
   }
@@ -83,6 +80,7 @@ class LoginScreen extends StatelessWidget with HandleUIError {
       }
       Get.snackbar("Success", "Login success",
           backgroundColor: Colors.green, colorText: Colors.white);
+      await utilService.init();
       userService.setUserInfo(response.data);
       await tokenService.saveAccessToken(response.data!.tokens!.access!.token!);
 

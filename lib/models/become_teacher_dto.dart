@@ -1,7 +1,8 @@
 
 import 'package:dio/dio.dart';
 
-class BecomeTeacherDto{
+class BecomeTeacherRequest{
+
   String? country;
   String? birthday;
   String? interests;

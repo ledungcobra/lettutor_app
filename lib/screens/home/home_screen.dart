@@ -13,7 +13,7 @@ import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../dto/ResponseEntity.dart';
+import '../../models/response_entity.dart';
 import '../../utils/mixing.dart';
 import '../../widgets/load_more_footer.dart';
 import 'widgets/no_upcoming_lesson.dart';

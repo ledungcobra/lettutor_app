@@ -13,7 +13,7 @@ import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 import 'package:lettutor_app/widgets/title_button.dart';
 
-import '../../dto/ResponseEntity.dart';
+import '../../models/response_entity.dart';
 
 class TutorDetailScreen extends StatelessWidget with Dimension, HandleUIError {
   var courseExpanded = true.obs;

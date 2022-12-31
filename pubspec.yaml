@@ -59,10 +59,12 @@ dependencies:
   jwt_decoder: ^2.0.1
   flutter_profile_picture: ^2.0.0
   socket_io_client: ^2.0.0
-
+  json_annotation:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^2.0.2
+  json_serializable:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

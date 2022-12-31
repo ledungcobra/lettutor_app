@@ -1,4 +1,4 @@
-import '../models/dto/error.dart';
+import 'dto/error.dart';
 
 class ResponseEntity<T> {
   T? data;

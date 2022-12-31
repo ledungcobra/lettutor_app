@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:lettutor_app/dto/ResponseEntity.dart';
+import 'package:lettutor_app/models/response_entity.dart';
 import 'package:lettutor_app/models/comment.dart';
 import 'package:lettutor_app/models/tutor.dart';
 import 'package:lettutor_app/models/tutor_detail.dart';
