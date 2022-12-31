@@ -1,6 +1,5 @@
-import 'package:lettutor_app/models/category_items.dart';
-
-import '../models/tutor.dart';
+import '../models/category_list/category.dart';
+import '../models/tutor/tutor.dart';
 
 class Nationality {
   String display;

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lettutor_app/models/user_info.dart';
+import 'package:lettutor_app/models/user_info/user_info.dart';
 import 'package:lettutor_app/screens/profile/profile_controller.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/widgets/avatar.dart';

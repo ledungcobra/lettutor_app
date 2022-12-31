@@ -1,12 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lettutor_app/models/user_info.dart';
-import 'package:lettutor_app/screens/profile/profile_controller.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
+
+import '../become_tutor_controller.dart';
 
 class EditPhoto extends StatefulWidget {
 
@@ -19,7 +17,7 @@ class EditPhoto extends StatefulWidget {
 }
 
 class _EditPhotoState extends State<EditPhoto> {
-  get controller => Get.find<ProfileController>(tag: 'profile_controller');
+  get controller => Get.find<BecomeTutorController>(tag: 'become_tutor_controller');
   final ImagePicker _picker = ImagePicker();
   get user => Get.find<UserService>().userInfo.user;
 

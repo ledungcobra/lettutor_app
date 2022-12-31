@@ -1,16 +1,14 @@
-import 'dart:convert';
-
 import 'package:lettutor_app/models/response_entity.dart';
-import 'package:lettutor_app/models/comment.dart';
-import 'package:lettutor_app/models/tutor.dart';
-import 'package:lettutor_app/models/tutor_detail.dart';
+import 'package:lettutor_app/models/comment/comment.dart';
+import 'package:lettutor_app/models/tutor/tutor.dart';
+import 'package:lettutor_app/models/tutor_detail/tutor_detail.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/utils/types.dart';
 
-import '../models/booking_item.dart';
-import '../models/dto/become_teacher_dto.dart';
-import '../models/dto/error.dart';
-import '../models/schedule_info.dart';
+import '../models/request/become_teacher_dto.dart';
+import '../models/booking_item/booking_item.dart';
+import '../models/error/error.dart';
+import '../models/schedule/tutor_schedule_info.dart';
 
 class TutorService with AppAPI, CatchError {
   Future<ResponseEntity<List<Comment>>> getFeedbacksPaging(
@@ -117,7 +115,7 @@ class TutorService with AppAPI, CatchError {
   }
 
   Future<ResponseEntity> performBecomeATeacher(
-      BecomeTeacherDto becomeTeacherDto) async {
+      BecomeTeacherRequest becomeTeacherDto) async {
     try {
       var url = buildUrl("/tutor/register");
       await reloadToken();
@@ -145,12 +143,10 @@ class TutorService with AppAPI, CatchError {
   Future<bool> saveReport(String note, String? bookingId, int reasonId) async {
     try {
       var body = {'note': note, 'reasonId': reasonId, 'bookingId': bookingId};
-      var result =
-          await dio.put(buildUrl('/lesson-report/save-report'), data: body);
-      print(result);
+
+      await dio.put(buildUrl('/lesson-report/save-report'), data: body);
       return true;
     } catch (e) {
-      print(e);
       return false;
     }
   }
@@ -164,11 +160,9 @@ class TutorService with AppAPI, CatchError {
         'content': content,
         'bookingId': bookingId
       };
-      var result = await dio.post(buildUrl('/user/feedbackTutor'), data: body);
-      print(result);
+      await dio.post(buildUrl('/user/feedbackTutor'), data: body);
       return true;
     } catch (e) {
-      print(e);
       return false;
     }
   }
@@ -180,7 +174,6 @@ class TutorService with AppAPI, CatchError {
           data: {"studentRequest": newRequest});
       return result.data['data'].length > 0 && result.data['data'][0] == 1;
     } catch (e) {
-      print(e);
       return false;
     }
   }
@@ -210,7 +203,6 @@ class TutorService with AppAPI, CatchError {
       var next = now.add(Duration(days: 7));
       var url = buildUrl(
           '/schedule?tutorId=$tutorId&startTimestamp=${now.millisecondsSinceEpoch}&endTimestamp=${next.millisecondsSinceEpoch}');
-      print(url);
       var response = await dio.get(url);
       var result = <TutorScheduleInfo>[];
       for (var item in response.data['scheduleOfTutor']) {
@@ -225,10 +217,8 @@ class TutorService with AppAPI, CatchError {
   Future<bool> bookAClass(List<String> bookingDetailIds, String note) async {
     try {
       var url = buildUrl('/booking');
-      await dio.post(url, data: {
-        'scheduleDetailIds': bookingDetailIds,
-        'note': note
-      });
+      await dio.post(url,
+          data: {'scheduleDetailIds': bookingDetailIds, 'note': note});
       return true;
     } catch (e) {
       return false;

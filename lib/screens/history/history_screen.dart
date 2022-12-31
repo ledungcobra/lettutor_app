@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/history_item.dart';
+import 'package:lettutor_app/models/class_history/class_history.dart';
 import 'package:lettutor_app/screens/history/widgets/history_item.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/utils/mixing.dart';

@@ -1,12 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../models/history_item.dart';
+import '../../../models/class_history/feedback.dart' as f;
 import '../../../widgets/stars.dart';
 
 class FeedbackItem extends StatelessWidget {
-  final Feedbacks feedback;
+  final f.Feedback feedback;
 
   const FeedbackItem({super.key, required this.feedback});
 

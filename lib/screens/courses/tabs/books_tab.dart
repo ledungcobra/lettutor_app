@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/book.dart';
 import 'package:lettutor_app/screens/courses/widgets/book_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../../../models/book/book.dart';
 import '../../../widgets/load_more_footer.dart';
 import 'books_controller.dart';
 

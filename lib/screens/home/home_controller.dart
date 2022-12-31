@@ -2,10 +2,9 @@ import 'package:get/get.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/utils/types.dart';
 
-import '../../models/booking_item.dart';
-import '../../models/home_model.dart';
-import '../../models/tutor.dart';
-import '../../models/tutor_detail.dart';
+import '../../models/booking_item/booking_item.dart';
+import '../../models/tutor/tutor.dart';
+import '../../models/tutor_detail/tutor_detail.dart';
 import '../../services/tutor_service.dart';
 import '../../services/user_service.dart';
 

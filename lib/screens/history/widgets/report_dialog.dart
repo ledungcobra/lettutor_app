@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/history_item.dart';
+import 'package:lettutor_app/models/class_history/class_history.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 
+import '../../../models/class_history/tutor_info.dart';
 import '../../../utils/constants.dart';
 
 class ReportDialog extends StatelessWidget {

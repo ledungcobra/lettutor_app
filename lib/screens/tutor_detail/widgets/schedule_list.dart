@@ -5,7 +5,7 @@ import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
-import '../../../models/schedule_info.dart';
+import '../../../models/schedule/tutor_schedule_info.dart';
 import '../../../services/tutor_service.dart';
 import '../../../widgets/loading.dart';
 import 'booking_dialog.dart';

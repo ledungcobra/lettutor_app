@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/models/category_items.dart';
+import 'package:lettutor_app/models/category_list/category.dart';
 import 'package:lettutor_app/utils/constants.dart';
 
 class TextAndChips extends StatelessWidget {

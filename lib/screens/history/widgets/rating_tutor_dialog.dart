@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../models/history_item.dart';
+import '../../../models/class_history/class_history.dart';
+import '../../../models/class_history/class_review.dart';
+import '../../../models/class_history/tutor_info.dart';
 import '../../../services/tutor_service.dart';
 import '../../../widgets/stars.dart';
 

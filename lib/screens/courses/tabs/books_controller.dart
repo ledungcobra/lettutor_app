@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
-import '../../../models/book.dart';
+import '../../../models/book/book.dart';
 import '../../../services/course_service.dart';
 
 class BooksController extends GetxController with HandleUIError {

@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart' as d;
 import 'package:image_picker/image_picker.dart';
 import 'package:lettutor_app/models/response_entity.dart';
-import 'package:lettutor_app/models/user_info.dart';
+import 'package:lettutor_app/models/user_info/user_info.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
-import '../models/history_item.dart';
-import '../models/profile_dto.dart';
+import '../models/class_history/class_history.dart';
+import '../models/profile/profile_dto.dart';
+import '../models/user_info/user.dart';
 
 class UserService with CatchError, AppAPI {
 

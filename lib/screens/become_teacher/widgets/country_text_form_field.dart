@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 
 class CountryTextFormField extends StatefulWidget {
   final Function(Country) onDone;
-
-  final String country;
+  final String name;
 
   const CountryTextFormField({
-    Key? key, required this.country, required this.onDone,
+    Key? key, required this.name, required this.onDone,
   }) : super(key: key);
 
   @override
@@ -33,7 +32,7 @@ class _CountryTextFormFieldState extends State<CountryTextFormField> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              widget.country,
+              widget.name,
               style: const TextStyle(
 
                 fontSize: 16,

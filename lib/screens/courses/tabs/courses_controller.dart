@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
-import '../../../models/course.dart';
+import '../../../models/course/course.dart';
 import '../../../services/course_service.dart';
 
 class CoursesController with HandleUIError {

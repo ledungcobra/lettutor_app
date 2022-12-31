@@ -1,19 +1,14 @@
 import 'package:get/get.dart';
 import 'package:lettutor_app/models/response_entity.dart';
-import 'package:lettutor_app/models/book.dart';
-import 'package:lettutor_app/models/course.dart';
+import 'package:lettutor_app/models/course/course.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/utils/helper.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
+import '../models/book/book.dart';
+
 class CourseService with AppAPI, CatchError {
   final userService = Get.find<UserService>();
-
-  Future<List<Book>> getBooks() async {
-    await Future.delayed(Duration(seconds: 1));
-    return readJson("books.json")
-        .then((value) => value.map((v) => Book.fromJson(v)).toList());
-  }
 
   Future<ResponseEntity<List<Course>>> getCoursesPagination(int page, int perPage, [String? courseName]) async {
     try {

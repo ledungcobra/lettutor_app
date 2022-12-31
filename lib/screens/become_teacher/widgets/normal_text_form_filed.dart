@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../profile_controller.dart';
+import '../become_tutor_controller.dart';
 
 class NameFormField extends StatelessWidget {
+
+  final controller = Get.find<BecomeTutorController>(tag: 'become_tutor_controller');
+  final String hintText;
+  final String title;
+
   NameFormField({
     Key? key,
     required this.hintText,
     required this.title,
   }) : super(key: key);
-
-  final controller = Get.find<ProfileController>(tag: 'profile_controller');
-  final String hintText;
-  final String title;
 
   @override
   Widget build(BuildContext context) {

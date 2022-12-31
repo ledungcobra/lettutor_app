@@ -5,7 +5,6 @@ double DEFAULT_PADDING = 10;
 const PRIMARY_COLOR = Color(0xFF0071F0);
 const ASSET_FILE_PATH = "assets/images";
 var CHIP_COLOR = Colors.blue[50];
-var COMMENTS_FILE = "tutor_detail_info_comments.json";
 
 var DEFAULT_AVATAR =
     "https://www.lewesac.co.uk/wp-content/uploads/2017/12/default-avatar.jpg";
@@ -32,3 +31,11 @@ List<Reason> cancelReason = [
   Reason(3, 'Asked by the tutor'),
   Reason(4, 'Other'),
 ];
+
+const LevelToText = {
+  "1": "Beginner",
+  "2": "Upper-Beginner",
+  "3": "Pre-Intermediate",
+  "4": "Intermediate",
+  "5": "Upper-Intermediate"
+};

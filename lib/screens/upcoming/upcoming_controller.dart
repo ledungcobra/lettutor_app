@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
-import '../../models/booking_item.dart';
+import '../../models/booking_item/booking_item.dart';
 
 class UpcomingController extends GetxController with HandleUIError {
   final tutorService = Get.find<TutorService>();

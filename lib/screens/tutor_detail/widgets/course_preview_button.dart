@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/models/tutor_detail.dart';
 import 'package:lettutor_app/utils/constants.dart';
 
+import '../../../models/tutor_detail/course.dart';
+
 class CoursePreviewButton extends StatelessWidget {
-  final Courses coursePreview;
+  final Course coursePreview;
 
   CoursePreviewButton({Key? key, required this.coursePreview})
       : super(key: key);

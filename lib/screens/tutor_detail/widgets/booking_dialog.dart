@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 
-import '../../../models/schedule_info.dart';
+import '../../../models/schedule/tutor_schedule_info.dart';
 
 class BookingDialog extends StatelessWidget {
   TutorScheduleInfo schedule;

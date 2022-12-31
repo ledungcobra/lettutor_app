@@ -1,10 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../models/error/error.dart';
 import '../models/response_entity.dart';
-import '../models/dto/error.dart';
 import 'shared_reference.dart';
 
 mixin Dimension {

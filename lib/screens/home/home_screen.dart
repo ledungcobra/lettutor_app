@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/tutor.dart';
-import 'package:lettutor_app/models/user_info.dart';
+import 'package:lettutor_app/models/tutor/tutor.dart';
+import 'package:lettutor_app/models/user_info/user_info.dart';
 import 'package:lettutor_app/screens/home/home_controller.dart';
 import 'package:lettutor_app/screens/home/widgets/upcoming_lesson.dart';
 import 'package:lettutor_app/screens/home/widgets/user_info_drawer.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/category_items.dart';
-import 'package:lettutor_app/models/user_info.dart';
+import 'package:lettutor_app/models/category_list/category.dart';
+import 'package:lettutor_app/models/user_info/user_info.dart';
 import 'package:lettutor_app/screens/profile/profile_controller.dart';
 import 'package:lettutor_app/screens/profile/widgets/birthday_text_form_field.dart';
 import 'package:lettutor_app/screens/profile/widgets/country_text_form_field.dart';

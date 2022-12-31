@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/history_item.dart';
+import 'package:lettutor_app/models/class_history/class_history.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 
-import '../../../models/booking_item.dart';
+import '../../../models/booking_item/booking_item.dart';
 import '../../../utils/constants.dart';
 import '../upcoming_controller.dart';
 

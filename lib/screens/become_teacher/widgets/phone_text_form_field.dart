@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/screens/profile/profile_controller.dart';
+import '../become_tutor_controller.dart';
 
 class PhoneTextFormField extends StatelessWidget {
-  final controller = Get.find<ProfileController>(tag: 'profile_controller');
+
+  final controller = Get.find<BecomeTutorController>(tag: 'become_tutor_controller');
 
   PhoneTextFormField({
     Key? key,

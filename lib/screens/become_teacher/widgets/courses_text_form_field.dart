@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/services/utils_service.dart';
 
-import '../../../models/category_items.dart';
+import '../../../models/category_list/category.dart';
+
 
 class CoursesTextFormField extends StatefulWidget {
   final List<Category> selectedLearnTopics;

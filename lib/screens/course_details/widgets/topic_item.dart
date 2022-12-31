@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:lettutor_app/models/course.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
+import '../../../models/course/topic.dart';
+
 class TopicItem extends StatelessWidget with Dimension {
-  final Topics topics;
+
+  final Topic topics;
   final bool isSelected;
   final int position;
   final void Function(int index) changeSelectedIndex;

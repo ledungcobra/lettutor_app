@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/user_info.dart';
+import 'package:lettutor_app/models/request/become_teacher_dto.dart';
+import 'package:lettutor_app/models/user_info/user_info.dart';
 import 'package:lettutor_app/screens/profile/profile_screen.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
+
+import '../../become_teacher/become_tutor_screen.dart';
 
 class UserInfoDrawer extends StatelessWidget {
   final userService = Get.find<UserService>();
@@ -70,9 +73,7 @@ class UserInfoDrawer extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             onTap: () {
-
-              Get.snackbar('Notification', 'Becoming tutor',
-                  backgroundColor: Colors.greenAccent);
+              Get.to(()=> BecomeTeacherScreen());
             },
           )
         ],

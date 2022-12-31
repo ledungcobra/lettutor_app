@@ -7,7 +7,7 @@ import 'package:lettutor_app/services/course_service.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../../models/course.dart';
+import '../../../models/course/course.dart';
 import '../../../widgets/load_more_footer.dart';
 import 'courses_controller.dart';
 

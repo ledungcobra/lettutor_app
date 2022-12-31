@@ -9,7 +9,7 @@ import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
-import '../../../models/booking_item.dart';
+import '../../../models/booking_item/booking_item.dart';
 
 class UpCommingLession extends StatefulWidget {
   BookingItem header;

@@ -1,6 +1,6 @@
 import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:lettutor_app/models/booking_item.dart';
+import 'package:lettutor_app/models/booking_item/booking_item.dart';
 
 joinMeetingJitsi(BookingItem bookingItem) async {
   var token = bookingItem.studentMeetingLink!.split("token=")[1];

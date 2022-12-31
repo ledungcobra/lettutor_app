@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/booking_item.dart';
+import 'package:lettutor_app/models/booking_item/booking_item.dart';
 import 'package:lettutor_app/screens/upcoming/widgets/request_edit_dialog.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
+import '../../../models/booking_item/schedule_info.dart';
 import '../../../services/tutor_service.dart';
 import '../../video_call/jitsy_util.dart';
 import 'cancel_dialog.dart';

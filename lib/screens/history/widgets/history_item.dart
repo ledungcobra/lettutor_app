@@ -5,7 +5,8 @@ import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 
-import '../../../models/history_item.dart';
+import '../../../models/class_history/class_history.dart';
+import '../../../models/class_history/class_review.dart';
 import '../../../widgets/divider.dart';
 import '../../../widgets/stars.dart';
 import 'feedback_item.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/comment.dart';
-import 'package:lettutor_app/models/tutor_detail.dart';
+import 'package:lettutor_app/models/comment/comment.dart';
+import 'package:lettutor_app/models/tutor_detail/tutor_detail.dart';
 import 'package:lettutor_app/screens/tutor_detail/widgets/schedule_list.dart';
 import 'package:lettutor_app/screens/tutor_detail/widgets/comment_item.dart';
 import 'package:lettutor_app/screens/tutor_detail/widgets/course_preview_button.dart';

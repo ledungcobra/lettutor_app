@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../profile_controller.dart';
+import '../become_tutor_controller.dart';
 
 class BirthdayTextFormField extends StatefulWidget {
   
@@ -19,7 +19,7 @@ class BirthdayTextFormField extends StatefulWidget {
 class _BirthdayTextFormFieldState extends State<BirthdayTextFormField> {
 
   TextEditingController textController = TextEditingController();
-  final controller = Get.find<ProfileController>(tag: 'profile_controller');
+  final controller = Get.find<BecomeTutorController>(tag: 'become_tutor_controller');
 
   @override
   void initState() {

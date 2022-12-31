@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/category_items.dart';
+import '../../../models/category_list/category.dart';
 
 class SelectionTextFormField extends StatefulWidget {
   final String? initField;

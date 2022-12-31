@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
-import '../../models/profile_dto.dart';
+import '../../models/profile/profile_dto.dart';
 import '../../services/user_service.dart';
 
 class ProfileController with HandleUIError {

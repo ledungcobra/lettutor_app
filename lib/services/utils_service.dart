@@ -1,4 +1,5 @@
-import 'package:lettutor_app/models/category_items.dart';
+import 'package:lettutor_app/models/category_list/category.dart';
+import 'package:lettutor_app/models/category_list/category_list.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
 class UtilService with AppAPI, CatchError {
@@ -23,9 +24,9 @@ class UtilService with AppAPI, CatchError {
   loadSkillFilter() async {
     try {
       var response = await dio.get(buildUrl("/category"));
-      var categoryList = <CategoryItems>[];
+      var categoryList = <CategoryList>[];
       for (var skill in response.data) {
-        categoryList.add(CategoryItems.fromJson(skill));
+        categoryList.add(CategoryList.fromJson(skill));
       }
 
       for (var item in categoryList) {

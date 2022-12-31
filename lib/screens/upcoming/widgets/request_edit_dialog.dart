@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 
-import '../../../models/booking_item.dart';
+import '../../../models/booking_item/booking_item.dart';
 import '../upcoming_controller.dart';
 
 class RequestEditDialog extends StatelessWidget {

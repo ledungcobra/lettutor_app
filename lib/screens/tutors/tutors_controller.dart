@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/category_items.dart';
-import 'package:lettutor_app/models/tutor.dart';
+import 'package:lettutor_app/models/category_list/category.dart';
+import 'package:lettutor_app/models/tutor/tutor.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/utils/types.dart';

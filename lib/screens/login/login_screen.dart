@@ -59,12 +59,12 @@ class LoginScreen extends StatelessWidget with HandleUIError {
   void checkForLogin() async {
     final result = await tokenService.checkToken();
     if (result) {
-      await utilService.init();
       final userInfo = await userService.getUserInfo();
       if (userInfo.hasError) {
         return;
       }
       userService.setUserInfo(userInfo.data);
+      await utilService.init();
       Get.offAll(() => TabBarScreen());
     }
   }
@@ -80,10 +80,10 @@ class LoginScreen extends StatelessWidget with HandleUIError {
       }
       Get.snackbar("Success", "Login success",
           backgroundColor: Colors.green, colorText: Colors.white);
-      await utilService.init();
       userService.setUserInfo(response.data);
       await tokenService.saveAccessToken(response.data!.tokens!.access!.token!);
 
+      await utilService.init();
       Get.offAll(() => TabBarScreen());
     } finally {
       loginController.loading.value = false;
