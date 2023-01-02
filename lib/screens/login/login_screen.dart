@@ -57,6 +57,10 @@ class LoginScreen extends StatelessWidget with HandleUIError {
   }
 
   void checkForLogin() async {
+    if(tokenService.logout){
+      print('Logout clicked');
+      return;
+    }
     final result = await tokenService.checkToken();
     if (result) {
       final userInfo = await userService.getUserInfo();

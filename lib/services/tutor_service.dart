@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:lettutor_app/models/response_entity.dart';
 import 'package:lettutor_app/models/comment/comment.dart';
 import 'package:lettutor_app/models/tutor/tutor.dart';
@@ -115,11 +116,13 @@ class TutorService with AppAPI, CatchError {
   }
 
   Future<ResponseEntity> performBecomeATeacher(
-      BecomeTeacherRequest becomeTeacherDto) async {
+      FormData formData) async {
     try {
       var url = buildUrl("/tutor/register");
       await reloadToken();
-      var response = await dio.put(url, data: becomeTeacherDto.toFormData());
+      var response = await dio.post(url, data: formData,options: Options(
+        contentType: 'multipart/form-data'
+      ));
       return ResponseEntity(data: response.data);
     } catch (e) {
       return handleError(e);

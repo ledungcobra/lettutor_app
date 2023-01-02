@@ -8,8 +8,8 @@ class BirthdayTextFormField extends StatefulWidget {
   
   final String title;
   String? birthday;
-
-  BirthdayTextFormField({Key? key, required this.title, this.birthday, required Function(String v) onDone})
+  Function(String v) onDone;
+  BirthdayTextFormField({Key? key, required this.title, this.birthday, required  this.onDone})
       : super(key: key);
 
   @override
@@ -23,6 +23,9 @@ class _BirthdayTextFormFieldState extends State<BirthdayTextFormField> {
 
   @override
   void initState() {
+    textController.addListener(() {
+      widget.onDone(textController.text);
+    });
     textController.text = widget.birthday != null && widget.birthday!.isNotEmpty
         ? DateFormat('yyyy-MM-dd').format(DateTime.parse(widget.birthday!))
         :  DateFormat('yyyy-MM-dd').format(DateTime.now()); //set the initial value of text field

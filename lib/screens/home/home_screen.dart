@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/models/tutor/tutor.dart';
 import 'package:lettutor_app/models/user_info/user_info.dart';
 import 'package:lettutor_app/screens/home/home_controller.dart';
 import 'package:lettutor_app/screens/home/widgets/upcoming_lesson.dart';
-import 'package:lettutor_app/screens/home/widgets/user_info_drawer.dart';
 import 'package:lettutor_app/screens/tutor_detail/tutor_detail.dart';
 import 'package:lettutor_app/screens/tutors/widgets/tutor_card.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
@@ -59,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: UserInfoDrawer(),
       appBar: AppBar(
         title: const Text('Home'),
         actions: [

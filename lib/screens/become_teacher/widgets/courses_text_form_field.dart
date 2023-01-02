@@ -1,42 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:lettutor_app/services/utils_service.dart';
 
 import '../../../models/category_list/category.dart';
 
+class MultipleSelectionFormField extends StatefulWidget {
+  final List<Category> initValues;
+  final Map<String?, Category> specialties;
+  final Function(List<Category> selectedLanguages) onDone;
 
-class CoursesTextFormField extends StatefulWidget {
-  final List<Category> selectedLearnTopics;
-  final List<Category> selectedTestPreparations;
-  final Function(List<Category> selectedLearnTopics,
-      List<Category> selectedPreparations) onDone;
-
-  CoursesTextFormField({
+  const MultipleSelectionFormField({
     Key? key,
     required this.title,
     required this.hintText,
-    required this.selectedLearnTopics,
-    required this.selectedTestPreparations,
+    required this.initValues,
     required this.onDone,
+    required this.specialties,
   }) : super(key: key);
   final String title;
   final String hintText;
 
   @override
-  State<CoursesTextFormField> createState() => _CoursesTextFormFieldState();
+  State<MultipleSelectionFormField> createState() =>
+      _MultipleSelectionFormFieldState();
 }
 
-class _CoursesTextFormFieldState extends State<CoursesTextFormField> {
-  final utilService = Get.find<UtilService>();
-  List<Category> selectedLearnTopics = [];
-  List<Category> selectedTestPreparations = [];
+class _MultipleSelectionFormFieldState
+    extends State<MultipleSelectionFormField> {
+
+  List<Category> selectedSpecialties = [];
 
   var textController = TextEditingController();
 
   @override
   void initState() {
-    selectedLearnTopics = widget.selectedLearnTopics;
-    selectedTestPreparations = widget.selectedTestPreparations;
+    selectedSpecialties = widget.initValues;
     buildSelectionText();
     super.initState();
   }
@@ -53,7 +49,7 @@ class _CoursesTextFormFieldState extends State<CoursesTextFormField> {
               widget.title,
               style: const TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.left,
             ),
@@ -80,15 +76,13 @@ class _CoursesTextFormFieldState extends State<CoursesTextFormField> {
             builder: (context) {
               return StatefulBuilder(builder: (context, setState) {
                 return AlertDialog(
-                  title: const Text(
-                      "Select subject \nTest preparation you want to learn"),
+                  title: const Text("Select your languages"),
                   content: SingleChildScrollView(
                     child: SizedBox(
                       width: double.infinity,
                       child: Column(
                         children: [
-                          ...learnTopicsList(setState),
-                          ...testPreparationList(setState)
+                          ...specialtiesList(setState),
                         ],
                       ),
                     ),
@@ -98,7 +92,7 @@ class _CoursesTextFormFieldState extends State<CoursesTextFormField> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         buildSelectionText();
-                        widget.onDone(selectedLearnTopics, selectedTestPreparations);
+                        widget.onDone(selectedSpecialties);
                       },
                       child: const Text("Ok"),
                     ),
@@ -112,38 +106,17 @@ class _CoursesTextFormFieldState extends State<CoursesTextFormField> {
     );
   }
 
-  List<CheckboxListTile> learnTopicsList(StateSetter setState) {
-    return utilService.learnTopics.values
+  List<CheckboxListTile> specialtiesList(StateSetter update) {
+    return widget.specialties.values
         .map(
           (e) => CheckboxListTile(
-            value: selectedLearnTopics.contains(e),
+            value: selectedSpecialties.contains(e),
             onChanged: (value) {
-              setState(() {
+              update(() {
                 if (value!) {
-                  selectedLearnTopics.add(e);
+                  selectedSpecialties.add(e);
                 } else {
-                  selectedLearnTopics.removeWhere((element) => element == e);
-                }
-              });
-            },
-            title: Text(e.description ?? ""),
-          ),
-        )
-        .toList();
-  }
-
-  List<CheckboxListTile> testPreparationList(StateSetter setState) {
-    return utilService.testPreparations.values
-        .map(
-          (e) => CheckboxListTile(
-            value: selectedTestPreparations.contains(e),
-            onChanged: (value) {
-              setState(() {
-                if (value!) {
-                  selectedTestPreparations.add(e);
-                } else {
-                  selectedTestPreparations
-                      .removeWhere((element) => element == e);
+                  selectedSpecialties.removeWhere((element) => element == e);
                 }
               });
             },
@@ -155,12 +128,8 @@ class _CoursesTextFormFieldState extends State<CoursesTextFormField> {
 
   buildSelectionText() {
     textController.text = "";
-    for (var i = 0; i < selectedLearnTopics.length; i++) {
-      textController.text += "${selectedLearnTopics[i].description ?? ""}, ";
-    }
-    for (var i = 0; i < selectedTestPreparations.length; i++) {
-      textController.text +=
-          "${selectedTestPreparations[i].description ?? ""}, ";
+    for (var i = 0; i < selectedSpecialties.length; i++) {
+      textController.text += "${selectedSpecialties[i].description ?? ""}, ";
     }
   }
 }

@@ -40,6 +40,7 @@ class MyTextFormField extends StatelessWidget {
           onSaved: (val) {
             onDone(val ?? "");
           },
+          onChanged: (v)=> onDone(v),
         ),
       ],
     );

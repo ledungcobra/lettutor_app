@@ -60,6 +60,10 @@ dependencies:
   flutter_profile_picture: ^2.0.0
   socket_io_client: ^2.0.0
   json_annotation:
+  video_uploader: ^0.1.1
+  video_player: ^2.4.10
+  file_picker: ^4.2.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -14,7 +14,7 @@ class TitleLine extends StatelessWidget {
     return Row(
       children: [
         const SizedBox(
-          width: 30,
+          width: 10,
           child: Divider(
             endIndent: 10,
           ),
@@ -22,11 +22,6 @@ class TitleLine extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-        ),
-        const Expanded(
-          child: Divider(
-            indent: 10,
-          ),
         ),
       ],
     );

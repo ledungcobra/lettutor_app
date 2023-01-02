@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/screens/history/history_screen.dart';
 import 'package:lettutor_app/screens/login/login_screen.dart';
+import 'package:lettutor_app/screens/profile/profile_screen.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/shared_reference.dart';
@@ -10,6 +11,7 @@ import 'package:lettutor_app/widgets/button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/theme_controller.dart';
+import '../become_teacher/become_tutor_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -48,49 +50,88 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(
                 height: 100,
               ),
-              Button(
-                title: 'Booking History',
-                onClick: _handleOpenHistory,
-                color: Get.isDarkMode ? Colors.black : Get.theme.primaryColor,
-                // textColor: Colors.black54,
-                leadingIcon: Icon(
-                  Icons.history,
-                  color: Get.isDarkMode ? Colors.white : Colors.black45,
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Button(
-                title:
-                    themeController.isLight.value ? 'Dark mode' : 'Light mode',
-                onClick: () async {
-                  Get.changeThemeMode(
-                    Get.isDarkMode ? ThemeMode.light : ThemeMode.dark,
-                  );
-                  themeController.toggle();
-                  await themeController.saveThemeStatus();
-                },
-                color: Get.isDarkMode ? Colors.black : Get.theme.primaryColor,
-                // textColor: Colors.black54,
-                leadingIcon: Icon(
-                  themeController.isLight.value
-                      ? Icons.dark_mode
-                      : Icons.light_mode,
-                  color: Get.isDarkMode ? Colors.white : Colors.black45,
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Button(
-                title: 'Logout',
-                onClick: _handleLogout,
-                color: !Get.isDarkMode ? Colors.white10 : Colors.blueGrey,
-              )
+              historyBtn(),
+              divider(),
+              becomeTutorBtn(),
+              divider(),
+              darkModeBtn(),
+              divider(),
+              profileBtn(),
+              divider(),
+              logoutBtn()
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget profileBtn() {
+    return Button(
+      title: 'Profile',
+      onClick: () => Get.to(ProfileScreen()),
+      color: Get.isDarkMode ? Colors.black : Get.theme.primaryColor,
+      leadingIcon: Icon(
+        Icons.people,
+        color: Get.isDarkMode ? Colors.white : Colors.black45,
+      ),
+    );
+  }
+
+  Widget becomeTutorBtn() {
+    return Button(
+      title: 'Become tutor',
+      onClick: () => Get.to(BecomeTutorScreen()),
+      color: Get.isDarkMode ? Colors.black : Get.theme.primaryColor,
+      leadingIcon: Icon(
+        Icons.school,
+        color: Get.isDarkMode ? Colors.white : Colors.black45,
+      ),
+    );
+  }
+
+  SizedBox divider() {
+    return SizedBox(
+      height: 5,
+    );
+  }
+
+  Button logoutBtn() {
+    return Button(
+      title: 'Logout',
+      onClick: _handleLogout,
+      color: !Get.isDarkMode ? Colors.white10 : Colors.blueGrey,
+    );
+  }
+
+  Widget darkModeBtn() {
+    return Button(
+      title: themeController.isLight.value ? 'Dark mode' : 'Light mode',
+      onClick: () async {
+        Get.changeThemeMode(
+          Get.isDarkMode ? ThemeMode.light : ThemeMode.dark,
+        );
+        themeController.toggle();
+        await themeController.saveThemeStatus();
+      },
+      color: Get.isDarkMode ? Colors.black : Get.theme.primaryColor,
+      // textColor: Colors.black54,
+      leadingIcon: Icon(
+        themeController.isLight.value ? Icons.dark_mode : Icons.light_mode,
+        color: Get.isDarkMode ? Colors.white : Colors.black45,
+      ),
+    );
+  }
+
+  Widget historyBtn() {
+    return Button(
+      title: 'Booking History',
+      onClick: _handleOpenHistory,
+      color: Get.isDarkMode ? Colors.black : Get.theme.primaryColor,
+      // textColor: Colors.black54,
+      leadingIcon: Icon(
+        Icons.history,
+        color: Get.isDarkMode ? Colors.white : Colors.black45,
       ),
     );
   }

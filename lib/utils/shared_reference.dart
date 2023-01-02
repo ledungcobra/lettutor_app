@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/utils/mixing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenService {
   final String AccessToken = "ACCESS_TOKEN";
   final String RefreshToken = "REFRESH_TOKEN";
+  bool logout = false;
 
   Future<void> saveAccessToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
@@ -34,6 +34,7 @@ class TokenService {
   }
 
   clearTokens() async {
+    logout = true;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(AccessToken);
     await prefs.remove(RefreshToken);

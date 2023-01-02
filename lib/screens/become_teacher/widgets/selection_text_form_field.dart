@@ -3,15 +3,19 @@ import 'package:flutter/material.dart';
 import '../../../models/category_list/category.dart';
 
 class SelectionTextFormField extends StatefulWidget {
-  final String? initField;
+  final String? initSelected;
+  final String placeHolder;
   final Map<String?, Category> categories;
   final Function(Category) onSelect;
+  bool? deferSelect;
 
   SelectionTextFormField({
     Key? key,
-    required this.initField,
+    this.initSelected,
+    this.deferSelect = false,
     required this.categories,
     required this.onSelect,
+    required this.placeHolder,
   }) : super(key: key);
 
   @override
@@ -25,7 +29,7 @@ class _SelectionTextFormFieldState extends State<SelectionTextFormField> {
 
   onSelect(Category category, {StateSetter? onComplete}) {
     textController.text = category.description ?? "";
-    if(onComplete != null){
+    if (onComplete != null) {
       onComplete!(() {
         selectedCategory = category;
       });
@@ -35,9 +39,9 @@ class _SelectionTextFormFieldState extends State<SelectionTextFormField> {
 
   @override
   void initState() {
-    print(textController.text);
-    if (widget.initField != null && widget.initField!.isNotEmpty) {
-      onSelect(widget.categories[widget.initField?.toUpperCase()]!);
+    if (widget.deferSelect!) return;
+    if (widget.initSelected != null && widget.initSelected!.isNotEmpty) {
+      onSelect(widget.categories[widget.initSelected?.toUpperCase()]!);
     } else {
       onSelect(widget.categories.values.first);
     }
@@ -50,12 +54,12 @@ class _SelectionTextFormFieldState extends State<SelectionTextFormField> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              "Level",
+              widget.placeHolder,
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.left,
             ),

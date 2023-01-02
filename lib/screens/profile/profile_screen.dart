@@ -159,9 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> with HandleUIError {
   handleUpdateProfile() async {
     final controller = Get.find<ProfileController>(tag: 'profile_controller');
     var profileDto = controller.getProfileDto();
-    print(profileDto.toJson());
-    final result = await userService.updateProfile(profileDto);
-    print(result);
+    await userService.updateProfile(profileDto);
     setState(() {});
     Get.snackbar('Notification', "Profile updated",
         backgroundColor: Colors.lightGreen);

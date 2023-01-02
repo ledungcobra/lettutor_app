@@ -1,3 +1,5 @@
+import 'package:lettutor_app/models/error/error.dart';
+
 import '../models/category_list/category.dart';
 import '../models/tutor/tutor.dart';
 
@@ -73,4 +75,11 @@ class Reason {
 
 abstract class Likable {
   Future<dynamic> like(Tutor tutor);
+}
+
+
+class FormValidationException extends Error {
+  final String message;
+  FormValidationException(this.message);
+  ErrorResponse get error=> ErrorResponse(statusCode: 0, message: message);
 }
