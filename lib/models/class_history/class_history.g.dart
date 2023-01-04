@@ -54,8 +54,8 @@ Map<String, dynamic> _$ClassHistoryToJson(ClassHistory instance) =>
       'cancelReasonId': instance.cancelReasonId,
       'cancelNote': instance.cancelNote,
       'isDeleted': instance.isDeleted,
-      'scheduleDetailInfo': instance.scheduleDetailInfo,
-      'classReview': instance.classReview,
+      'scheduleDetailInfo': instance.scheduleDetailInfo?.toJson(),
+      'classReview': instance.classReview?.toJson(),
       'showRecordUrl': instance.showRecordUrl,
-      'feedbacks': instance.feedbacks,
+      'feedbacks': instance.feedbacks?.map((e) => e.toJson()).toList(),
     };

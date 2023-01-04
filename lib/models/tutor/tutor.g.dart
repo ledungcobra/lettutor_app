@@ -58,7 +58,7 @@ Map<String, dynamic> _$TutorToJson(Tutor instance) => <String, dynamic>{
       'isPublicRecord': instance.isPublicRecord,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
-      'feedbacks': instance.feedbacks,
+      'feedbacks': instance.feedbacks?.map((e) => e.toJson()).toList(),
       'id': instance.id,
       'userId': instance.userId,
       'video': instance.video,

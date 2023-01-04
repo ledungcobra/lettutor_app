@@ -37,5 +37,5 @@ Map<String, dynamic> _$BookingItemToJson(BookingItem instance) =>
       'tutorReview': instance.tutorReview,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
-      'scheduleDetailInfo': instance.scheduleDetailInfo,
+      'scheduleDetailInfo': instance.scheduleDetailInfo?.toJson(),
     };

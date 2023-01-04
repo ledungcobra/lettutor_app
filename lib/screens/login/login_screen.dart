@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lettutor_app/models/response_entity.dart';
 import 'package:lettutor_app/screens/login/login_controller.dart';
 import 'package:lettutor_app/screens/login/widgets/FormFields.dart';
 import 'package:lettutor_app/screens/login/widgets/footer.dart';
@@ -11,11 +12,11 @@ import 'package:lettutor_app/utils/helper.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/utils/shared_reference.dart';
 import 'package:lettutor_app/widgets/button.dart';
+
+import '../../models/user_info/user_info.dart';
 import '../../widgets/loading.dart';
-// import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class LoginScreen extends StatelessWidget with HandleUIError {
-
   final loginController = Get.find<LoginController>();
   final userService = Get.find<UserService>();
   final tokenService = Get.find<TokenService>();
@@ -43,7 +44,10 @@ class LoginScreen extends StatelessWidget with HandleUIError {
                       FormFields(),
                       const SizedBox(height: 10),
                       Button(onClick: _handleLogin, title: 'LOGIN'),
-                      Footer(),
+                      Footer(
+                        googleLogin: _handleLoginGoogle,
+                        facebookLogin: () => print("Login facebook"),
+                      ),
                     ],
                   ),
                 ),
@@ -56,8 +60,15 @@ class LoginScreen extends StatelessWidget with HandleUIError {
     );
   }
 
+  _handleLoginGoogle() async {
+    print('LOgin google');
+    final response = await userService.loginGoogle();
+    print(response);
+    await _processLogin(response);
+  }
+
   void checkForLogin() async {
-    if(tokenService.logout){
+    if (tokenService.logout) {
       print('Logout clicked');
       return;
     }
@@ -78,10 +89,17 @@ class LoginScreen extends StatelessWidget with HandleUIError {
       loginController.loading.value = true;
       var response = await userService.login(
           loginController.email.value, loginController.password.value);
-      if (response.hasError) {
-        handleError(response.error!);
-        return;
-      }
+      await _processLogin(response);
+    } finally {
+      loginController.loading.value = false;
+    }
+  }
+
+  Future _processLogin(ResponseEntity<UserInfo?> response) async {
+    if (response.hasError) {
+      handleError(response.error!);
+      return;
+    } else {
       Get.snackbar("Success", "Login success",
           backgroundColor: Colors.green, colorText: Colors.white);
       userService.setUserInfo(response.data);
@@ -89,8 +107,6 @@ class LoginScreen extends StatelessWidget with HandleUIError {
 
       await utilService.init();
       Get.offAll(() => TabBarScreen());
-    } finally {
-      loginController.loading.value = false;
     }
   }
 

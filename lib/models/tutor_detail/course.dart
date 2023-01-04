@@ -8,6 +8,8 @@ part 'course.g.dart';
 class Course {
   String? id;
   String? name;
+
+  @JsonKey(name: 'TutorCourse')
   TutorCourse? tutorCourse;
 
   Course({this.id, this.name, this.tutorCourse});

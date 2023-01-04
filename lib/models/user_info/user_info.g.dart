@@ -16,6 +16,6 @@ UserInfo _$UserInfoFromJson(Map<String, dynamic> json) => UserInfo(
     );
 
 Map<String, dynamic> _$UserInfoToJson(UserInfo instance) => <String, dynamic>{
-      'user': instance.user,
-      'tokens': instance.tokens,
+      'user': instance.user?.toJson(),
+      'tokens': instance.tokens?.toJson(),
     };

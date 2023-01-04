@@ -9,13 +9,13 @@ part of 'course.dart';
 Course _$CourseFromJson(Map<String, dynamic> json) => Course(
       id: json['id'] as String?,
       name: json['name'] as String?,
-      tutorCourse: json['tutorCourse'] == null
+      tutorCourse: json['TutorCourse'] == null
           ? null
-          : TutorCourse.fromJson(json['tutorCourse'] as Map<String, dynamic>),
+          : TutorCourse.fromJson(json['TutorCourse'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$CourseToJson(Course instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'tutorCourse': instance.tutorCourse,
+      'TutorCourse': instance.tutorCourse?.toJson(),
     };

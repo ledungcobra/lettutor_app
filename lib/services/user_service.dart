@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart' as d;
+import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lettutor_app/models/response_entity.dart';
 import 'package:lettutor_app/models/user_info/user_info.dart';
@@ -7,9 +8,9 @@ import 'package:lettutor_app/utils/mixing.dart';
 import '../models/class_history/class_history.dart';
 import '../models/profile/profile_dto.dart';
 import '../models/user_info/user.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class UserService with CatchError, AppAPI {
-
   UserInfo? _userInfo;
 
   setUserInfo(UserInfo? userInfo) {
@@ -108,6 +109,23 @@ class UserService with CatchError, AppAPI {
       return _userInfo?.user?.avatar ?? "";
     } catch (e) {
       print(e);
+      return handleError(e);
+    }
+  }
+
+  Future<ResponseEntity<UserInfo?>> loginGoogle() async {
+    try {
+      final token = await GoogleSignIn(
+        scopes: <String>[
+          'email',
+        ],
+      ).signIn();
+      final auth = await (token!.authentication);
+      final accessToken = auth.accessToken!;
+      final response = await Dio()
+          .post(buildUrl("/auth/google"), data: {"access_token": accessToken});
+      return ResponseEntity(data: UserInfo.fromJson(response.data));
+    } catch (e) {
       return handleError(e);
     }
   }

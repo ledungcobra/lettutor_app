@@ -6,7 +6,6 @@ import 'package:lettutor_app/models/tutor_detail/tutor_detail.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/utils/types.dart';
 
-import '../models/request/become_teacher_dto.dart';
 import '../models/booking_item/booking_item.dart';
 import '../models/error/error.dart';
 import '../models/schedule/tutor_schedule_info.dart';
@@ -57,6 +56,7 @@ class TutorService with AppAPI, CatchError {
 
   Future<ResponseEntity<TutorDetail>> getTutorDetail(String userId) async {
     try {
+      print(userId);
       var url = buildUrl("/tutor/$userId");
       var response = await dio.get(url);
       return ResponseEntity(

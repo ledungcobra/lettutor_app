@@ -16,11 +16,20 @@ import 'services/utils_service.dart';
 import 'utils/shared_reference.dart';
 import 'utils/theme_controller.dart';
 import 'widgets/refresh_scroll_behavior.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initFirebase();
   await setUpIOC();
   runApp(App());
+}
+
+Future initFirebase() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 setUpIOC() async {

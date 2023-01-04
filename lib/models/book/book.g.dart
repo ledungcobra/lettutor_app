@@ -31,5 +31,5 @@ Map<String, dynamic> _$BookToJson(Book instance) => <String, dynamic>{
       'fileUrl': instance.fileUrl,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
-      'categories': instance.categories,
+      'categories': instance.categories?.map((e) => e.toJson()).toList(),
     };

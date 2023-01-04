@@ -120,10 +120,13 @@ class _HomeScreenState extends State<HomeScreen> with HandleUIError {
       handleError(response.error!);
       return;
     }
-    Get.to(TutorDetailScreen(
-      tutorDetail: response.data!,
-      tutorId: tutor.userId!,
-    ));
+    Get.to(
+      () => TutorDetailScreen(
+        tutorDetail: response.data!,
+        tutorId: tutor.userId!,
+        name: tutor.name
+      ),
+    );
   }
 
   _recommendTutors() {

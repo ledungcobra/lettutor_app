@@ -4,7 +4,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lettutor_app/screens/become_teacher/become_tutor_controller.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../widgets/button.dart';
 import '../widgets/title_line.dart';
 
 class VideoStep extends StatefulWidget {
@@ -45,8 +44,8 @@ class _VideoStepState extends State<VideoStep> {
     return Container(
       width: Get.width,
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-          color: Colors.blue[50], borderRadius: BorderRadius.circular(10)),
+      decoration: !Get.isDarkMode ? BoxDecoration(
+          color: Get.theme.primaryColor, borderRadius: BorderRadius.circular(10)): null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [

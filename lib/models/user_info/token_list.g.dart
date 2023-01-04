@@ -16,6 +16,6 @@ TokenList _$TokenListFromJson(Map<String, dynamic> json) => TokenList(
     );
 
 Map<String, dynamic> _$TokenListToJson(TokenList instance) => <String, dynamic>{
-      'access': instance.access,
-      'refresh': instance.refresh,
+      'access': instance.access?.toJson(),
+      'refresh': instance.refresh?.toJson(),
     };

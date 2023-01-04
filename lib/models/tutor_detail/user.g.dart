@@ -27,5 +27,5 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'country': instance.country,
       'language': instance.language,
       'isPublicRecord': instance.isPublicRecord,
-      'courses': instance.courses,
+      'courses': instance.courses?.map((e) => e.toJson()).toList(),
     };

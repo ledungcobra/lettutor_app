@@ -31,5 +31,6 @@ Map<String, dynamic> _$TutorScheduleInfoToJson(TutorScheduleInfo instance) =>
       'endTimestamp': instance.endTimestamp,
       'createdAt': instance.createdAt,
       'isBooked': instance.isBooked,
-      'scheduleDetails': instance.scheduleDetails,
+      'scheduleDetails':
+          instance.scheduleDetails?.map((e) => e.toJson()).toList(),
     };

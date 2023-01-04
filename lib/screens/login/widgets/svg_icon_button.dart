@@ -4,20 +4,21 @@ import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/helper.dart';
 
 class SvgIconButton extends StatelessWidget {
-  late String _imageName;
+  late String image;
+  Function? onClick;
 
-  SvgIconButton(String assetImage) {
-    _imageName = assetImage;
-  }
+  SvgIconButton({required this.image, this.onClick});
 
   @override
   Widget build(BuildContext context) {
-    var url = getAssetImage(_imageName);
+    var url = getAssetImage(image);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5),
       child: InkWell(
         onTap: () {
-          print('Taped');
+          if (onClick != null) {
+            onClick!();
+          }
         },
         borderRadius: BorderRadius.circular(50),
         child: Container(

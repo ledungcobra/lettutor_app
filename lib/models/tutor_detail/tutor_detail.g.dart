@@ -19,9 +19,9 @@ TutorDetail _$TutorDetailFromJson(Map<String, dynamic> json) => TutorDetail(
       specialties: json['specialties'] as String?,
       rating: json['rating'] as num?,
       isNative: json['isNative'] as bool?,
-      user: json['user'] == null
+      user: json['User'] == null
           ? null
-          : User.fromJson(json['user'] as Map<String, dynamic>),
+          : User.fromJson(json['User'] as Map<String, dynamic>),
       isFavorite: json['isFavorite'] as bool?,
       avgRating: json['avgRating'] as num?,
       totalFeedback: json['totalFeedback'] as int?,
@@ -41,7 +41,7 @@ Map<String, dynamic> _$TutorDetailToJson(TutorDetail instance) =>
       'specialties': instance.specialties,
       'rating': instance.rating,
       'isNative': instance.isNative,
-      'user': instance.user,
+      'User': instance.user?.toJson(),
       'isFavorite': instance.isFavorite,
       'avgRating': instance.avgRating,
       'totalFeedback': instance.totalFeedback,

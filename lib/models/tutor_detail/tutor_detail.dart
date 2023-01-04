@@ -5,6 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'course.dart';
 import 'user.dart';
+
 part 'tutor_detail.g.dart';
 
 @JsonSerializable()
@@ -21,6 +22,7 @@ class TutorDetail {
   String? specialties;
   num? rating;
   bool? isNative;
+  @JsonKey(name: 'User',nullable: true)
   User? user;
   bool? isFavorite;
   num? avgRating;
@@ -45,15 +47,17 @@ class TutorDetail {
       this.avgRating,
       this.totalFeedback});
 
-  factory TutorDetail.fromJson(Map<String, dynamic> json) => _$TutorDetailFromJson(json);
+  factory TutorDetail.fromJson(Map<String, dynamic> json) =>
+      _$TutorDetailFromJson(json);
+
   Map<String, dynamic> toJson() => _$TutorDetailToJson(this);
 
   List<Category> getSpecialties() {
-    return  specialties!
+    return (specialties != null ? specialties! : "")
         .split(RegExp(","))
         .map((cat) => utilService.specialties[cat])
         .where((element) => element != null)
-        .map((x)=> x!)
+        .map((x) => x!)
         .toList();
   }
 
@@ -62,7 +66,7 @@ class TutorDetail {
         .split(RegExp(","))
         .map((cat) => utilService.languages[cat])
         .where((element) => element != null)
-        .map((x)=> x!)
+        .map((x) => x!)
         .toList();
   }
 

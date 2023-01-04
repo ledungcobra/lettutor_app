@@ -31,5 +31,5 @@ Map<String, dynamic> _$ScheduleDetailInfoToJson(ScheduleDetailInfo instance) =>
       'endPeriod': instance.endPeriod,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
-      'scheduleInfo': instance.scheduleInfo,
+      'scheduleInfo': instance.scheduleInfo?.toJson(),
     };

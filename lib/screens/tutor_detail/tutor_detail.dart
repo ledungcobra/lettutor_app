@@ -21,7 +21,10 @@ class TutorDetailScreen extends StatelessWidget with Dimension, HandleUIError {
   final _tutorDetail = TutorDetail().obs;
   final _tutorService = Get.find<TutorService>();
   final String tutorId;
-  TutorDetailScreen({super.key, required tutorDetail, required this.tutorId}) {
+  String? name;
+
+  TutorDetailScreen(
+      {super.key, required tutorDetail, required this.tutorId, this.name}) {
     _tutorDetail.value = tutorDetail;
   }
 
@@ -77,7 +80,7 @@ class TutorDetailScreen extends StatelessWidget with Dimension, HandleUIError {
         ),
         Column(
           children: [
-            Text(tutorDetail.user?.name ?? ""),
+            Text(name ?? ""),
             _stars(tutorDetail.avgRating?.toInt() ?? 0),
             Align(
                 child: Container(
@@ -133,8 +136,7 @@ class TutorDetailScreen extends StatelessWidget with Dimension, HandleUIError {
           height: 10,
         ),
         Button(
-            onClick: () =>
-                ScheduleList.showFullModal(Get.context!, tutorId),
+            onClick: () => ScheduleList.showFullModal(Get.context!, tutorId),
             title: 'Book')
       ],
     );
@@ -271,7 +273,8 @@ class TutorDetailScreen extends StatelessWidget with Dimension, HandleUIError {
 
   _comments() {
     return FutureBuilder(
-      future: _tutorService.getFeedbacksPaging(tutorDetail.user!.id!, 1, 12),
+      future:
+          _tutorService.getFeedbacksPaging(tutorDetail.user?.id ?? "", 1, 12),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Container();

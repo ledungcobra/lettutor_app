@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/screens/become_teacher/steps/step2.dart';
+import 'package:lettutor_app/screens/become_teacher/sub_screen/step2.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
 import '../../../services/tutor_service.dart';
@@ -17,6 +17,7 @@ import '../widgets/selection_text_form_field.dart';
 import '../widgets/my_text_form_field.dart';
 
 class Step1 extends StatelessWidget with HandleUIError {
+
   final UtilService utilService = Get.find<UtilService>();
   final tutorService = Get.find<TutorService>();
   final loading = false.obs;

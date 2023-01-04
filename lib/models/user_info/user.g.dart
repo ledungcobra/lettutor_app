@@ -44,8 +44,9 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'isActivated': instance.isActivated,
       'level': instance.level,
       'studySchedule': instance.studySchedule,
-      'learnTopics': instance.learnTopics,
-      'testPreparations': instance.testPreparations,
+      'learnTopics': instance.learnTopics?.map((e) => e.toJson()).toList(),
+      'testPreparations':
+          instance.testPreparations?.map((e) => e.toJson()).toList(),
       'isPhoneActivated': instance.isPhoneActivated,
       'timezone': instance.timezone,
       'canSendMessage': instance.canSendMessage,

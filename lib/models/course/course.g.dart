@@ -48,6 +48,6 @@ Map<String, dynamic> _$CourseToJson(Course instance) => <String, dynamic>{
       'displayOrder': instance.displayOrder,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
-      'topics': instance.topics,
-      'categories': instance.categories,
+      'topics': instance.topics?.map((e) => e.toJson()).toList(),
+      'categories': instance.categories?.map((e) => e.toJson()).toList(),
     };

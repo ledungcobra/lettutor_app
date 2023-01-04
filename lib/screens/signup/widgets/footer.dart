@@ -21,7 +21,12 @@ class Footer extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: icons.map((icon) => SvgIconButton(icon)).toList(),
+          children: [
+            SvgIconButton(image: "facebook.svg"),
+            SvgIconButton(
+              image: "google.svg",
+            ),
+          ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

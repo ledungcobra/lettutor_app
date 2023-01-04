@@ -18,5 +18,5 @@ Map<String, dynamic> _$CategoryListToJson(CategoryList instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
-      'categories': instance.categories,
+      'categories': instance.categories?.map((e) => e.toJson()).toList(),
     };

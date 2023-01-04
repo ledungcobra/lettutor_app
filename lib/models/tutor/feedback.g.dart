@@ -29,5 +29,5 @@ Map<String, dynamic> _$FeedbackToJson(Feedback instance) => <String, dynamic>{
       'content': instance.content,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
-      'firstInfo': instance.firstInfo,
+      'firstInfo': instance.firstInfo?.toJson(),
     };

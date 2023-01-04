@@ -46,5 +46,5 @@ Map<String, dynamic> _$ClassReviewToJson(ClassReview instance) =>
       'vocabularyComment': instance.vocabularyComment,
       'homeworkComment': instance.homeworkComment,
       'overallComment': instance.overallComment,
-      'lessonStatus': instance.lessonStatus,
+      'lessonStatus': instance.lessonStatus?.toJson(),
     };
