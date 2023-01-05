@@ -16,7 +16,7 @@ ClassHistory _$ClassHistoryFromJson(Map<String, dynamic> json) => ClassHistory(
       studentMeetingLink: json['studentMeetingLink'] as String?,
       studentRequest: json['studentRequest'] as String?,
       tutorReview: json['tutorReview'] as String?,
-      scoreByTutor: json['scoreByTutor'] as String?,
+      scoreByTutor: json['scoreByTutor'] as int?,
       createdAt: json['createdAt'] as String?,
       updatedAt: json['updatedAt'] as String?,
       recordUrl: json['recordUrl'] as String?,

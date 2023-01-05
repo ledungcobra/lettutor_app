@@ -16,7 +16,7 @@ class ClassHistory {
   String? studentMeetingLink;
   String? studentRequest;
   String? tutorReview;
-  String? scoreByTutor;
+  int? scoreByTutor;
   String? createdAt;
   String? updatedAt;
   String? recordUrl;

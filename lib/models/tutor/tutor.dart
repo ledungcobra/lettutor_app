@@ -46,6 +46,15 @@ class Tutor {
   @JsonKey(ignore: true)
   final utilService = Get.find<UtilService>();
 
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Tutor && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
+
   Tutor(
       {this.email,
       this.google,

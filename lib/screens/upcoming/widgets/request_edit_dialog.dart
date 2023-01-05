@@ -6,18 +6,19 @@ import '../../../models/booking_item/booking_item.dart';
 import '../upcoming_controller.dart';
 
 class RequestEditDialog extends StatelessWidget {
-  final BookingItem bookingItem;
+  final String? bookingId;
+  final String? studentRequest;
   final tutorService = Get.find<TutorService>();
   final upcomingController = Get.find<UpcomingController>();
 
-  RequestEditDialog({super.key, required this.bookingItem});
+  RequestEditDialog({super.key, required this.bookingId, required this.studentRequest});
 
   final reportText = "".obs;
   final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = bookingItem.studentRequest ?? "";
+    _controller.text = studentRequest ?? "";
     return AlertDialog(
       content: SizedBox(
         height: Get.height * 0.3,
@@ -65,7 +66,7 @@ class RequestEditDialog extends StatelessWidget {
         ),
         ElevatedButton(
             onPressed: () async  => await upcomingController.handleUpdateRequest(
-                reportText.value, bookingItem),
+                reportText.value, bookingId),
             child: Text('Send'))
       ],
     );

@@ -8,7 +8,9 @@ import '../../models/tutor_detail/tutor_detail.dart';
 import '../../services/tutor_service.dart';
 import '../../services/user_service.dart';
 
-class HomeController extends GetxController with HandleUIError implements Likable {
+class HomeController extends GetxController
+    with HandleUIError
+    implements Likable {
   final TutorService _tutorService = Get.find();
   final userService = Get.find<UserService>();
   var listTutors = <Tutor>[].obs;
@@ -36,7 +38,7 @@ class HomeController extends GetxController with HandleUIError implements Likabl
   }
 
   Future<void> getUpcomingLesson() async {
-      var upComingResponse = await _tutorService.getUpcomingCourse();
+    var upComingResponse = await _tutorService.getUpcomingCourse();
     if (upComingResponse.hasData && upComingResponse!.data!.isNotEmpty) {
       var data = upComingResponse.data!;
       var min = data[0];
@@ -55,7 +57,7 @@ class HomeController extends GetxController with HandleUIError implements Likabl
   }
 
   loadNextTutors() async {
-   await _load();
+    await _load();
     page++;
   }
 
@@ -69,18 +71,27 @@ class HomeController extends GetxController with HandleUIError implements Likabl
     listTutors.addAll(tutorResponse.data!);
   }
 
-  refreshTutors () async  {
+  refreshTutors() async {
     page = 1;
     listTutors.clear();
     await _load();
     await getUpcomingLesson();
   }
 
-  like(Tutor tutor) async  {
+  like(Tutor tutor) async {
     tutor.isFavorite = !tutor.isFavorite;
     var response = await _tutorService.performLike(tutor.userId!);
-    if(response.hasError){
+    if (response.hasError) {
       return handleError(response.error!);
     }
+    listTutors.refresh();
+  }
+
+  void updateLikeFor(String id) {
+    final index = listTutors.indexWhere((t) => t.userId == id);
+    final tutor = listTutors[index];
+    tutor.isFavorite = !tutor.isFavorite;
+    listTutors[index] = Tutor.fromJson(tutor.toJson());
+    refresh();
   }
 }

@@ -6,6 +6,7 @@ import 'package:lettutor_app/screens/login/login_controller.dart';
 import 'package:lettutor_app/screens/login/login_screen.dart';
 import 'package:lettutor_app/screens/signup/sign_up_controller.dart';
 import 'package:lettutor_app/screens/tutors/tutors_controller.dart';
+import 'package:lettutor_app/services/chat_service.dart';
 import 'package:lettutor_app/services/course_service.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/services/user_service.dart';
@@ -52,6 +53,7 @@ setUpIOC() async {
   Get.put(DateFormat('yyyy-MM-dd hh:mm'));
   Get.put(TutorService());
   Get.put(UserService());
+  Get.put(ChatService());
   Get.put(CourseService());
   Get.put(SignUpController());
   Get.put(LoginController());

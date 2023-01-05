@@ -4,23 +4,29 @@ import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 
 import '../../models/booking_item/booking_item.dart';
+import '../../models/class_history/class_history.dart';
 
 class UpcomingController extends GetxController with HandleUIError {
   final tutorService = Get.find<TutorService>();
-  final bookingItems = <BookingItem>[].obs;
+  final bookingItems = <ClassHistory>[].obs;
+  num page = 1;
+  final num perPage = 5;
 
-  loadData() async {
-    var response = await tutorService.getUpcomingCourse();
+  loadNextUpcoming() async {
+    print("Page = $page perPage = $perPage");
+    var response = await tutorService.getUpComings(perPage, page);
     if (response.hasError) {
       handleError(response.error!);
       return;
     }
-    bookingItems.value = response.data!;
+    bookingItems.addAll(response.data!);
+    page++;
   }
 
-  handleUpdateRequest(String reportText, BookingItem bookingItem) async {
+  handleUpdateRequest(String reportText, String? bookingId) async {
+
     var success =
-        await tutorService.editBookingRequest(reportText, bookingItem.id);
+        await tutorService.editBookingRequest(reportText, bookingId);
     Get.back();
     if (success) {
       Get.snackbar(
@@ -29,7 +35,8 @@ class UpcomingController extends GetxController with HandleUIError {
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
-      var index = bookingItems.indexWhere((element) => element.id == bookingItem.id);
+      var index =
+          bookingItems.indexWhere((element) => element.id == bookingId);
       bookingItems[index].studentRequest = reportText;
       bookingItems.refresh();
     } else {
@@ -42,7 +49,8 @@ class UpcomingController extends GetxController with HandleUIError {
     }
   }
 
-  handleCancel(String reportText, BookingItem bookingItem, int selectedReason) async {
+  handleCancel(
+      String reportText, String? bookingId, int selectedReason) async {
     if (selectedReason == 0) {
       Get.snackbar(
         'Error',
@@ -54,7 +62,7 @@ class UpcomingController extends GetxController with HandleUIError {
     }
 
     var response = await tutorService.cancelBookingRequest(
-        bookingItem.id!, selectedReason, reportText);
+        bookingId, selectedReason, reportText);
     if (response.hasData) {
       Get.back(result: true);
       Get.snackbar(
@@ -63,7 +71,8 @@ class UpcomingController extends GetxController with HandleUIError {
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
-      bookingItems.value = bookingItems.where((item)=> item.id != bookingItem.id).toList();
+      bookingItems.value =
+          bookingItems.where((item) => item.id != bookingId).toList();
     } else {
       Get.back(result: true);
       Get.snackbar(
@@ -73,5 +82,11 @@ class UpcomingController extends GetxController with HandleUIError {
         colorText: Colors.white,
       );
     }
+  }
+
+  refreshUpcoming() async  {
+    page = 1;
+    bookingItems.clear();
+    await loadNextUpcoming();
   }
 }

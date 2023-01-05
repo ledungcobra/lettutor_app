@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:lettutor_app/models/category_list/category.dart';
 import 'package:lettutor_app/models/category_list/category_list.dart';
 import 'package:lettutor_app/utils/mixing.dart';
+import 'package:web_socket_channel/io.dart';
 
 class UtilService with AppAPI, CatchError {
   Map<String?, Category> languages = {};
@@ -9,8 +13,8 @@ class UtilService with AppAPI, CatchError {
   Map<String?, Category> testPreparations = {};
   Map<String?, Category> proficiencies = {
     "BEGINNER": Category(description: "Beginner", id: "0", key: "BEGINNER"),
-    "HIGHER_BEGINNER":
-        Category(description: "Higher Beginner", id: "0", key: "HIGHER_BEGINNER"),
+    "HIGHER_BEGINNER": Category(
+        description: "Higher Beginner", id: "0", key: "HIGHER_BEGINNER"),
     "PRE_INTERMEDIATE": Category(
         description: "Pre-Intermediate", id: "0", key: "PRE_INTERMEDIATE"),
     "INTERMEDIATE":
@@ -18,7 +22,7 @@ class UtilService with AppAPI, CatchError {
     "UPPER_INTERMEDIATE": Category(
         description: "Upper-Intermediate", id: "0", key: "UPPER_INTERMEDIATE"),
     "ADVANCED": Category(description: "Advanced", id: "0", key: "ADVANCED"),
-    "PROFICIENCY":  Category(description: "Proficiency", key: "PROFICIENCY"),
+    "PROFICIENCY": Category(description: "Proficiency", key: "PROFICIENCY"),
   };
 
   loadSkillFilter() async {

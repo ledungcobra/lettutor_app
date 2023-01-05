@@ -5,8 +5,10 @@ import '../../../models/tutor_detail/course.dart';
 
 class CoursePreviewButton extends StatelessWidget {
   final Course coursePreview;
+  final Function() onClick;
 
-  CoursePreviewButton({Key? key, required this.coursePreview})
+  CoursePreviewButton(
+      {Key? key, required this.coursePreview, required this.onClick})
       : super(key: key);
 
   @override
@@ -21,7 +23,7 @@ class CoursePreviewButton extends StatelessWidget {
         SizedBox(
           height: 30,
           child: TextButton(
-            onPressed: () {},
+            onPressed: onClick,
             child: Text(
               "Find out",
               style: const TextStyle(fontSize: 16, color: PRIMARY_COLOR),

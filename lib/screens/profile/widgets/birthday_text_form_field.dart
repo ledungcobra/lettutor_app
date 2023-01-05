@@ -5,11 +5,12 @@ import 'package:intl/intl.dart';
 import '../profile_controller.dart';
 
 class BirthdayTextFormField extends StatefulWidget {
-  
   final String title;
   String? birthday;
   Function(String v) onDone;
-  BirthdayTextFormField({Key? key, required this.title, this.birthday, required this.onDone})
+
+  BirthdayTextFormField(
+      {Key? key, required this.title, this.birthday, required this.onDone})
       : super(key: key);
 
   @override
@@ -17,7 +18,6 @@ class BirthdayTextFormField extends StatefulWidget {
 }
 
 class _BirthdayTextFormFieldState extends State<BirthdayTextFormField> {
-
   TextEditingController textController = TextEditingController();
   final controller = Get.find<ProfileController>(tag: 'profile_controller');
 
@@ -27,8 +27,9 @@ class _BirthdayTextFormFieldState extends State<BirthdayTextFormField> {
       widget.onDone(textController.text);
     });
     textController.text = widget.birthday != null && widget.birthday!.isNotEmpty
-        ? DateFormat('yyyy-MM-dd').format(DateTime.parse(widget.birthday!))
-        :  DateFormat('yyyy-MM-dd').format(DateTime.now()); //set the initial value of text field
+        ? widget.birthday!
+        : DateFormat('yyyy-MM-dd')
+            .format(DateTime.now()); //set the initial value of text field
     super.initState();
   }
 
@@ -62,7 +63,7 @@ class _BirthdayTextFormFieldState extends State<BirthdayTextFormField> {
               context: context,
               initialDate: DateTime.now(),
               firstDate: DateTime(
-                  2000), //DateTime.now() - not to allow to choose before today.
+                  1888),
               lastDate: DateTime(2101),
             );
 

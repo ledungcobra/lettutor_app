@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/screens/upcoming/widgets/upcomming_item.dart';
 import 'package:lettutor_app/widgets/not_found.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../widgets/loading.dart';
+import '../../models/class_history/class_history.dart';
+import '../../widgets/load_more_footer.dart';
 import 'upcoming_controller.dart';
 
 class UpcomingScreen extends StatefulWidget {
@@ -16,16 +18,16 @@ class UpcomingScreen extends StatefulWidget {
 }
 
 class _UpcomingScreenState extends State<UpcomingScreen> {
-  final upcomingController = Get.find<UpcomingController>();
+  final controller = Get.find<UpcomingController>();
   Timer? timer;
   final elapsedTime = 0.obs;
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: true);
+  final GlobalKey refresherKey = GlobalKey();
 
   @override
   void initState() {
-    upcomingController.loadData();
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      elapsedTime.value = elapsedTime.value + 1;
-    });
+    controller.loadNextUpcoming();
     super.initState();
   }
 
@@ -33,7 +35,8 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    timer?.cancel();
+    // timer?.cancel();
+    refreshController.dispose();
   }
 
   @override
@@ -53,23 +56,44 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
   }
 
   Widget _listSchedule() {
-    return Obx(
-        () => upcomingController.bookingItems.isEmpty && elapsedTime.value <= 8
-            ? Loading()
-            : upcomingController.bookingItems.isEmpty
-                ? Row(
-                    children: [
-                      NotFound(),
-                    ],
-                  )
-                : ListView(
-                    key: UniqueKey(),
-                    children: upcomingController.bookingItems
-                        .map((item) => UpcomingItem(
-                              key: UniqueKey(),
-                              bookingItem: item,
-                            ))
-                        .toList(),
-                  ));
+    return SmartRefresher(
+      key: refresherKey,
+      enablePullUp: true,
+      enablePullDown: true,
+      header: WaterDropHeader(),
+      footer: LoadMoreFooter(),
+      controller: refreshController,
+      onLoading: () async {
+        await controller.loadNextUpcoming();
+        refreshController.loadComplete();
+        if (mounted) {
+          setState(() {});
+        }
+      },
+      onRefresh: () async {
+        await controller.refreshUpcoming();
+        if (mounted) {
+          setState(() {});
+        }
+        refreshController.refreshCompleted();
+      },
+      child: listBookingItems(controller.bookingItems),
+    );
+  }
+
+  listBookingItems(List<ClassHistory> upComings) {
+    return upComings.isEmpty
+        ? Row(
+            children: [
+              NotFound(),
+            ],
+          )
+        : ListView(
+            children: upComings
+                .map((item) => UpcomingItem(
+                      bookingItem: item,
+                    ))
+                .toList(),
+          );
   }
 }

@@ -1,15 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/models/class_history/class_history.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 
-import '../../../models/booking_item/booking_item.dart';
 import '../../../utils/constants.dart';
 import '../upcoming_controller.dart';
 
 class CancelDialog extends StatelessWidget {
-  final BookingItem bookingItem;
+  final ClassHistory bookingItem;
   final tutorService = Get.find<TutorService>();
   final controller = Get.find<UpcomingController>();
 
@@ -81,7 +79,7 @@ class CancelDialog extends StatelessWidget {
         ),
         ElevatedButton(
             onPressed: () => controller.handleCancel(
-                reportText.value, bookingItem, selectedReason.value.id),
+                reportText.value, bookingItem.id, selectedReason.value.id),
             child: Text('Cancel'))
       ],
     );

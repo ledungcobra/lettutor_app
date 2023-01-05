@@ -41,10 +41,7 @@ class TutorsController extends GetxController
   void initData() async {}
 
   refreshTutors() async {
-    page--;
-    if (page < 0) {
-      page = 1;
-    }
+    page = 1;
     _tutors.clear();
     await _load();
   }

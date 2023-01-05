@@ -7,6 +7,7 @@ import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/utils/types.dart';
 
 import '../models/booking_item/booking_item.dart';
+import '../models/class_history/class_history.dart';
 import '../models/error/error.dart';
 import '../models/schedule/tutor_schedule_info.dart';
 
@@ -129,15 +130,30 @@ class TutorService with AppAPI, CatchError {
     }
   }
 
-  Future<ResponseEntity<List<BookingItem>>> getUpcomingCourse() async {
+  Future<ResponseEntity<List<BookingItem>>> getUpcomingCourse({num page=1, num perPage=1}) async {
     try {
       var response = await dio.get(buildUrl(
-          '/booking/next?dateTime=${DateTime.now().millisecondsSinceEpoch}'));
+            '/booking/next?dateTime=${DateTime.now().millisecondsSinceEpoch}'));
       var result = <BookingItem>[];
       for (var item in response.data['data']) {
         result.add(BookingItem.fromJson(item));
       }
       return ResponseEntity(data: result);
+    } catch (e) {
+      return handleError(e);
+    }
+  }
+
+  Future<ResponseEntity<List<ClassHistory>>> getUpComings(
+      num perPage, num page) async {
+    try {
+      int timestamp = DateTime.now().subtract(const Duration(minutes: 30)).millisecondsSinceEpoch;
+      var response = await dio.get(buildUrl('/booking/list/student?perPage=$perPage&page=$page&dateTimeGte=$timestamp&orderBy=meeting&sortBy=desc'));
+      var result = <ClassHistory>[];
+      for (var item in response.data['data']['rows']) {
+        result.add(ClassHistory.fromJson(item));
+      }
+      return ResponseEntity(data: result, error: null);
     } catch (e) {
       return handleError(e);
     }
@@ -182,7 +198,7 @@ class TutorService with AppAPI, CatchError {
   }
 
   Future<ResponseEntity> cancelBookingRequest(
-      String bookingId, int cancelReason, String note) async {
+      String? bookingId, int cancelReason, String note) async {
     try {
       var result =
           await dio.delete(buildUrl('/booking/schedule-detail'), data: {

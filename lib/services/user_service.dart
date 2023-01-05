@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart' as d;
 import 'package:dio/dio.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lettutor_app/models/response_entity.dart';
 import 'package:lettutor_app/models/user_info/user_info.dart';
@@ -8,7 +9,6 @@ import 'package:lettutor_app/utils/mixing.dart';
 import '../models/class_history/class_history.dart';
 import '../models/profile/profile_dto.dart';
 import '../models/user_info/user.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class UserService with CatchError, AppAPI {
   UserInfo? _userInfo;
@@ -55,7 +55,9 @@ class UserService with CatchError, AppAPI {
   Future<ResponseEntity<List<ClassHistory>>> getHistories(
       int perPage, int page) async {
     try {
-      var response = await dio.get(buildUrl('/booking/list/student'));
+      int timestamp = DateTime.now().millisecondsSinceEpoch;
+      var response = await dio.get(buildUrl(
+          '/booking/list/student?perPage=$perPage&page=$page&dateTimeLte=$timestamp&orderBy=meeting&sortBy=desc'));
       var result = <ClassHistory>[];
       for (var item in response.data['data']['rows']) {
         result.add(ClassHistory.fromJson(item));
@@ -108,7 +110,6 @@ class UserService with CatchError, AppAPI {
       }
       return _userInfo?.user?.avatar ?? "";
     } catch (e) {
-      print(e);
       return handleError(e);
     }
   }

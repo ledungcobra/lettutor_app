@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/booking_item/booking_item.dart';
+import 'package:intl/intl.dart';
 import 'package:lettutor_app/screens/upcoming/widgets/request_edit_dialog.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
-import '../../../models/booking_item/schedule_info.dart';
+import '../../../models/class_history/class_history.dart';
+import '../../../models/class_history/schedule_detail_info.dart';
+import '../../../models/class_history/schedule_info.dart';
 import '../../../services/tutor_service.dart';
 import '../../video_call/jitsy_util.dart';
 import 'cancel_dialog.dart';
 
 class UpcomingItem extends StatelessWidget {
-  final BookingItem bookingItem;
+  final ClassHistory bookingItem;
   final tutorService = Get.find<TutorService>();
+  final dateFormat = Get.find<DateFormat>();
 
-  ScheduleInfo? get scheduleInfo =>
-      bookingItem.scheduleDetailInfo?.scheduleInfo;
+  ScheduleDetailInfo? get scheduleDetailInfo => bookingItem.scheduleDetailInfo;
+
+  ScheduleInfo? get scheduleInfo => scheduleDetailInfo?.scheduleInfo;
 
   UpcomingItem({Key? key, required this.bookingItem}) : super(key: key);
 
@@ -27,7 +31,15 @@ class UpcomingItem extends StatelessWidget {
   }
 
   _handleGoMeeting() async {
-    await joinMeetingJitsi(bookingItem);
+    await joinMeetingJitsi(bookingItem.studentMeetingLink ?? "");
+  }
+
+  String getPeriod() {
+    final start = DateTime.fromMillisecondsSinceEpoch(
+        scheduleDetailInfo?.startPeriodTimestamp ?? 0);
+    final end = DateTime.fromMillisecondsSinceEpoch(
+        scheduleDetailInfo?.endPeriodTimestamp ?? 0);
+    return '${start.hour}:${start.minute} - ${end.hour}:${end.minute}';
   }
 
   @override
@@ -42,10 +54,7 @@ class UpcomingItem extends StatelessWidget {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(scheduleInfo?.date ?? "Date not found"),
-                  Text('${scheduleInfo?.startTime}-${scheduleInfo?.endTime!}')
-                ],
+                children: [Text(scheduleInfo?.date ?? ''), Text(getPeriod())],
               ),
               SizedBox(height: 10),
               Row(
@@ -98,7 +107,10 @@ class UpcomingItem extends StatelessWidget {
                                     onPressed: () {
                                       Get.dialog(
                                         RequestEditDialog(
-                                            bookingItem: bookingItem),
+                                          bookingId: bookingItem.id,
+                                          studentRequest:
+                                              bookingItem.studentRequest,
+                                        ),
                                       );
                                     },
                                     child: Text(

@@ -13,7 +13,10 @@ class CourseOverview extends StatelessWidget {
   late BuildContext context;
 
   _handleDiscover() {
-    Get.to(CourseDetails(course: course, selectedIndex: 0,));
+    Get.to(CourseDetails(
+      course: course,
+      selectedIndex: 0,
+    ));
   }
 
   @override
@@ -165,11 +168,10 @@ class CourseOverview extends StatelessWidget {
             children: [
               Text("${i + 1}.${topic.name}"),
               InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (ctx) => CourseDetails(course: course, selectedIndex: i,)),
-                ),
+                onTap: () => Get.to(() => CourseDetails(
+                      course: course,
+                      selectedIndex: i,
+                    )),
                 child: Text(
                   'Find out',
                   style: TextStyle(color: Colors.blue),

@@ -14,14 +14,19 @@ import 'package:lettutor_app/widgets/button.dart';
 import 'package:lettutor_app/widgets/title_button.dart';
 
 import '../../models/response_entity.dart';
-
+import '../../services/course_service.dart';
+import '../course_overview/course_overview.dart';
+import '../home/home_controller.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 class TutorDetailScreen extends StatelessWidget with Dimension, HandleUIError {
   var courseExpanded = true.obs;
   var commentExpanded = true.obs;
   final _tutorDetail = TutorDetail().obs;
+  final coursesService = Get.find<CourseService>();
   final _tutorService = Get.find<TutorService>();
   final String tutorId;
   String? name;
+  HomeController get homeController => Get.find<HomeController>();
 
   TutorDetailScreen(
       {super.key, required tutorDetail, required this.tutorId, this.name}) {
@@ -32,6 +37,7 @@ class TutorDetailScreen extends StatelessWidget with Dimension, HandleUIError {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.lightBlueAccent,
@@ -222,7 +228,10 @@ class TutorDetailScreen extends StatelessWidget with Dimension, HandleUIError {
                 children: tutorDetail
                     .getCourses()
                     .map(
-                      (course) => CoursePreviewButton(coursePreview: course),
+                      (course) => CoursePreviewButton(
+                        coursePreview: course,
+                        onClick: () => openCourse(course.id),
+                      ),
                     )
                     .toList(),
               );
@@ -302,6 +311,7 @@ class TutorDetailScreen extends StatelessWidget with Dimension, HandleUIError {
     _tutorDetail.value.isFavorite = !_tutorDetail.value.isFavorite!;
     _tutorDetail.value = TutorDetail.fromJson(_tutorDetail.value.toJson());
     var response = await _tutorService.performLike(tutorDetail.user?.id ?? "");
+    homeController.updateLikeFor(tutorDetail.user?.id ?? "");
     if (response.hasError) {
       return handleError(response.error!);
     }
@@ -310,5 +320,14 @@ class TutorDetailScreen extends StatelessWidget with Dimension, HandleUIError {
   void _onPressReport() {
     Get.snackbar('Reporting', 'Sending report to admin',
         backgroundColor: Colors.red);
+  }
+
+  openCourse(String? id) async {
+    var response = await coursesService.getCourseDetail(id!);
+    if (response.hasError) {
+      handleError(response.error!);
+      return;
+    }
+    Get.to(CourseOverview(course: response.data!));
   }
 }

@@ -1,10 +1,9 @@
 import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:lettutor_app/models/booking_item/booking_item.dart';
+import 'package:lettutor_app/models/class_history/class_history.dart';
 
-joinMeetingJitsi(BookingItem bookingItem) async {
-  var token = bookingItem.studentMeetingLink!.split("token=")[1];
-  print('Token $token');
+joinMeetingJitsi(String studentToken) async {
+  var token =studentToken.split("token=")[1];
   Map<String, dynamic> meetObject = JwtDecoder.decode(token);
   final String roomId = meetObject['room'];
   final options = JitsiMeetingOptions(room: roomId)
