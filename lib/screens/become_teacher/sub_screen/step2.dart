@@ -1,3 +1,4 @@
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -44,8 +45,11 @@ class _VideoStepState extends State<VideoStep> {
     return Container(
       width: Get.width,
       padding: const EdgeInsets.all(12),
-      decoration: !Get.isDarkMode ? BoxDecoration(
-          color: Get.theme.primaryColor, borderRadius: BorderRadius.circular(10)): null,
+      decoration: !Get.isDarkMode
+          ? BoxDecoration(
+              color: Get.theme.primaryColor,
+              borderRadius: BorderRadius.circular(10))
+          : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
@@ -71,7 +75,12 @@ class _VideoStepState extends State<VideoStep> {
             : SizedBox(
                 height: Get.height / 2,
                 width: Get.width,
-                child: VideoPlayer(_videoController!),
+                child: Chewie(
+                  controller: ChewieController(
+                      videoPlayerController: _videoController!,
+                      autoPlay: true,
+                      looping: true),
+                ),
               )
       ],
     );

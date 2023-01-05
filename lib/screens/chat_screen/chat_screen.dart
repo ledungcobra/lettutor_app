@@ -38,7 +38,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Get.isDarkMode ? Colors.black54: Colors.grey[200],
       endDrawer: Drawer(
         child: Obx(
           () => Center(

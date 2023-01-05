@@ -40,7 +40,7 @@ class HistoryItem extends StatelessWidget with Dimension {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: !Get.isDarkMode ? Colors.white : Colors.white24,
             borderRadius: BorderRadius.circular(5),
           ),
           padding: EdgeInsets.all(10),
@@ -54,8 +54,12 @@ class HistoryItem extends StatelessWidget with Dimension {
                           ?.toString() ??
                       ""),
                   IconButton(
-                      onPressed: _messageNow,
-                      icon: Icon(Icons.message_outlined, color: PRIMARY_COLOR)),
+                    onPressed: _messageNow,
+                    icon: Icon(
+                      Icons.message_outlined,
+                      color: !Get.isDarkMode ? PRIMARY_COLOR : Colors.white24,
+                    ),
+                  ),
                   NetworkAvatar(url: tutor.avatar),
                 ],
               )
@@ -66,7 +70,7 @@ class HistoryItem extends StatelessWidget with Dimension {
         SizedBox(height: 2),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: !Get.isDarkMode ? Colors.white : Colors.white24,
             borderRadius: BorderRadius.circular(5),
           ),
           padding: EdgeInsets.all(10),

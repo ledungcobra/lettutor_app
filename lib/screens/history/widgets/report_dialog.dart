@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lettutor_app/models/class_history/class_history.dart';
@@ -30,8 +29,9 @@ class ReportDialog extends StatelessWidget {
       return;
     }
 
+    // TODO :Handle bug
     var success = await tutorService.saveReport(reportText.value,
-        history!.classReview!.bookingId!, selectedReason.value.id);
+        history.scheduleDetailInfo?.scheduleInfo?.id, selectedReason.value.id);
     Get.back();
     if (success) {
       Get.snackbar(
@@ -60,11 +60,13 @@ class ReportDialog extends StatelessWidget {
           shrinkWrap: true,
           children: [
             RichText(
-              text: TextSpan(children: const [
+              text: TextSpan(children: [
                 TextSpan(text: '*', style: TextStyle(color: Colors.red)),
                 TextSpan(
                     text: ' Reason you report this lesson',
-                    style: TextStyle(fontSize: 20, color: Colors.black)),
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Get.isDarkMode ? Colors.white60 : Colors.black)),
               ]),
             ),
             SizedBox(
@@ -90,11 +92,13 @@ class ReportDialog extends StatelessWidget {
               width: Get.width * 0.85,
               child: Card(
                 borderOnForeground: true,
-                color: Colors.white,
+                color: Get.isDarkMode ? Colors.white24 : Colors.white,
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
                   child: TextField(
-                    maxLines: 8, //or null
+                    maxLines: 8,
+                    //or null
+                    style: Get.theme.textTheme.button,
                     decoration: InputDecoration.collapsed(
                         hintText: "Enter your text here"),
                     onChanged: (value) => reportText.value = value,

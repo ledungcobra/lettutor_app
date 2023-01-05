@@ -11,7 +11,7 @@ class FeedbackItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: Colors.white),
+      decoration: BoxDecoration(color: !Get.isDarkMode? Colors.white: Colors.white24,),
       height: 50,
       width: Get.width,
       child: Row(

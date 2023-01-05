@@ -25,15 +25,20 @@ class ChatBubble extends StatelessWidget {
                 : AlignmentDirectional.centerStart,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: isCurrentUser ? Colors.blue : Colors.grey[300],
+                color: Get.isDarkMode
+                    ? (isCurrentUser ? Colors.blueGrey : Colors.white38)
+                    : (isCurrentUser ? Colors.blue : Colors.grey[300]),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Text(
                   text,
-                  style: Get.theme.textTheme.bodyText1!.copyWith(
-                      color: isCurrentUser ? Colors.white:Colors.black87 ),
+                  style: Get.isDarkMode
+                      ? Get.theme.textTheme.bodyText1!.copyWith(
+                          color: isCurrentUser ? Colors.white : Colors.white)
+                      : Get.theme.textTheme.bodyText1!.copyWith(
+                          color: isCurrentUser ? Colors.white : Colors.black87),
                 ),
               ),
             ),

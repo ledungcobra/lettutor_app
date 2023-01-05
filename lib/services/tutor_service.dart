@@ -163,7 +163,8 @@ class TutorService with AppAPI, CatchError {
     try {
       var body = {'note': note, 'reasonId': reasonId, 'bookingId': bookingId};
 
-      await dio.put(buildUrl('/lesson-report/save-report'), data: body);
+      final res = await dio.put(buildUrl('/lesson-report/save-report'), data: body);
+      print(res);
       return true;
     } catch (e) {
       return false;

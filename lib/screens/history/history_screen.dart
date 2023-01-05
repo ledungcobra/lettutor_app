@@ -20,7 +20,7 @@ class _HistoryScreenState extends State<HistoryScreen> with HandleUIError {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: !Get.isDarkMode ? Colors.grey[200] : null,
       appBar: AppBar(
         title: Text('History'),
       ),

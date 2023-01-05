@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ChatInput extends StatelessWidget {
   final Function(String) onDone;
@@ -23,7 +24,7 @@ class ChatInput extends StatelessWidget {
             padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
             height: 60,
             width: double.infinity,
-            color: Colors.white,
+            color: Get.isDarkMode ? Colors.white30 : Colors.white,
             child: Row(
               children: <Widget>[
                 GestureDetector(
@@ -50,7 +51,9 @@ class ChatInput extends StatelessWidget {
                     controller: controller,
                     decoration: InputDecoration(
                         hintText: "Write message...",
-                        hintStyle: TextStyle(color: Colors.black54),
+                        hintStyle: TextStyle(
+                            color:
+                                Get.isDarkMode ? Colors.white : Colors.black54),
                         border: InputBorder.none),
                   ),
                 ),

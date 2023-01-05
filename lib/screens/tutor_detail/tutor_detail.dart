@@ -17,7 +17,7 @@ import '../../models/response_entity.dart';
 import '../../services/course_service.dart';
 import '../course_overview/course_overview.dart';
 import '../home/home_controller.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+
 class TutorDetailScreen extends StatelessWidget with Dimension, HandleUIError {
   var courseExpanded = true.obs;
   var commentExpanded = true.obs;
