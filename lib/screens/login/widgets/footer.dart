@@ -7,7 +7,8 @@ class Footer extends StatelessWidget {
   final Function googleLogin;
   final Function facebookLogin;
 
-  Footer({Key? key, required this.googleLogin, required this.facebookLogin}) : super(key: key);
+  Footer({Key? key, required this.googleLogin, required this.facebookLogin})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +23,7 @@ class Footer extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgIconButton(image: "facebook.svg"),
-            SvgIconButton(
-                image: "google.svg", onClick: googleLogin),
+            SvgIconButton(image: "google.svg", onClick: googleLogin),
           ],
         ),
         Row(

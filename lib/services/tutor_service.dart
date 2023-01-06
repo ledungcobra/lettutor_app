@@ -41,7 +41,6 @@ class TutorService with AppAPI, CatchError {
       int page, int perPage) async {
     try {
       var url = buildUrl("/tutor/more?perPage=$perPage&page=$page");
-      dio.options.headers['Authorization'] = null;
       var response = await dio.get(url);
       var result = <Tutor>[];
       var favoriteTutorIds = await getFavoriteTutorIds();

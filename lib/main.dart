@@ -74,7 +74,7 @@ Future<void> handleError(
     error, TokenService tokenService, Dio dio, handler) async {
   final statusCode = error.response?.statusCode;
   if (statusCode == 403 || statusCode == 401) {
-    if (!await tokenService.isAccessTokenValid()) {
+    if (!await tokenService.isRefreshTokenValid()) {
       tokenService.clearTokens();
       Get.offAll(() => LoginScreen());
       throw error;
@@ -147,7 +147,9 @@ class App extends StatelessWidget {
           themeMode: ThemeMode.system,
           builder: (context, child) {
             return ScrollConfiguration(
-                behavior: RefreshScrollBehavior(), child: child!);
+              behavior: RefreshScrollBehavior(),
+              child: child!,
+            );
           },
           title: 'Lettutor',
           debugShowCheckedModeBanner: false,

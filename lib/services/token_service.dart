@@ -31,7 +31,7 @@ class TokenService with AppAPI {
     return prefs.getString(AccessToken) ?? "";
   }
 
-  Future<bool> isAccessTokenValid() async {
+  Future<bool> isRefreshTokenValid() async {
     final prefs = await SharedPreferences.getInstance();
     final dateExpire = prefs.getString(RefreshTokenExpire) ?? "";
     final date =DateTime.parse(dateExpire);

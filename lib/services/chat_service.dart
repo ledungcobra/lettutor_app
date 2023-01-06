@@ -19,6 +19,7 @@ class ChatService with AppAPI {
   final Rxn<ChatList> chatList = Rxn();
   final tutorService = Get.find<TutorService>();
   final messages = [].obs;
+  bool lock = false;
 
   void init() {
     onlineTutors.clear();
@@ -41,7 +42,6 @@ class ChatService with AppAPI {
           } catch (e) {}
           break;
         case 40:
-          print('Do login');
           c.sink.add("42${jsonEncode([
                 "connection:login",
                 {"user": userInfo.user?.toJson()}
@@ -62,7 +62,6 @@ class ChatService with AppAPI {
               _updateOnlineTutorsList(parsedData);
               break;
             case "chat:returnNewMessage":
-              print('New message');
               _updateChat(parsedData[1][1]["message"]);
               break;
             case "chat:readMessage":
@@ -134,5 +133,10 @@ class ChatService with AppAPI {
       ],
     )}";
     channel?.sink.add(message);
+  }
+
+  bool canChat(String tutorId) {
+    return (chatList.value?.recentList ?? [])
+        .any((x) => x.partner?.id == tutorId);
   }
 }

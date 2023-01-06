@@ -39,7 +39,6 @@ class _ProfileScreenState extends State<ProfileScreen> with HandleUIError {
         return;
       }
       userInfo = response.data!;
-
       ProfileController profileController = ProfileController();
       Get.replace(profileController, tag: 'profile_controller');
       profileController.name.value = userInfo?.user?.name ?? "";

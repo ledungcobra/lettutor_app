@@ -9,10 +9,9 @@ import 'widgets/chat_widget.dart';
 
 class ChatScreen extends StatefulWidget {
   static Rxn<String> clickedId = Rxn();
+  final String? userId;
 
-  ChatScreen({String? userId}) {
-    clickedId.value = userId;
-  }
+  ChatScreen({this.userId});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -32,16 +31,20 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     chatService.init();
-    Future.delayed(Duration(seconds: 2)).then((x) => ChatScreen.clickedId
-        .value = chatService.chatList.value?.recentList?.first.partner?.id);
+    ChatScreen.clickedId.value = widget.userId;
+    if (ChatScreen.clickedId.value == null) {
+      Future.delayed(Duration(seconds: 2)).then((x) {
+        ChatScreen.clickedId.value ??=
+            chatService.chatList.value?.recentList?.first.partner?.id;
+      });
+    }
     ChatScreen.clickedId.listen((id) {
-      print('Current user = $id');
       if (id != null) {
+        print("Change to " + id);
         _openChatForTutor(id);
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,13 +65,18 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: Text('Chat'),
       ),
-      body: ListView(
-        children: [
-          listChats(),
-          ChatInput(
-            onDone: _handleChat,
+      body: SafeArea(
+        child: SizedBox(
+          height: Get.height,
+          child: ListView(
+            children: [
+              listChats(),
+              ChatInput(
+                onDone: _handleChat,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -82,7 +90,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 curve: Curves.fastOutSlowIn));
         return SizedBox(
           width: Get.width,
-          height: Get.height * 0.8,
+          height: Get.height * 0.77,
           child: Center(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 30),
@@ -136,5 +144,6 @@ class _ChatScreenState extends State<ChatScreen> {
   void dispose() {
     super.dispose();
     chatService.dispose();
+    ChatScreen.clickedId.value = null;
   }
 }
