@@ -9,6 +9,7 @@ import '../../../models/class_history/class_history.dart';
 import '../../../models/class_history/class_review.dart';
 import '../../../widgets/divider.dart';
 import '../../../widgets/stars.dart';
+import '../../chat_screen/chat_screen.dart';
 import 'feedback_item.dart';
 import 'rating_tutor_dialog.dart';
 import 'report_dialog.dart';
@@ -30,7 +31,12 @@ class HistoryItem extends StatelessWidget with Dimension {
 
   ClassReview? get reviews => history.classReview;
 
-  _messageNow() {}
+  _messageNow() {
+    Get.to(
+      () => ChatScreen(
+          userId: history.scheduleDetailInfo?.scheduleInfo?.tutorInfo?.id),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

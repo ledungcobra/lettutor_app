@@ -7,11 +7,11 @@ import '../../../models/socket/chat_list.dart';
 import '../../../models/tutor_detail/tutor_detail.dart';
 import '../../../utils/types.dart';
 import '../../../widgets/avatar.dart';
+import '../chat_screen.dart';
 
 class TutorChat extends StatefulWidget {
   final Partner partner;
   final void Function() onClick;
-  static Rxn<String> clickedId = Rxn();
 
   TutorChat({
     Key? key,
@@ -32,7 +32,7 @@ class _TutorChatState extends State<TutorChat> {
           widget.onClick();
         },
         child: Card(
-          color: TutorChat.clickedId.value == widget.partner.id
+          color: ChatScreen.clickedId.value == widget.partner.id
               ? Colors.blueGrey
               : null,
           elevation: 10,

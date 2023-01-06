@@ -8,6 +8,12 @@ import 'widgets/chat_input.dart';
 import 'widgets/chat_widget.dart';
 
 class ChatScreen extends StatefulWidget {
+  static Rxn<String> clickedId = Rxn();
+
+  ChatScreen({String? userId}) {
+    clickedId.value = userId;
+  }
+
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
@@ -26,9 +32,10 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     chatService.init();
-    Future.delayed(Duration(seconds: 2)).then((x) => TutorChat.clickedId.value =
-        chatService.chatList.value?.recentList?.first.partner?.id);
-    TutorChat.clickedId.listen((id) {
+    Future.delayed(Duration(seconds: 2)).then((x) => ChatScreen.clickedId
+        .value = chatService.chatList.value?.recentList?.first.partner?.id);
+    ChatScreen.clickedId.listen((id) {
+      print('Current user = $id');
       if (id != null) {
         _openChatForTutor(id);
       }
@@ -38,7 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Get.isDarkMode ? Colors.black54: Colors.grey[200],
+      backgroundColor: Get.isDarkMode ? Colors.black54 : Colors.grey[200],
       endDrawer: Drawer(
         child: Obx(
           () => Center(
@@ -71,7 +78,8 @@ class _ChatScreenState extends State<ChatScreen> {
       () {
         Future.delayed(Duration(milliseconds: 500)).then((x) => scrollController
             .animateTo(scrollController.position.maxScrollExtent + 100,
-                duration: Duration(milliseconds: 200), curve: Curves.fastOutSlowIn));
+                duration: Duration(milliseconds: 200),
+                curve: Curves.fastOutSlowIn));
         return SizedBox(
           width: Get.width,
           height: Get.height * 0.8,
@@ -82,7 +90,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 shrinkWrap: true,
                 controller: scrollController,
                 children: chatService.chats.map((chat) {
-                  print('From Id=${chat.fromInfo?.id} userId=$userId');
                   return ChatBubble(
                       text: chat.content ?? "",
                       isCurrentUser: chat.isAuthor(userId));
@@ -100,10 +107,10 @@ class _ChatScreenState extends State<ChatScreen> {
       return TutorChat(
         partner: x.partner!,
         onClick: () {
-          if (TutorChat.clickedId.value == x.partner?.id) {
-            TutorChat.clickedId.value = null;
+          if (ChatScreen.clickedId.value == x.partner?.id) {
+            ChatScreen.clickedId.value = null;
           } else {
-            TutorChat.clickedId.value = x.partner?.id;
+            ChatScreen.clickedId.value = x.partner?.id;
           }
         },
       );
@@ -115,12 +122,12 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   _handleChat(String value) {
-    if (TutorChat.clickedId.value == null) {
+    if (ChatScreen.clickedId.value == null) {
       return;
     }
     chatService.chat(
       fromId: userId,
-      toId: TutorChat.clickedId.value,
+      toId: ChatScreen.clickedId.value,
       content: value,
     );
   }

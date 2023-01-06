@@ -13,7 +13,6 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Is current user ${isCurrentUser}");
     return SizedBox(
       width: Get.width,
       child: Column(
