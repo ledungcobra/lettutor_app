@@ -30,8 +30,8 @@ class ReportDialog extends StatelessWidget {
     }
 
     // TODO :Handle bug
-    var success = await tutorService.saveReport(reportText.value,
-        history.scheduleDetailInfo?.scheduleInfo?.id, selectedReason.value.id);
+    var success = await tutorService.saveReport(
+        reportText.value, history.id, selectedReason.value.id);
     Get.back();
     if (success) {
       Get.snackbar(
