@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/course.dart';
 import 'package:lettutor_app/utils/mixing.dart';
-import 'package:lettutor_app/widgets/loading.dart';
 import 'package:lettutor_app/widgets/loading_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../models/book.dart';
+import '../../../models/book/book.dart';
+import '../../../utils/constants.dart';
 
 class BookItem extends StatelessWidget with Dimension {
   final Book book;
@@ -40,10 +39,10 @@ class BookItem extends StatelessWidget with Dimension {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   SizedBox(height: 10),
                   Text(book.description ?? "",
-                      style: TextStyle(color: Colors.black45)),
+                      style: TextStyle(color: Get.isDarkMode? Colors.white: Colors.black45)),
                   SizedBox(height: 30),
                   Text(
-                    LEVEL_TO_TEXT[book.level ?? ""] ?? "",
+                    LevelToText[book.level ?? ""] ?? "",
                     style: TextStyle(fontWeight: FontWeight.w500),
                   )
                 ],

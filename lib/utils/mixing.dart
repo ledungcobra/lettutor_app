@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../dto/ResponseEntity.dart';
-import '../models/error.dart';
+import '../models/error/error.dart';
+import '../models/response_entity.dart';
+import '../services/token_service.dart';
 
 mixin Dimension {
   double width(BuildContext context) {
@@ -19,11 +19,13 @@ mixin Dimension {
 mixin CatchError {
   handleError(Object e) {
     if (e is DioError) {
+      print(e);
       String message = e.response!.data['message'].toString();
       return ResponseEntity(
           data: null, error: ErrorResponse(message: message, statusCode: 400));
+    } else {
+      print(e);
     }
-    print(e);
     return ResponseEntity(
       data: null,
       error: ErrorResponse(message: "Some thing went wrong", statusCode: 400),
@@ -43,9 +45,37 @@ mixin HandleUIError {
 }
 
 mixin AppAPI {
-  final dio = Get.find<Dio>();
+  Dio get dio => Get.find<Dio>();
   final baseUrl = 'https://sandbox.api.lettutor.com';
-  buildUrl(String endpoint){
+
+  TokenService get tokenService => Get.find<TokenService>();
+
+  buildUrl(String endpoint) {
     return "$baseUrl$endpoint";
+  }
+
+  reloadToken() async {
+    var accessToken = await tokenService.getAccessToken();
+    if (accessToken.isNotEmpty) {
+      dio.options.headers['Authorization'] = "Bearer $accessToken";
+    }
+  }
+}
+
+extension ToString on Duration {
+  String print() {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(inSeconds.remainder(60));
+    return "${twoDigits(inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+}
+
+extension ToTwoDigits on int {
+  String toTwoDigit() {
+    if (this > 10) {
+      return toString();
+    }
+    return '0$this';
   }
 }

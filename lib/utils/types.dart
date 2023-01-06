@@ -1,63 +1,85 @@
-import 'package:lettutor_app/models/tutor.dart';
+import 'package:lettutor_app/models/error/error.dart';
+
+import '../models/category_list/category.dart';
+import '../models/tutor/tutor.dart';
 
 class Nationality {
   String display;
   String val;
 
   Nationality(this.display, this.val);
-}
 
-class SkillFilter {
-  num id;
-  String key;
-  String name;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Nationality &&
+          runtimeType == other.runtimeType &&
+          display == other.display &&
+          val == other.val;
 
-  SkillFilter(this.id, this.key, this.name);
+  @override
+  int get hashCode => display.hashCode ^ val.hashCode;
 }
 
 class FilterCriteria {
   final String name;
-  final SkillFilter skillFilter;
-  final Nationality nationality;
+  final Category specialty;
+  final List<Nationality> nationality;
 
   FilterCriteria(
       {required this.nationality,
-      required this.skillFilter,
-      required this.name});
+      required this.specialty,
+      required this.name}) {}
 
-  bool _isNameOk(Tutor tutor) {
-    print("Name searching $name");
-    return tutor.name!.contains(RegExp(name, caseSensitive: false));
+  Map getNationalities() {
+    var result = {};
+    if (nationality.isEmpty) {
+      return result;
+    }
+    if (nationality.contains(Nationality("Gia sư nước ngoài", "isOversea")) &&
+        nationality.contains(Nationality("Gia sư Viêt Nam", "isVietNamese")) &&
+        nationality.contains(Nationality("Gia sư Bản Ngữ", "isNative"))) {
+      return result;
+    }
+    for (var value in nationality) {
+      if (value.val == "all") {
+        result.clear();
+        return result;
+      }
+      if (value.val == "isOversea") {
+        result['isVietNamese'] = false;
+        result['isNative'] = false;
+        return result;
+      }
+      result[value.val] = true;
+    }
+    return result;
   }
 
-  bool _isSkillOk(Tutor tutor){
-    if(skillFilter.key == "all"){
-      return true;
+  List<String?> getSpecialties() {
+    var result = <String?>[];
+    if (specialty.key == 'all') {
+      return result;
     }
-    var specialties =  tutor.getSpecialties();
-    return specialties.any((specialty) => specialty.key == skillFilter.key);
+    result.add(specialty.key);
+    return result;
   }
+}
 
-  bool _isNationalityOk(Tutor tutor) {
-    if(nationality.val == "all"){
-      return true;
-    }
+class Reason {
+  int id;
+  String description;
 
-    if (nationality.val == "native") {
-      return tutor.isNative!;
-    }
+  Reason(this.id, this.description);
+}
 
-    if (nationality.val == "vn") {
-      return  tutor.country!.toLowerCase() == "vn";
-    }
+abstract class Likable {
+  Future<dynamic> like(Tutor tutor);
+}
 
-    if (nationality.val == "oversea") {
-      return tutor.country!.toLowerCase() != "vn" && !tutor.isNative!;
-    }
-    return true;
-  }
 
-  bool isOk(Tutor tutor) {
-    return _isNameOk(tutor) && _isNationalityOk(tutor) && _isSkillOk(tutor);
-  }
+class FormValidationException extends Error {
+  final String message;
+  FormValidationException(this.message);
+  ErrorResponse get error=> ErrorResponse(statusCode: 0, message: message);
 }

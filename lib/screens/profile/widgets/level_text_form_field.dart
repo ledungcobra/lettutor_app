@@ -1,40 +1,45 @@
 import 'package:flutter/material.dart';
+import '../../../models/category_list/category.dart';
 
-class LevelTextFormField extends StatefulWidget {
-  final String level;
-  const LevelTextFormField({
-    Key? key, required this.level,
+class SelectionTextFormField extends StatefulWidget {
+  final String? initField;
+  final Map<String?, Category> categories;
+  final Function(Category) onSelect;
+
+  SelectionTextFormField({
+    Key? key,
+    required this.initField,
+    required this.categories,
+    required this.onSelect,
   }) : super(key: key);
 
   @override
-  State<LevelTextFormField> createState() => _LevelTextFormFieldState();
+  State<SelectionTextFormField> createState() => _SelectionTextFormFieldState();
 }
 
-enum SingingCharacter {
-  beginer,
-  highBeginer,
-  preInter,
-  inter,
-  upperInter,
-  advanced,
-  profici,
-}
+class _SelectionTextFormFieldState extends State<SelectionTextFormField> {
+  final textController = TextEditingController();
 
-class _LevelTextFormFieldState extends State<LevelTextFormField> {
-  static final List<String> _levels = [
-    "Beginner",
-    "Higher Beginner",
-    "Pre-Intermediate",
-    "Intermediate",
-    "Upper-Intermediate",
-    "Advanced",
-    "Proficiency",
-  ];
-  var levelController = TextEditingController();
-  SingingCharacter? _character = SingingCharacter.beginer;
+  Category? selectedCategory;
+
+  onSelect(Category category, {StateSetter? onComplete}) {
+    textController.text = category.description ?? "";
+    if(onComplete != null){
+      onComplete!(() {
+        selectedCategory = category;
+      });
+    }
+    widget.onSelect(category);
+  }
+
   @override
   void initState() {
-    levelController.text = _levels[0];
+    print(textController.text);
+    if (widget.initField != null && widget.initField!.isNotEmpty) {
+      onSelect(widget.categories[widget.initField?.toUpperCase()]!);
+    } else {
+      onSelect(widget.categories.values.first);
+    }
     super.initState();
   }
 
@@ -46,9 +51,8 @@ class _LevelTextFormFieldState extends State<LevelTextFormField> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: const [
             Text(
-              "Current Level",
+              "Level",
               style: TextStyle(
-                color: Colors.black,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -58,13 +62,15 @@ class _LevelTextFormFieldState extends State<LevelTextFormField> {
         ),
         const SizedBox(height: 10),
         TextFormField(
-          controller: levelController,
+          controller: textController,
           readOnly: true,
           keyboardType: TextInputType.emailAddress,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
-            hintText: "Enter your name",
+            hintText: "Enter level",
           ),
+          onChanged: (v) => widget.onSelect(widget.categories[v]!),
+          onSaved: (v) => widget.onSelect(widget.categories[v]!),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter some text';
@@ -81,19 +87,16 @@ class _LevelTextFormFieldState extends State<LevelTextFormField> {
                     child: SizedBox(
                       width: double.infinity,
                       child: Column(
-                        children: _levels
+                        children: widget.categories.values
                             .map(
-                              (e) => RadioListTile<SingingCharacter>(
-                                value:
-                                    SingingCharacter.values[_levels.indexOf(e)],
-                                title: Text(e),
-                                groupValue: _character,
+                              (e) => RadioListTile<Category>(
+                                value: e,
+                                title: Text(e.description ?? ''),
+                                groupValue: selectedCategory,
                                 onChanged: (newValue) {
-                                  setState(() {
-                                    _character = newValue;
-                                  });
-                                  levelController.text = e;
-                                  // Navigator.of(context).pop();
+                                  if (newValue != null) {
+                                    onSelect(newValue, onComplete: setState);
+                                  }
                                 },
                               ),
                             )

@@ -9,17 +9,16 @@ import 'package:lettutor_app/widgets/button.dart';
 
 import '../../services/user_service.dart';
 import '../../widgets/loading.dart';
-import '../tab_bar_screen/tab_bar_screen.dart';
 import 'sign_up_controller.dart';
 
 class SignUpScreen extends StatelessWidget with HandleUIError {
   SignUpController signUpController = Get.find();
   UserService userService = Get.find();
-
   SignUpScreen({Key? key}) : super(key: key);
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   _handleSignUp() async {
-    var state = signUpController.formKey.currentState!;
+    var state = formKey.currentState!;
     if (!state.validate()) {
       Get.snackbar("Errors", "There are some errors");
       return;
@@ -35,13 +34,11 @@ class SignUpScreen extends StatelessWidget with HandleUIError {
     userService.setUserInfo(response.data);
     Get.snackbar('Success', 'Register success', backgroundColor: Colors.green);
     signUpController.loading.value = false;
-    Get.offAll(() => TabBarScreen());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -54,7 +51,7 @@ class SignUpScreen extends StatelessWidget with HandleUIError {
                     children: [
                       _introductionSection(),
                       const SizedBox(height: 10),
-                      FormFields(),
+                      FormFields(formKey: formKey),
                       const SizedBox(height: 10),
                       Button(onClick: _handleSignUp, title: 'SIGN UP'),
                       Footer(),

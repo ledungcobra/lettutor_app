@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/comment.dart';
-import 'package:lettutor_app/models/tutor_detail.dart';
-import 'package:lettutor_app/screens/tutor_detail/widgets/booking.dart';
+import 'package:lettutor_app/models/comment/comment.dart';
+import 'package:lettutor_app/models/tutor_detail/tutor_detail.dart';
 import 'package:lettutor_app/screens/tutor_detail/widgets/comment_item.dart';
 import 'package:lettutor_app/screens/tutor_detail/widgets/course_preview_button.dart';
+import 'package:lettutor_app/screens/tutor_detail/widgets/schedule_list.dart';
 import 'package:lettutor_app/screens/tutor_detail/widgets/text_and_chips.dart';
+import 'package:lettutor_app/services/chat_service.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/mixing.dart';
@@ -14,18 +14,59 @@ import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 import 'package:lettutor_app/widgets/title_button.dart';
 
-class TutorDetailScreen extends StatelessWidget with Dimension {
-  var courseExpanded = true.obs;
-  var commentExpanded = true.obs;
-  final TutorDetail tutorDetail;
-  TutorService _tutorService = Get.find();
-  late BuildContext context;
+import '../../models/response_entity.dart';
+import '../../services/course_service.dart';
+import '../chat_screen/chat_screen.dart';
+import '../course_overview/course_overview.dart';
+import '../home/home_controller.dart';
+import 'widgets/intro_video.dart';
 
-  TutorDetailScreen({super.key, required this.tutorDetail});
+class TutorDetailScreen extends StatefulWidget with Dimension {
+  final String tutorId;
+  String? name;
+  final TutorDetail tutorDetail;
+
+  TutorDetailScreen(
+      {super.key,
+      required this.tutorDetail,
+      required this.tutorId,
+      this.name}) {}
+
+  @override
+  State<TutorDetailScreen> createState() => _TutorDetailScreenState();
+}
+
+class _TutorDetailScreenState extends State<TutorDetailScreen>
+    with HandleUIError {
+  var courseExpanded = true.obs;
+
+  var commentExpanded = true.obs;
+
+  final _tutorDetail = TutorDetail().obs;
+
+  final coursesService = Get.find<CourseService>();
+
+  final tutorService = Get.find<TutorService>();
+
+  ChatService get chatService => Get.find<ChatService>();
+
+  HomeController get homeController => Get.find<HomeController>();
+
+  TutorDetail get tutorDetail => _tutorDetail.value;
+
+  @override
+  void initState() {
+    super.initState();
+    _tutorDetail.value = widget.tutorDetail;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    this.context = context;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.lightBlueAccent,
@@ -48,6 +89,8 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
                   scrollDirection: Axis.vertical,
                   children: [
                     _header(),
+                    if (tutorDetail.video != null)
+                      IntroVideo(link: tutorDetail.video!),
                     SizedBox(
                       height: 20,
                     ),
@@ -74,7 +117,7 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
         ),
         Column(
           children: [
-            Text(tutorDetail.user?.name ?? ""),
+            Text(widget.name ?? ""),
             _stars(tutorDetail.avgRating?.toInt() ?? 0),
             Align(
                 child: Container(
@@ -109,13 +152,18 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TitleButton(
-                title: 'Message',
-                icon: Icons.message_outlined,
-                onPress: _onPressMessageNow),
-            TitleButton(
-                title: 'Favorite',
-                icon: Icons.favorite_outline,
-                onPress: _onPressFavorite),
+              title: 'Message',
+              icon: Icons.message_outlined,
+              onPress: _sendMessage,
+            ),
+            Obx(() {
+              return TitleButton(
+                  title: 'Favorite',
+                  icon: _tutorDetail.value.isFavorite!
+                      ? Icons.favorite
+                      : Icons.favorite_outline,
+                  onPress: () async => _onPressFavorite());
+            }),
             TitleButton(
                 title: 'Report',
                 icon: Icons.info_outline,
@@ -126,33 +174,17 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
           height: 10,
         ),
         Button(
-            onClick: () => Booking.showFullModal(context, tutorDetail.user!.id!),
+            onClick: () =>
+                ScheduleList.showFullModal(Get.context!, widget.tutorId),
             title: 'Book')
       ],
     );
   }
 
-  void _onPressMessageNow() {
-    Get.defaultDialog(
-        title: 'Compose message',
-        radius: 2,
-        middleText: "",
-        content: Column(
-          children: [
-            TextFormField(
-              decoration: InputDecoration(hintText: 'Enter some thing ...'),
-            )
-          ],
-        ),
-        actions: [
-          Button(
-              title: 'Send',
-              onClick: () {
-                Get.back();
-                Get.snackbar('Sending', 'Message is sending',
-                    backgroundColor: Colors.green);
-              })
-        ]);
+  _sendMessage() {
+    final userId = tutorDetail.user?.id ?? "";
+    print("user id $userId");
+    Get.to(() => ChatScreen(userId: userId));
   }
 
   Widget _body() {
@@ -166,7 +198,7 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
           style: TextStyle(fontSize: 18),
         ),
         gap,
-        TextAndChips(text: 'Language', chips: tutorDetail.getSpecialties()),
+        TextAndChips(text: 'Languages', chips: tutorDetail.getLanguages()),
         halfGap,
         Text(
           "Interest",
@@ -212,7 +244,10 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
                 children: tutorDetail
                     .getCourses()
                     .map(
-                      (course) => CoursePreviewButton(coursePreview: course),
+                      (course) => CoursePreviewButton(
+                        coursePreview: course,
+                        onClick: () => openCourse(course.id),
+                      ),
                     )
                     .toList(),
               );
@@ -261,21 +296,23 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
     );
   }
 
-  FutureBuilder<List<Comment>> _comments() {
+  _comments() {
     return FutureBuilder(
-      future: _tutorService.getComments(tutorDetail.user!.id!),
+      future:
+          tutorService.getFeedbacksPaging(tutorDetail.user?.id ?? "", 1, 12),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Container();
         }
         if (snapshot.hasData) {
-          var comments = snapshot.data as List<Comment>;
+          var response = snapshot.data as ResponseEntity<List<Comment>>;
+
           return SizedBox(
-            height: height(context) / 2,
+            height: Get.height / 2,
             child: ListView.builder(
-              itemCount: comments.length,
+              itemCount: response.data!.length,
               itemBuilder: (context, index) {
-                var comment = comments[index];
+                var comment = response.data![index];
                 return CommentItem(comment: comment);
               },
             ),
@@ -286,10 +323,27 @@ class TutorDetailScreen extends StatelessWidget with Dimension {
     );
   }
 
-  void _onPressFavorite() {}
+  void _onPressFavorite() async {
+    _tutorDetail.value.isFavorite = !_tutorDetail.value.isFavorite!;
+    _tutorDetail.value = TutorDetail.fromJson(_tutorDetail.value.toJson());
+    var response = await tutorService.performLike(tutorDetail.user?.id ?? "");
+    homeController.updateLikeFor(tutorDetail.user?.id ?? "");
+    if (response.hasError) {
+      return handleError(response.error!);
+    }
+  }
 
   void _onPressReport() {
     Get.snackbar('Reporting', 'Sending report to admin',
         backgroundColor: Colors.red);
+  }
+
+  openCourse(String? id) async {
+    var response = await coursesService.getCourseDetail(id!);
+    if (response.hasError) {
+      handleError(response.error!);
+      return;
+    }
+    Get.to(CourseOverview(course: response.data!));
   }
 }

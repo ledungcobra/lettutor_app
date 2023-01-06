@@ -9,7 +9,7 @@ class SignUpController extends GetxController {
   final rePassword = "".obs;
   final loading = false.obs;
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
 
   reset() {
     showPassword1.value = false;

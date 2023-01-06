@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/course.dart';
+import 'package:lettutor_app/models/course/course.dart';
 import 'package:lettutor_app/screens/course_details/course_details.dart';
 import 'package:lettutor_app/widgets/loading_image.dart';
 import 'package:lettutor_app/widgets/button.dart';
@@ -13,7 +13,10 @@ class CourseOverview extends StatelessWidget {
   late BuildContext context;
 
   _handleDiscover() {
-    Get.to(CourseDetails(course: course, selectedIndex: 0,));
+    Get.to(CourseDetails(
+      course: course,
+      selectedIndex: 0,
+    ));
   }
 
   @override
@@ -165,11 +168,10 @@ class CourseOverview extends StatelessWidget {
             children: [
               Text("${i + 1}.${topic.name}"),
               InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (ctx) => CourseDetails(course: course, selectedIndex: i,)),
-                ),
+                onTap: () => Get.to(() => CourseDetails(
+                      course: course,
+                      selectedIndex: i,
+                    )),
                 child: Text(
                   'Find out',
                   style: TextStyle(color: Colors.blue),

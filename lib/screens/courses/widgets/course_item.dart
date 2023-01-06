@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/course.dart';
+import 'package:lettutor_app/models/course/course.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/loading_image.dart';
 

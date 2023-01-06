@@ -1,27 +1,32 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lettutor_app/models/user_info.dart';
+import 'package:lettutor_app/models/user_info/user_info.dart';
+import 'package:lettutor_app/screens/profile/profile_controller.dart';
+import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 
 class EditPhoto extends StatefulWidget {
-  User? user;
-  EditPhoto(this.user, {
+
+  EditPhoto({
     Key? key,
   }) : super(key: key);
+
   @override
   State<EditPhoto> createState() => _EditPhotoState();
 }
 
 class _EditPhotoState extends State<EditPhoto> {
-  String imageURI = "";
+  get controller => Get.find<ProfileController>(tag: 'profile_controller');
   final ImagePicker _picker = ImagePicker();
+  get user => Get.find<UserService>().userInfo.user;
+
   Future getImageFromGallery() async {
     var image = await _picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imageURI = image!.path;
-    });
+    await controller.uploadAvatar(image);
+    setState(() {});
   }
 
   @override
@@ -30,24 +35,21 @@ class _EditPhotoState extends State<EditPhoto> {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(75.0),
-          child: imageURI != ""
-              ? Image.file(File(imageURI),
-                  width: 200, height: 200, fit: BoxFit.fill)
-              : NetworkAvatar(url: widget.user?.avatar ?? "",
-                  width: 200, height: 200),
+          child: NetworkAvatar(
+              url: user?.avatar ?? "", width: 200, height: 200),
         ),
         Positioned(
           right: 0,
           bottom: 0,
           child: ElevatedButton(
             onPressed: getImageFromGallery,
-            child: const Icon(Icons.edit),
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),
               // padding: EdgeInsets.all(),
               primary: Colors.blue,
               onPrimary: Colors.white,
             ),
+            child: const Icon(Icons.edit),
           ),
         )
       ],

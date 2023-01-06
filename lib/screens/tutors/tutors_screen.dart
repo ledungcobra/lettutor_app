@@ -1,50 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/tutor.dart';
+import 'package:lettutor_app/models/tutor/tutor.dart';
 import 'package:lettutor_app/screens/tutor_detail/tutor_detail.dart';
 import 'package:lettutor_app/screens/tutors/tutors_controller.dart';
 import 'package:lettutor_app/screens/tutors/widgets/tutor_card.dart';
 import 'package:lettutor_app/services/tutor_service.dart';
 import 'package:lettutor_app/utils/constants.dart';
+import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/utils/types.dart';
-import 'package:lettutor_app/widgets/center_error.dart';
-import 'package:lettutor_app/widgets/loading.dart';
 import 'package:lettutor_app/widgets/skill_chip.dart';
-import 'package:lettutor_app/widgets/not_found.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class TutorsScreen extends GetView<TutorsController> {
-  Rx<Nationality> selectedNationality = nationalities.first.obs;
-  RxInt selectedFilterIndex = 0.obs;
-  final TutorService _tutorService = Get.find();
-  var tutorName = "";
+import '../../widgets/load_more_footer.dart';
+import '../../widgets/search_bar.dart';
 
+class TutorsScreen extends StatefulWidget {
   TutorsScreen();
+
+  @override
+  State<TutorsScreen> createState() => _TutorsScreenState();
+}
+
+class _TutorsScreenState extends State<TutorsScreen> with HandleUIError {
+  final controller = Get.find<TutorsController>();
+  final TutorService _tutorService = Get.find();
+  RefreshController refreshController = RefreshController(initialRefresh: true);
+  final GlobalKey _refresherKey = GlobalKey();
+
+  @override
+  void initState() {
+    controller.init();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     Get.put(TutorsController());
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
         appBar: AppBar(
             title: Row(
-              children: [
-                Text(
-                  'Tutors',
-                  style: TextStyle(color: Colors.blue),
-                ),
-                _searchField()
-              ],
+          children: [
+            Text(
+              'Tutors',
+              style: TextStyle(color: Colors.blue),
             ),
-            backgroundColor: Colors.white),
+            SearchBar(
+                handleSearch: _handleSearch, placeholder: 'Enter tutor name')
+          ],
+        )),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
                 _filterNationalityBar(),
-                _filterSkillsBar(),
-                _tutorsList(),
+                _filterSpecialtiesBar(),
+                tutorsList(),
               ],
             ),
           ),
@@ -72,22 +85,21 @@ class TutorsScreen extends GetView<TutorsController> {
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(50)),
-              child: Obx(
-                () => DropdownButton(
-                  underline: Container(),
-                  onChanged: (value) {
-                    selectedNationality.value = (nationalities
-                        .firstWhere((element) => element.val == value));
-                    doFilter();
-                  },
-                  value: selectedNationality.value.val,
-                  items: nationalities
-                      .map(
-                        (e) => DropdownMenuItem(
-                            value: e.val, child: Text(e.display)),
-                      )
-                      .toList(),
-                ),
+              child: MultiSelectDialogField(
+                chipDisplay: MultiSelectChipDisplay<Nationality>()
+                  ..disabled = true,
+                decoration: BoxDecoration(borderRadius: BorderRadius.zero),
+                title: Text('Chọn quốc gia'),
+                buttonText: Text('Chọn quốc gia'),
+                items: nationalities
+                    .map((e) => MultiSelectItem(e, e.display))
+                    .toList(),
+                listType: MultiSelectListType.LIST,
+                initialValue: [nationalities.first],
+                onConfirm: (values) {
+                  controller.selectedNationalities.value = values;
+                  filter();
+                },
               ),
             )
           ],
@@ -96,51 +108,22 @@ class TutorsScreen extends GetView<TutorsController> {
     );
   }
 
-  Widget _searchField() {
-    return Expanded(
-      flex: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextFormField(
-          onFieldSubmitted: _handleSearch,
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 0),
-            hintText: 'Enter tutor name',
-            prefixIcon: Icon(Icons.search),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(50.0),
-              borderSide: BorderSide(
-                color: Colors.blue,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(25.0),
-              borderSide: BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _filterSkillsBar() {
+  Widget _filterSpecialtiesBar() {
+    var skills = controller.skills;
     return SizedBox(
       width: Get.width,
       height: 0.06 * Get.height,
       child: ListView.separated(
-        itemCount: skillFilters.keys.length,
+        itemCount: skills.keys.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) => Obx(
           () => SkillChip(
             onClick: () {
-              selectedFilterIndex.value = index;
-              doFilter();
+              controller.selectedFilterIndex.value = index;
+              filter();
             },
-            selected: selectedFilterIndex.value == index,
-            value: skillFilters.values.toList()[index].name,
+            selected: controller.selectedFilterIndex.value == index,
+            value: skills.values.toList()[index].description ?? "Unknown",
           ),
         ),
         separatorBuilder: ((context, index) => SizedBox(
@@ -150,51 +133,63 @@ class TutorsScreen extends GetView<TutorsController> {
     );
   }
 
-  Widget _tutorsList() {
-    return controller.obx(
-      onLoading: Loading(),
-      onError: (error) => CenterError(error: error ?? ""),
-      (tutors) => controller.isInit.value
-          ? Loading()
-          : tutors!.isEmpty
-              ? NotFound()
-              : Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) => TutorCard(
-                      onLikeClick: () => controller.like(tutors[index].userId!),
-                      onClick: () => _handleShowTutorDetail(tutors[index]),
-                      tutor: tutors[index],
-                      key: Key(index.toString()),
-                    ),
-                    itemCount: tutors.length,
-                  ),
-                ),
+  tutorsList() {
+    return Expanded(
+      child: Obx(
+        () => SmartRefresher(
+          key: _refresherKey,
+          enablePullUp: true,
+          enablePullDown: true,
+          header: WaterDropHeader(),
+          physics: BouncingScrollPhysics(),
+          footer: LoadMoreFooter(),
+          controller: refreshController,
+          onRefresh: () async {
+            await controller.refreshTutors();
+            if (mounted) {
+              setState(() {});
+            }
+            refreshController.refreshCompleted();
+          },
+          onLoading: () async {
+            await controller.loadTutors();
+            if (mounted) {
+              setState(() {});
+            }
+            refreshController.loadComplete();
+          },
+          child: ListView(
+            children: controller.tutors
+                .map((tutor) => TutorCard(
+                    tutor: tutor,
+                    onClick: () => _handleShowTutorDetail(tutor),
+                    likable: controller))
+                .toList(),
+          ),
+        ),
+      ),
     );
   }
 
   void _handleShowTutorDetail(Tutor tutor) async {
-    var tutorDetail = await _tutorService.getTutorDetail(tutor.userId!);
-    Get.to(TutorDetailScreen(tutorDetail: tutorDetail));
+    var response = await _tutorService.getTutorDetail(tutor.userId!);
+    if (response.hasError) {
+      handleError(response.error!);
+      return;
+    }
+    Get.to(
+        TutorDetailScreen(tutorDetail: response.data!, tutorId: tutor.userId!));
   }
 
   void _handleSearch(String? newValue) {
     if (newValue == null) {
       return;
     }
-    tutorName = newValue;
-    doFilter();
+    controller.tutorName = newValue;
+    filter();
   }
 
-  doFilter() {
-    controller.filter(filterCriteria);
+  filter() {
+    controller.filter();
   }
-
-  SkillFilter get selectedSkillFilter =>
-      skillFilters.entries.toList()[selectedFilterIndex.value].value;
-
-  FilterCriteria get filterCriteria => FilterCriteria(
-        nationality: selectedNationality.value,
-        skillFilter: selectedSkillFilter,
-        name: tutorName,
-      );
 }

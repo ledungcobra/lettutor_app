@@ -1,13 +1,45 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/schedule.dart';
-import 'package:lettutor_app/screens/upcoming/widgets/schedule_item.dart';
-import 'package:lettutor_app/services/user_service.dart';
+import 'package:lettutor_app/screens/upcoming/widgets/upcomming_item.dart';
+import 'package:lettutor_app/widgets/not_found.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class UpcomingScreen extends StatelessWidget {
-  UserService userService = Get.find();
+import '../../models/class_history/class_history.dart';
+import '../../widgets/load_more_footer.dart';
+import 'upcoming_controller.dart';
 
+class UpcomingScreen extends StatefulWidget {
   UpcomingScreen({Key? key}) : super(key: key) {}
+
+  @override
+  State<UpcomingScreen> createState() => _UpcomingScreenState();
+}
+
+class _UpcomingScreenState extends State<UpcomingScreen> {
+
+  final controller = Get.find<UpcomingController>();
+
+  Timer? timer;
+  final elapsedTime = 0.obs;
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: true);
+  final GlobalKey refresherKey = GlobalKey();
+
+  @override
+  void initState() {
+    Get.put(UpcomingController(setState));
+    controller.loadNextUpcoming();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    refreshController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,53 +58,44 @@ class UpcomingScreen extends StatelessWidget {
   }
 
   Widget _listSchedule() {
-    return FutureBuilder(
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          var schedules = snapshot.data as List<Schedule>;
-          return ListView(
-            children: schedules
-                .map((schedule) => MeetingItem(schedule: schedule))
-                .toList(),
-          );
+    return SmartRefresher(
+      key: refresherKey,
+      enablePullUp: true,
+      enablePullDown: true,
+      header: WaterDropHeader(),
+      footer: LoadMoreFooter(),
+      controller: refreshController,
+      onLoading: () async {
+        await controller.loadNextUpcoming();
+        refreshController.loadComplete();
+        if (mounted) {
+          setState(() {});
         }
-        if (snapshot.hasError) {
-          return Container();
-        }
-        return CircularProgressIndicator();
       },
-      future: userService.getListSchedules(),
+      onRefresh: () async {
+        await controller.refreshUpcoming();
+        if (mounted) {
+          setState(() {});
+        }
+        refreshController.refreshCompleted();
+      },
+      child: listBookingItems(controller.bookingItems),
     );
   }
 
-  Future<void> _showMyDialog(context, target, error) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('An error occur when loading $target'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  error,
-                  style: TextStyle(color: Colors.red),
-                ),
-                Text('Would you like to approve of this message?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Approve'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+  listBookingItems(List<ClassHistory> upComings) {
+    return upComings.isEmpty
+        ? Row(
+            children: const [
+              NotFound(),
+            ],
+          )
+        : ListView(
+            children: upComings
+                .map((item) => UpcomingItem(
+                      bookingItem: item,
+                    ))
+                .toList(),
+          );
   }
 }

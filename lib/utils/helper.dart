@@ -5,12 +5,11 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter/services.dart';
 
 String? validateEmail(String? value) {
-  print("validate");
   if (value == null || value.isEmpty) {
     return "Please input email";
   }
   if (!RegExp(
-          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+          r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$")
       .hasMatch(value)) {
     return "Invalid Email";
   }
@@ -18,7 +17,9 @@ String? validateEmail(String? value) {
 }
 
 String? validatePassword(String? value) {
-  // TODO: implement validation password
+  if(value == null || value.isEmpty){
+    return "Please input password";
+  }
   return null;
 }
 

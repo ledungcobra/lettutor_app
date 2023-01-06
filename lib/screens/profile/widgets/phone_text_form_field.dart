@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lettutor_app/screens/profile/profile_controller.dart';
 
 class PhoneTextFormField extends StatelessWidget {
-  final String phoneNumber;
-  const PhoneTextFormField({
-    Key? key, required this.phoneNumber,
+  final controller = Get.find<ProfileController>(tag: 'profile_controller');
+
+  PhoneTextFormField({
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -16,7 +19,6 @@ class PhoneTextFormField extends StatelessWidget {
             Text(
               "Phone Number",
               style: TextStyle(
-                color: Colors.black,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -31,7 +33,8 @@ class PhoneTextFormField extends StatelessWidget {
             border: OutlineInputBorder(),
             hintText: "Enter your phone number",
           ),
-          initialValue: phoneNumber,
+          onChanged: (v) => controller.phone.value = v,
+          initialValue: controller.phone.value,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter some text';
@@ -42,7 +45,7 @@ class PhoneTextFormField extends StatelessWidget {
             }
             return null;
           },
-          onSaved: (val) {},
+          onSaved: (val) => controller.phone.value = val ?? "",
         ),
       ],
     );

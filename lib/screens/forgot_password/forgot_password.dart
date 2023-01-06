@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/helper.dart';
 import 'package:lettutor_app/widgets/button.dart';
+
+import '../../services/user_service.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
@@ -11,15 +14,24 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  _processResetPassword() {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('Sending '),backgroundColor: Colors.green,));
+  final userService = Get.find<UserService>();
+  final email = "".obs;
+
+  _processResetPassword() async {
+    final errorMessage = validateEmail(email.value);
+    if (errorMessage != null) {
+      Get.snackbar('Error', errorMessage,
+          colorText: Colors.white, backgroundColor: Colors.red);
+      return;
+    }
+    final response = await userService.sendForgotPassword(email.value);
+    Get.snackbar('Error', response,
+        colorText: Colors.white, backgroundColor: Colors.green);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Forgot password"),
         elevation: 0,
@@ -51,8 +63,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     border: OutlineInputBorder(),
                     hintText: 'Enter your email',
                   ),
+                  onChanged: (v) => email.value = v,
                   validator: validateEmail,
-                  onSaved: (value) {},
+                  onSaved: (value) => email.value = value ?? "",
                 ),
                 const SizedBox(height: 15),
                 Button(

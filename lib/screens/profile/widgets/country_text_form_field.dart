@@ -2,20 +2,26 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 
 class CountryTextFormField extends StatefulWidget {
+  final Function(Country) onDone;
+
+  final String country;
+
   const CountryTextFormField({
-    Key? key, required this.title,
+    Key? key, required this.country, required this.onDone,
   }) : super(key: key);
-  final String title;
+
   @override
   State<CountryTextFormField> createState() => _CountryTextFormFieldState();
 }
 
 class _CountryTextFormFieldState extends State<CountryTextFormField> {
+
   TextEditingController countryName = TextEditingController();
-  
+  Country? country;
+
   @override
   void initState() {
-    countryName.text = "Vietnam"; //set the initial value of text field
+    countryName.text = "";
     super.initState();
   }
   @override
@@ -27,9 +33,9 @@ class _CountryTextFormFieldState extends State<CountryTextFormField> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              widget.title,
+              widget.country,
               style: const TextStyle(
-                color: Colors.black,
+
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
               ),
@@ -57,23 +63,20 @@ class _CountryTextFormFieldState extends State<CountryTextFormField> {
           onTap: () {
             showCountryPicker(
               context: context,
-              //Optional.  Can be used to exclude(remove) one ore more country from the countries list (optional).
               exclude: <String>['KN', 'MF'],
-              //Optional. Shows phone code before the country name.
               showPhoneCode: false,
-              onSelect: (Country country) {
+              onSelect: (Country v) {
+                country = v;
+                widget.onDone(v);
                 setState(() {
-                  countryName.text = country.name;
+                  countryName.text = v.name;
                 });
               },
-              // Optional. Sets the theme for the country list picker.
               countryListTheme: CountryListThemeData(
-                // Optional. Sets the border radius for the bottomsheet.
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10.0),
                   topRight: Radius.circular(10.0),
                 ),
-                // Optional. Styles the search field.
                 inputDecoration: InputDecoration(
                   labelText: 'Search',
                   hintText: 'Start typing to search',

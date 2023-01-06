@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SkillChip extends StatelessWidget {
   SkillChip({
@@ -14,14 +15,18 @@ class SkillChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color? color;
+    if(selected) {
+      color = Get.isDarkMode ? Colors.black: Colors.blue[200];
+    }
     return InkWell(
       onTap: () {
         if (onClick != null) onClick!();
       },
       child: Chip(
-        backgroundColor: selected ? Colors.blue[200] : null,
+        backgroundColor: color,
         label:
-            Text(value, style: selected ? TextStyle(color: Colors.blue) : null),
+            Text(value, style: selected ? Get.theme.textTheme.button : null),
       ),
     );
   }

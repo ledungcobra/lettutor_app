@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lettutor_app/models/comment.dart';
+import 'package:lettutor_app/models/comment/comment.dart';
 import 'package:lettutor_app/utils/helper.dart';
 import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
