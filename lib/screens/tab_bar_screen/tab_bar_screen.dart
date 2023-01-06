@@ -20,15 +20,15 @@ class TabBarScreen extends StatefulWidget with Dimension {
 
 class _TabBarScreenState extends State<TabBarScreen> {
   int _selectedIndex = 0;
+
+  ChatService get chatService => Get.find<ChatService>();
   final List<Widget> _widgets = [
     HomeScreen(),
     CoursesScreen(),
     TutorsScreen(),
     UpcomingScreen(),
-    SettingsScreen(),
+    SettingsScreen()
   ];
-
-  ChatService get chatService => Get.find<ChatService>();
 
   void _onItemTapped(int index) {
     setState(() {

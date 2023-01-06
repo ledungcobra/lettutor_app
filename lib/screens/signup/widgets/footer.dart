@@ -8,25 +8,10 @@ class Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const icons = ["facebook.svg", "google.svg"];
     return Column(
       children: [
         SizedBox(
           height: 10,
-        ),
-        const Text('Or continue with'),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgIconButton(image: "facebook.svg"),
-            SvgIconButton(
-              image: "google.svg",
-            ),
-          ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

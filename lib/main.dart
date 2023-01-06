@@ -14,7 +14,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'screens/course_details/controllers/course_details_controller.dart';
 import 'screens/upcoming/upcoming_controller.dart';
 import 'services/utils_service.dart';
-import 'utils/shared_reference.dart';
+import 'services/token_service.dart';
 import 'utils/theme_controller.dart';
 import 'widgets/refresh_scroll_behavior.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,18 +34,14 @@ Future initFirebase() async {
 }
 
 setUpIOC() async {
-  var dio = Dio();
   var tokenService = TokenService();
-  var accessToken = await tokenService.getAccessToken();
-  if (accessToken.isNotEmpty) {
-    dio.options.headers['Authorization'] = "Bearer $accessToken";
-  }
-  dio.options.headers['Content-Type'] = 'application/json';
+  final dio = Dio();
   Get.put(dio);
   Get.put(tokenService);
+  await configDio(tokenService, dio);
 
   final themeController = ThemeController();
-  themeController.init();
+  await themeController.init();
 
   final utilService = UtilService();
   Get.put(utilService);
@@ -57,10 +53,47 @@ setUpIOC() async {
   Get.put(CourseService());
   Get.put(SignUpController());
   Get.put(LoginController());
-
   Get.put(CourseDetailsController());
   Get.put(TutorsController());
   Get.put(UpcomingController());
+}
+
+Future<Dio> configDio(TokenService tokenService, Dio dio) async {
+  var accessToken = await tokenService.getAccessToken();
+  if (accessToken.isNotEmpty) {
+    dio.options.headers['Authorization'] = "Bearer $accessToken";
+  }
+  dio.options.headers['Content-Type'] = 'application/json';
+  dio.interceptors.add(InterceptorsWrapper(
+    onError: (e, handler) => handleError(e, tokenService, dio, handler),
+  ));
+  return dio;
+}
+
+Future<void> handleError(
+    error, TokenService tokenService, Dio dio, handler) async {
+  final statusCode = error.response?.statusCode;
+  if (statusCode == 403 || statusCode == 401) {
+    if (!await tokenService.isAccessTokenValid()) {
+      tokenService.clearTokens();
+      Get.offAll(() => LoginScreen());
+      throw error;
+    }
+    final accessToken = await tokenService.refresh();
+    dio.options.headers['Authorization'] = "Bearer $accessToken";
+    final cloneRequest = await retry(dio, error);
+    return handler.resolve(cloneRequest);
+  }
+  throw error;
+}
+
+Future<dynamic> retry(Dio dio, error) async {
+  final cloneRequest = await dio.request(
+    error.requestOptions.path,
+    data: error.requestOptions.data,
+    queryParameters: error.requestOptions.queryParameters,
+  );
+  return cloneRequest;
 }
 
 class App extends StatelessWidget {

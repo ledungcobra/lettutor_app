@@ -10,7 +10,7 @@ import 'package:lettutor_app/services/utils_service.dart';
 import 'package:lettutor_app/utils/constants.dart';
 import 'package:lettutor_app/utils/helper.dart';
 import 'package:lettutor_app/utils/mixing.dart';
-import 'package:lettutor_app/utils/shared_reference.dart';
+import 'package:lettutor_app/services/token_service.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
 import '../../models/user_info/user_info.dart';
@@ -21,6 +21,7 @@ class LoginScreen extends StatelessWidget with HandleUIError {
   final userService = Get.find<UserService>();
   final tokenService = Get.find<TokenService>();
   final utilService = Get.find<UtilService>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   LoginScreen({Key? key}) : super(key: key);
 
@@ -41,12 +42,12 @@ class LoginScreen extends StatelessWidget with HandleUIError {
                     children: [
                       _introductionSection(),
                       const SizedBox(height: 10),
-                      FormFields(),
+                      FormFields(formKey: formKey),
                       const SizedBox(height: 10),
                       Button(onClick: _handleLogin, title: 'LOGIN'),
                       Footer(
                         googleLogin: _handleLoginGoogle,
-                        facebookLogin: () => print("Login facebook"),
+                        facebookLogin: () => print("Not supported"),
                       ),
                     ],
                   ),
@@ -61,9 +62,7 @@ class LoginScreen extends StatelessWidget with HandleUIError {
   }
 
   _handleLoginGoogle() async {
-    print('LOgin google');
     final response = await userService.loginGoogle();
-    print(response);
     await _processLogin(response);
   }
 
@@ -72,16 +71,13 @@ class LoginScreen extends StatelessWidget with HandleUIError {
       print('Logout clicked');
       return;
     }
-    final result = await tokenService.checkToken();
-    if (result) {
-      final userInfo = await userService.getUserInfo();
-      if (userInfo.hasError) {
-        return;
-      }
-      userService.setUserInfo(userInfo.data);
-      await utilService.init();
-      Get.offAll(() => TabBarScreen());
+    final userInfo = await userService.getUserInfo();
+    if (userInfo.hasError) {
+      return;
     }
+    userService.setUserInfo(userInfo.data);
+    await utilService.init();
+    Get.offAll(() => TabBarScreen());
   }
 
   void _handleLogin() async {
@@ -104,7 +100,7 @@ class LoginScreen extends StatelessWidget with HandleUIError {
           backgroundColor: Colors.green, colorText: Colors.white);
       userService.setUserInfo(response.data);
       await tokenService.saveAccessToken(response.data!.tokens!.access!.token!);
-
+      await tokenService.saveRefreshToken(response.data!.tokens!.refresh!);
       await utilService.init();
       Get.offAll(() => TabBarScreen());
     }

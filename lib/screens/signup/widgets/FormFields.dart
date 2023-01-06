@@ -7,13 +7,14 @@ import '../sign_up_controller.dart';
 
 class FormFields extends StatelessWidget {
   SignUpController signUpController = Get.find();
+  final GlobalKey<FormState> formKey;
 
-  FormFields({super.key});
+  FormFields({super.key, required this.formKey});
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: signUpController.formKey,
+      key: formKey,
       child: Column(
         children: [
           SizedBox(
@@ -36,7 +37,7 @@ class FormFields extends StatelessWidget {
               hintText: 'Enter your email',
             ),
             validator: validateEmail,
-            onChanged: (value)=>  signUpController.email.value = value,
+            onChanged: (value) => signUpController.email.value = value,
             onSaved: (value) {
               signUpController.email.value = value ?? "";
             },
@@ -72,7 +73,7 @@ class FormFields extends StatelessWidget {
                 )),
             validator: validatePassword,
             obscureText: !signUpController.showPassword1.value,
-            onChanged: (value) => signUpController.password.value = value  ,
+            onChanged: (value) => signUpController.password.value = value,
             onSaved: (value) => signUpController.password.value = value ?? "",
           ),
           SizedBox(height: 10),
@@ -104,7 +105,7 @@ class FormFields extends StatelessWidget {
                 )),
             validator: validatePassword,
             obscureText: !signUpController.showPassword2.value,
-            onChanged: (value) => signUpController.rePassword.value = value ,
+            onChanged: (value) => signUpController.rePassword.value = value,
             onSaved: (value) => signUpController.rePassword.value = value ?? "",
           ),
           SizedBox(

@@ -41,6 +41,7 @@ class TutorService with AppAPI, CatchError {
       int page, int perPage) async {
     try {
       var url = buildUrl("/tutor/more?perPage=$perPage&page=$page");
+      dio.options.headers['Authorization'] = null;
       var response = await dio.get(url);
       var result = <Tutor>[];
       var favoriteTutorIds = await getFavoriteTutorIds();
@@ -116,24 +117,23 @@ class TutorService with AppAPI, CatchError {
     }
   }
 
-  Future<ResponseEntity> performBecomeATeacher(
-      FormData formData) async {
+  Future<ResponseEntity> performBecomeATeacher(FormData formData) async {
     try {
       var url = buildUrl("/tutor/register");
       await reloadToken();
-      var response = await dio.post(url, data: formData,options: Options(
-        contentType: 'multipart/form-data'
-      ));
+      var response = await dio.post(url,
+          data: formData, options: Options(contentType: 'multipart/form-data'));
       return ResponseEntity(data: response.data);
     } catch (e) {
       return handleError(e);
     }
   }
 
-  Future<ResponseEntity<List<BookingItem>>> getUpcomingCourse({num page=1, num perPage=1}) async {
+  Future<ResponseEntity<List<BookingItem>>> getUpcomingCourse(
+      {num page = 1, num perPage = 1}) async {
     try {
       var response = await dio.get(buildUrl(
-            '/booking/next?dateTime=${DateTime.now().millisecondsSinceEpoch}'));
+          '/booking/next?dateTime=${DateTime.now().millisecondsSinceEpoch}'));
       var result = <BookingItem>[];
       for (var item in response.data['data']) {
         result.add(BookingItem.fromJson(item));
@@ -147,8 +147,11 @@ class TutorService with AppAPI, CatchError {
   Future<ResponseEntity<List<ClassHistory>>> getUpComings(
       num perPage, num page) async {
     try {
-      int timestamp = DateTime.now().subtract(const Duration(minutes: 30)).millisecondsSinceEpoch;
-      var response = await dio.get(buildUrl('/booking/list/student?perPage=$perPage&page=$page&dateTimeGte=$timestamp&orderBy=meeting&sortBy=desc'));
+      int timestamp = DateTime.now()
+          .subtract(const Duration(minutes: 30))
+          .millisecondsSinceEpoch;
+      var response = await dio.get(buildUrl(
+          '/booking/list/student?perPage=$perPage&page=$page&dateTimeGte=$timestamp&orderBy=meeting&sortBy=desc'));
       var result = <ClassHistory>[];
       for (var item in response.data['data']['rows']) {
         result.add(ClassHistory.fromJson(item));
@@ -163,7 +166,8 @@ class TutorService with AppAPI, CatchError {
     try {
       var body = {'note': note, 'reasonId': reasonId, 'bookingId': bookingId};
 
-      final res = await dio.put(buildUrl('/lesson-report/save-report'), data: body);
+      final res =
+          await dio.put(buildUrl('/lesson-report/save-report'), data: body);
       return true;
     } catch (e) {
       return false;

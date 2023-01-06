@@ -5,7 +5,7 @@ import 'package:lettutor_app/screens/login/login_screen.dart';
 import 'package:lettutor_app/screens/profile/profile_screen.dart';
 import 'package:lettutor_app/services/user_service.dart';
 import 'package:lettutor_app/utils/constants.dart';
-import 'package:lettutor_app/utils/shared_reference.dart';
+import 'package:lettutor_app/services/token_service.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 import 'package:shared_preferences/shared_preferences.dart';

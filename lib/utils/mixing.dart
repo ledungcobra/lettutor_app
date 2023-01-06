@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../models/error/error.dart';
 import '../models/response_entity.dart';
-import 'shared_reference.dart';
+import '../services/token_service.dart';
 
 mixin Dimension {
   double width(BuildContext context) {
@@ -23,7 +23,7 @@ mixin CatchError {
       String message = e.response!.data['message'].toString();
       return ResponseEntity(
           data: null, error: ErrorResponse(message: message, statusCode: 400));
-    }else{
+    } else {
       print(e);
     }
     return ResponseEntity(
@@ -45,12 +45,15 @@ mixin HandleUIError {
 }
 
 mixin AppAPI {
-  final dio = Get.find<Dio>();
+  Dio get dio => Get.find<Dio>();
   final baseUrl = 'https://sandbox.api.lettutor.com';
-  final tokenService = Get.find<TokenService>();
-  buildUrl(String endpoint){
+
+  TokenService get tokenService => Get.find<TokenService>();
+
+  buildUrl(String endpoint) {
     return "$baseUrl$endpoint";
   }
+
   reloadToken() async {
     var accessToken = await tokenService.getAccessToken();
     if (accessToken.isNotEmpty) {
