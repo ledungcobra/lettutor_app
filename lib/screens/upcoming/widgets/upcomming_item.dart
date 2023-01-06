@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lettutor_app/screens/upcoming/widgets/request_edit_dialog.dart';
 import 'package:lettutor_app/utils/constants.dart';
+import 'package:lettutor_app/utils/mixing.dart';
 import 'package:lettutor_app/widgets/avatar.dart';
 import 'package:lettutor_app/widgets/button.dart';
 
@@ -10,6 +11,7 @@ import '../../../models/class_history/class_history.dart';
 import '../../../models/class_history/schedule_detail_info.dart';
 import '../../../models/class_history/schedule_info.dart';
 import '../../../services/tutor_service.dart';
+import '../../chat_screen/chat_screen.dart';
 import '../../video_call/jitsy_util.dart';
 import 'cancel_dialog.dart';
 
@@ -24,7 +26,9 @@ class UpcomingItem extends StatelessWidget {
 
   UpcomingItem({Key? key, required this.bookingItem}) : super(key: key);
 
-  _messageNow() {}
+  _messageNow() {
+    Get.to(() => ChatScreen(userId: bookingItem.userId));
+  }
 
   _handleCancelUpcoming() async {
     Get.dialog(CancelDialog(bookingItem: bookingItem));
@@ -39,7 +43,7 @@ class UpcomingItem extends StatelessWidget {
         scheduleDetailInfo?.startPeriodTimestamp ?? 0);
     final end = DateTime.fromMillisecondsSinceEpoch(
         scheduleDetailInfo?.endPeriodTimestamp ?? 0);
-    return '${start.hour}:${start.minute} - ${end.hour}:${end.minute}';
+    return '${start.hour.toTwoDigit()}:${start.minute.toTwoDigit()} - ${end.hour.toTwoDigit()}:${end.minute.toTwoDigit()}';
   }
 
   @override
@@ -74,7 +78,7 @@ class UpcomingItem extends StatelessWidget {
                       IconButton(
                           onPressed: _messageNow,
                           icon: Icon(Icons.message_outlined,
-                              color: PRIMARY_COLOR))
+                              color: Get.theme.primaryColor))
                     ],
                   ),
                   SizedBox(
@@ -146,13 +150,14 @@ class UpcomingItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Button(
-                    full: false,
-                    radius: 10,
-                    title: 'Cancel',
-                    onClick: _handleCancelUpcoming,
-                    color: Get.theme.accentColor,
-                  ),
+                  if (bookingItem.cancelReasonId == null)
+                    Button(
+                      full: false,
+                      radius: 10,
+                      title: 'Cancel',
+                      onClick: _handleCancelUpcoming,
+                      color: Get.theme.accentColor,
+                    ),
                   SizedBox(width: 20),
                   Button(
                     full: false,

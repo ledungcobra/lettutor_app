@@ -18,7 +18,9 @@ class UpcomingScreen extends StatefulWidget {
 }
 
 class _UpcomingScreenState extends State<UpcomingScreen> {
+
   final controller = Get.find<UpcomingController>();
+
   Timer? timer;
   final elapsedTime = 0.obs;
   final RefreshController refreshController =
@@ -27,6 +29,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
 
   @override
   void initState() {
+    Get.put(UpcomingController(setState));
     controller.loadNextUpcoming();
     super.initState();
   }
@@ -35,7 +38,6 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    // timer?.cancel();
     refreshController.dispose();
   }
 
@@ -84,7 +86,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
   listBookingItems(List<ClassHistory> upComings) {
     return upComings.isEmpty
         ? Row(
-            children: [
+            children: const [
               NotFound(),
             ],
           )

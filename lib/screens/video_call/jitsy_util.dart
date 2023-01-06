@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:lettutor_app/models/class_history/class_history.dart';
 
 joinMeetingJitsi(String studentToken) async {
   var token =studentToken.split("token=")[1];
@@ -13,4 +13,6 @@ joinMeetingJitsi(String studentToken) async {
     ..token = token
     ..videoMuted = true;
   await JitsiMeet.joinMeeting(options);
+  // HtmlElementView().
 }
+

@@ -70,3 +70,12 @@ extension ToString on Duration {
     return "${twoDigits(inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 }
+
+extension ToTwoDigits on int {
+  String toTwoDigit() {
+    if (this > 10) {
+      return toString();
+    }
+    return '0$this';
+  }
+}

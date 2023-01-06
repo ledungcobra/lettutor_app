@@ -55,7 +55,6 @@ setUpIOC() async {
   Get.put(LoginController());
   Get.put(CourseDetailsController());
   Get.put(TutorsController());
-  Get.put(UpcomingController());
 }
 
 Future<Dio> configDio(TokenService tokenService, Dio dio) async {
